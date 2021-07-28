@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/module/badge_model.dart' as b;
+import 'package:kipling/module/country_model.dart' as c;
 import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/splash_data.dart';
@@ -41,19 +42,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 Future<b.BadgeData>? badgeData;
+Future<c.CountryPickerModel>? futureCountryPickerDataAlbum;
 
 List<b.BadgeData>? badgeDetailsData;
+List<c.Value>? countryList;
+List<b.Content>? contents;
+List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
+List<b.FinalBadgeModel> finalBadgeModel = [];
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<Splashdata> futureAlbum;
   late Future<PersonalDetailData> futurePersonDataAlbum;
+
   Logindata? logindata;
   PersonalDetailData? personalDetailData;
+  c.CountryPickerModel? countryPickerData;
   List<Todo> taskList = [];
   List<Todo> personalDataList = [];
   List<Logindata> profileList = [];
   List<PersonalDetailData> personalList = [];
+
   late Timer _timer;
+
   // List<b.BadgeData>? badgeData1;
   @override
   void initState() {
@@ -61,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     fetchapi();
     futureAlbum = fetchAlbum();
     futurePersonDataAlbum = fetchPersonData();
+    futureCountryPickerDataAlbum = fetchCountryListData();
     badgeData = fetchBadgeData();
     print("initState");
   }
@@ -114,16 +125,6 @@ class _MyHomePageState extends State<MyHomePage> {
           _timer.cancel();
         }
       });
-
-      /*  Timer(const Duration(seconds: 5), () {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => login_screen(
-                      ld: logindata,
-                  personalDetailData: personalDetailData,
-                    )));
-      });*/
       return Splashdata.fromJson(responseJson[0]);
     } else {
       throw Exception('Failed to load album');
@@ -154,6 +155,31 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  //countryList API
+  Future<c.CountryPickerModel> fetchCountryListData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=iso_country_codes'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("CountryPickerModel:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {
+        countryPickerData = c.CountryPickerModel.fromJson(responseJson[0]);
+        countryList = countryPickerData!.value;
+      });
+
+      // personalDataList.add(Todo(id: element['id'], jsonString: element['jsonString']));
+
+      return c.CountryPickerModel.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
   //Badge Screen data API
   Future<b.BadgeData> fetchBadgeData() async {
     var response = await http.get(
@@ -162,7 +188,8 @@ class _MyHomePageState extends State<MyHomePage> {
       headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
     );
 
-    final responseJson = json.decode(response.body)/*jsonDecode(response.body)*/;
+    final responseJson =
+        json.decode(response.body) /*jsonDecode(response.body)*/;
     print("badgeData:responseJson");
     print(responseJson);
     print('Status Code: ${response.statusCode}');
@@ -170,7 +197,46 @@ class _MyHomePageState extends State<MyHomePage> {
       print('ififififififi');
       setState(() {
         print('badgeDAtaVaraDat: ${response.body}');
-        badgeDetailsData = List<b.BadgeData>.from(responseJson.map((x) => b.BadgeData.fromJson(x)));
+        badgeDetailsData = List<b.BadgeData>.from(
+            responseJson.map((x) => b.BadgeData.fromJson(x)));
+        for (int i = 0; i < badgeDetailsData!.length; i++) {
+          contents = badgeDetailsData![i].contents;
+          for (int j = 0; j < badgeDetailsData![i].contents!.length; j++) {
+            if (badgeDetailsData![i].contents![j].state == 'Activated') {
+              print('shdfbhjbdfjbdsjfjsdbfhjdsbfjbdsfjbdfjbdfj');
+              finalActivatedBadgeModel!.add(b.FinalBadgeModel(
+                  point_needed: badgeDetailsData![i]
+                      .voucherTemplate!
+                      .pointsNeeded
+                      .toString(),
+                  title: badgeDetailsData![i].contents![j].title.toString(),
+                  description:
+                      badgeDetailsData![i].contents![j].description.toString(),
+                  condition:
+                      badgeDetailsData![i].contents![j].conditions.toString(),
+                  url: badgeDetailsData![i]
+                      .contents![j]
+                      .images![0]
+                      .url
+                      .toString()));
+            }
+            finalBadgeModel.add(b.FinalBadgeModel(
+                point_needed: badgeDetailsData![i]
+                    .voucherTemplate!
+                    .pointsNeeded
+                    .toString(),
+                title: badgeDetailsData![i].contents![j].title.toString(),
+                description:
+                    badgeDetailsData![i].contents![j].description.toString(),
+                condition:
+                    badgeDetailsData![i].contents![j].conditions.toString(),
+                url: badgeDetailsData![i]
+                    .contents![j]
+                    .images![0]
+                    .url
+                    .toString()));
+          }
+        }
         print('badgeDAtadfrgrgVaraDat: ${badgeDetailsData![0].id}');
       });
 
@@ -199,7 +265,6 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Image.asset(
                 'assets/images/logo_white.png',
                 fit: BoxFit.cover,
-
               ),
             ),
           )

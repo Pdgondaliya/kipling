@@ -22,7 +22,57 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
+        body: GridView.builder(
+            shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            padding: EdgeInsets.only(
+                left: displayHeight(context) * 0.02,
+                right: displayHeight(context) * 0.02,
+                top: displayHeight(context) * 0.02),
+            itemCount: finalActivatedBadgeModel!.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: displayHeight(context) * 0.00099,
+                crossAxisSpacing: displayWidth(context) * 0.009,
+                mainAxisSpacing: displayWidth(context) * 0.0007),
+            itemBuilder: (BuildContext context, int k) {
+              return GestureDetector(
+                onTap: () => dialog(
+                    finalActivatedBadgeModel![k].url.toString(),
+                    finalActivatedBadgeModel![k].title.toString(),
+                    finalActivatedBadgeModel![k].description.toString(),
+                    finalActivatedBadgeModel![k].point_needed.toString(),
+                    finalActivatedBadgeModel![k].condition.toString()),
+                child: Column(
+                  children: [
+                    SizedBox(
+                        width: displayWidth(context) * 0.30,
+                        height: displayWidth(context) * 0.30,
+                        child: Image.network(finalActivatedBadgeModel![k].url
+                            .toString())),
+                    SizedBox(height: 10),
+                    Text(
+                      finalActivatedBadgeModel![k].title.toString(),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: displayHeight(context) * 0.025,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      finalActivatedBadgeModel![k].point_needed
+                          .toString(),
+                      style: TextStyle(
+                          color: Color(0xff8ab250),
+                          fontSize: displayHeight(context) * 0.02,
+                          fontWeight: FontWeight.normal),
+                    )
+                  ],
+                ),
+              );
+            })
+
+        /*ListView.builder(
           shrinkWrap: true,
           physics: BouncingScrollPhysics(),
           itemCount: badgeDetailsData!.length,
@@ -32,183 +82,108 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                 physics: BouncingScrollPhysics(),
                 itemCount: badgeDetailsData![i].contents!.length,
                 itemBuilder: (BuildContext context, int j) {
-                  return GridView.builder(
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      padding: EdgeInsets.only(
-                          left: displayHeight(context) * 0.02,
-                          right: displayHeight(context) * 0.02,
-                          top: displayHeight(context) * 0.02),
-                      itemCount:
-                      badgeDetailsData![i].contents![j].images!.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: displayHeight(context) * 0.00099,
-                          crossAxisSpacing: displayWidth(context) * 0.009,
-                          mainAxisSpacing: displayWidth(context) * 0.0007),
-                      itemBuilder: (BuildContext context, int k) {
-                        return GestureDetector(
-                          onTap: () => dialog(
-                              badgeDetailsData![i]
-                                  .contents![j]
-                                  .images![k]
-                                  .url
-                                  .toString(),
-                              badgeDetailsData![i]
-                                  .contents![j]
-                                  .title
-                                  .toString(),
-                              badgeDetailsData![i]
-                                  .contents![j]
-                                  .description
-                                  .toString(),
-                              badgeDetailsData![i]
-                                  .voucherTemplate!
-                                  .pointsNeeded
-                                  .toString(),
-                              badgeDetailsData![i]
-                                  .contents![j]
-                                  .conditions
-                                  .toString()
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                  width: displayWidth(context) * 0.30,
-                                  height: displayWidth(context) * 0.30,
-                                  child: Image.network(badgeDetailsData![i]
-                                      .contents![j]
-                                      .images![k]
-                                      .url
-                                      .toString())),
-                              SizedBox(height: 10),
-                              Text(
-                                badgeDetailsData![i]
-                                    .contents![j]
-                                    .title
-                                    .toString(),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: displayHeight(context) * 0.025,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                badgeDetailsData![i]
-                                    .voucherTemplate!
-                                    .pointsNeeded
-                                    .toString(),
-                                style: TextStyle(
-                                    color: Color(0xff8ab250),
-                                    fontSize: displayHeight(context) * 0.02,
-                                    fontWeight: FontWeight.normal),
-                              )
-                            ],
-                          ),
-                        );
-                      });
+                  return
                 });
-          }),
-    );
+          }),*/
+        );
   }
 
-  dialog(String image, String badgeName, String desc, String points, String condition) {
+  dialog(String image, String badgeName, String desc, String points,
+      String condition) {
     showCupertinoDialog(
         context: context,
-        builder: (BuildContext context) =>
-            StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) =>
-                    Dialog(
-                      child: Container(
-                        height: displayHeight(context) * 0.7,
-                        padding: EdgeInsets.all(displayHeight(context) * 0.02),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton(
-                                onPressed: () => Navigator.pop(context),
-                                icon: Icon(
-                                  Icons.close,
-                                  color: Colors.black,
-                                ),
-                              ),
+        builder: (BuildContext context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) => Dialog(
+                  child: Container(
+                    height: displayHeight(context) * 0.7,
+                    padding: EdgeInsets.all(displayHeight(context) * 0.02),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: Icon(
+                              Icons.close,
+                              color: Colors.black,
                             ),
-                            SizedBox(
-                                width: displayWidth(context) * 0.35,
-                                height: displayWidth(context) * 0.35,
-                                child: Image.network(image)),
-                            Text(
-                              'You have found',
-                              style: TextStyle(
-                                  fontSize: displayHeight(context) * 0.02,
-                                  color: Color(0xff8ab250)),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              badgeName,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: displayHeight(context) * 0.04),
-                            ),
-                            // SizedBox(height: 10),
-                            Expanded(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Html(
-                                    data: """
+                          ),
+                        ),
+                        SizedBox(
+                            width: displayWidth(context) * 0.35,
+                            height: displayWidth(context) * 0.35,
+                            child: Image.network(image)),
+                        Text(
+                          'You have found',
+                          style: TextStyle(
+                              fontSize: displayHeight(context) * 0.02,
+                              color: Color(0xff8ab250)),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          badgeName,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: displayHeight(context) * 0.04),
+                        ),
+                        // SizedBox(height: 10),
+                        Expanded(
+                            child: Align(
+                          alignment: Alignment.center,
+                          child: Html(
+                            data: """
                               $desc
                               """,
-                                    // child: Text(desc,
-                                    //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
-                                    //     textAlign: TextAlign.center,
-                                    //     style: TextStyle(
-                                    //         fontSize: displayHeight(context) * 0.02,
-                                    //         color: Colors.black)),
-                                  ),
-                                )),
-                            // SizedBox(height: 10),
-                            Expanded(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Html(
-                                    data: """
+                            // child: Text(desc,
+                            //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
+                            //     textAlign: TextAlign.center,
+                            //     style: TextStyle(
+                            //         fontSize: displayHeight(context) * 0.02,
+                            //         color: Colors.black)),
+                          ),
+                        )),
+                        // SizedBox(height: 10),
+                        Expanded(
+                            child: Align(
+                          alignment: Alignment.center,
+                          child: Html(
+                            data: """
                               $condition
                               """,
-                                    // child: Text(desc,
-                                    //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
-                                    //     textAlign: TextAlign.center,
-                                    //     style: TextStyle(
-                                    //         fontSize: displayHeight(context) * 0.02,
-                                    //         color: Colors.black)),
-                                  ),
-                                )),
-                            Text(
-                              points,
-                              // '000 points',
-                              style: TextStyle(
-                                  color: Color(0xff8ab250),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: displayHeight(context) * 0.04),
-                            ),
-                            SizedBox(height: 10),
-                            RaisedButton(
-                              color: Color(0xff2c2d2e),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'Done',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: displayHeight(context) * 0.03,
-                                ),
-                              ),
-                            )
-                          ],
+                            // child: Text(desc,
+                            //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
+                            //     textAlign: TextAlign.center,
+                            //     style: TextStyle(
+                            //         fontSize: displayHeight(context) * 0.02,
+                            //         color: Colors.black)),
+                          ),
+                        )),
+                        Text(
+                          points,
+                          // '000 points',
+                          style: TextStyle(
+                              color: Color(0xff8ab250),
+                              fontWeight: FontWeight.bold,
+                              fontSize: displayHeight(context) * 0.04),
                         ),
-                      ),
-                    )));
+                        SizedBox(height: 10),
+                        RaisedButton(
+                          color: Color(0xff2c2d2e),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Done',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: displayHeight(context) * 0.03,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )));
   }
 }

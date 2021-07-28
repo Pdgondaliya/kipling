@@ -90,8 +90,9 @@ class BadgeData {
             List<dynamic>.from(json["product_categories"].map((x) => x)),
         redeemLocations:
             List<dynamic>.from(json["redeem_locations"].map((x) => x)),
-        contents: List<Content>.from(
-            json["contents"].map((x) => Content.fromJson(x))).toList(),
+        contents:
+            List<Content>.from(json["contents"].map((x) => Content.fromJson(x)))
+                .toList(),
         voucherCategories:
             List<dynamic>.from(json["voucher_categories"].map((x) => x)),
       );
@@ -169,7 +170,8 @@ class Content {
         updatedBy: json["updated_by"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        images: List<ImageModel>.from(json["images"].map((x) => ImageModel.fromJson(x))),
+        images: List<ImageModel>.from(
+            json["images"].map((x) => ImageModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -186,7 +188,6 @@ class Content {
         "updated_at": updatedAt!.toIso8601String(),
         "images": List<dynamic>.from(images!.map((x) => x.toJson())),
       };
-
 }
 
 class ImageModel {
@@ -446,4 +447,19 @@ class VoucherTemplate {
         "updated_at": updatedAt!.toIso8601String(),
         "reward_template_id": rewardTemplateId,
       };
+}
+
+class FinalBadgeModel {
+  String point_needed;
+  String title;
+  String description;
+  String condition;
+  String url;
+
+  FinalBadgeModel(
+      {required this.point_needed,
+      required this.title,
+      required this.description,
+      required this.condition,
+      required this.url});
 }

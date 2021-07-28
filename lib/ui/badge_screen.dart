@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/main.dart';
 import 'package:kipling/ui/activated_badges.dart';
 import 'package:kipling/ui/all_badges.dart';
 
@@ -11,7 +12,6 @@ class BadgeScreen extends StatefulWidget {
 }
 
 class _BadgeScreenState extends State<BadgeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -29,21 +29,21 @@ class _BadgeScreenState extends State<BadgeScreen> {
           centerTitle: true,
           elevation: 0,
           title: Text(
-            'Badges',
-            style:
-            TextStyle(color: Color(0xff0f0e0e), fontWeight: FontWeight.bold),
+            finalBadgeModel != [] ? 'My Collectables' : 'Badges',
+            style: TextStyle(
+                color: Color(0xff0f0e0e), fontWeight: FontWeight.bold),
           ),
           bottom: TabBar(
             labelColor: Colors.black,
             unselectedLabelColor: Color(0xff9f9e9f),
             unselectedLabelStyle: TextStyle(
-                fontSize: displayWidth(context) * 0.05,
-                color: Color(0xff9f9e9f),
-                ),
+              fontSize: displayWidth(context) * 0.05,
+              color: Color(0xff9f9e9f),
+            ),
             labelStyle: TextStyle(
-                fontSize: displayWidth(context) * 0.05,
-                color: Colors.black,
-                ),
+              fontSize: displayWidth(context) * 0.05,
+              color: Colors.black,
+            ),
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: UnderlineTabIndicator(
               borderSide: BorderSide(color: Color(0xff0279fc), width: 5),
@@ -52,7 +52,7 @@ class _BadgeScreenState extends State<BadgeScreen> {
             indicatorColor: Color(0xff0279fc),
             tabs: [
               Tab(
-                text: 'All badges',
+                text: finalBadgeModel.toString() != '[]' ? 'All Collectables' : 'All badges',
               ),
               Tab(
                 text: 'Activated',
@@ -61,10 +61,7 @@ class _BadgeScreenState extends State<BadgeScreen> {
           ),
         ),
         body: TabBarView(
-          children: [
-            AllBadges(),
-            ActivatedBadges()
-          ],
+          children: [AllBadges(), ActivatedBadges()],
         ),
       ),
     );
