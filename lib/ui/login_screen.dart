@@ -4,19 +4,20 @@ import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/main.dart';
+import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
+import 'package:kipling/ui/create_account.dart';
 import 'package:kipling/ui/personal_details.dart';
 
 class login_screen extends StatefulWidget {
-  const login_screen({Key? key, required this.ld,this.personalDetailData})
-      : super(
-          key: key,
-        );
+  const login_screen(
+      {required this.ld, this.personalDetailData, this.createAccountModel});
 
   // final List<Logindata> profileList;
   final Logindata? ld;
-final PersonalDetailData? personalDetailData ;
+  final PersonalDetailData? personalDetailData;
+  final CreateAccountModel? createAccountModel;
 
   @override
   _login_screenState createState() => _login_screenState();
@@ -34,11 +35,9 @@ class _login_screenState extends State<login_screen> {
   String dropdownvalue = 'EN';
   var items = [];
 
-
   @override
   void initState() {
-
-   print('pppppppppp  --- > ${ widget.personalDetailData}');
+    print('pppppppppp  --- > ${widget.personalDetailData}');
     print(widget.ld?.name);
     ld = widget.ld!;
     for (var i in ld.value) {
@@ -169,7 +168,9 @@ class _login_screenState extends State<login_screen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PersonalDetails(ld: widget.personalDetailData,)));
+                                      builder: (context) => PersonalDetails(
+                                            ld: widget.personalDetailData,
+                                          )));
                             },
                             style: ElevatedButton.styleFrom(
                               primary: const Color(0xFF2d2c2e),
@@ -250,12 +251,20 @@ class _login_screenState extends State<login_screen> {
                               Padding(
                                 padding: EdgeInsets.only(
                                     left: displayWidth(context) * 0.02),
-                                child: Text(
-                                  ld.value[index].registerLinkText,
-                                  style: TextStyle(
-                                      fontSize: displayWidth(context) * 0.045,
-                                      color: Color(0xff88b04a),
-                                      fontWeight: FontWeight.bold),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CreateAccount(
+                                              createAccountModel:
+                                                  widget.createAccountModel))),
+                                  child: Text(
+                                    ld.value[index].registerLinkText,
+                                    style: TextStyle(
+                                        fontSize: displayWidth(context) * 0.045,
+                                        color: Color(0xff88b04a),
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
                             ]),

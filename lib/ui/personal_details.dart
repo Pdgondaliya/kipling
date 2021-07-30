@@ -1012,136 +1012,136 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   hint: ld!.value[index].addressCityText,
                                   controller: cityController,
                                   context: context,
-                                  suffix: true,
-                                  suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                                  enable: false,
-                                  onTap: () {
-                                    showCupertinoModalPopup(
-                                      context: context,
-                                      builder: (context) {
-                                        return StatefulBuilder(builder:
-                                            (BuildContext context,
-                                                StateSetter setState) {
-                                          return Material(
-                                            color: Colors.transparent,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: <Widget>[
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xffffffff),
-                                                    border: Border(
-                                                      bottom: BorderSide(
-                                                        color:
-                                                            Color(0xff999999),
-                                                        width: 0.0,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        child: CupertinoButton(
-                                                          child: Text(''),
-                                                          onPressed: () {},
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            horizontal: 16.0,
-                                                            vertical: 5.0,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Center(
-                                                          child: Text(
-                                                            'Select City',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize:
-                                                                    displayWidth(
-                                                                            context) *
-                                                                        0.035),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: CupertinoButton(
-                                                          child:
-                                                              Text('Confirm'),
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            horizontal: 16.0,
-                                                            vertical: 5.0,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height:
-                                                      displayWidth(context) *
-                                                          0.5,
-                                                  color: Color(0xfff7f7f7),
-                                                  child: CupertinoPicker(
-                                                    itemExtent:
-                                                        displayWidth(context) *
-                                                            0.08,
-                                                    onSelectedItemChanged:
-                                                        (value) {
-                                                      setState(() {
-                                                        print(
-                                                            'Value::  $value');
-                                                      });
-                                                    },
-                                                    children: [
-                                                      Text(
-                                                        'Surat',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                      Text('Ahmedabad',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                      Text('Bhavnagar',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                      Text('Rajkot',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                      Text('Amreli',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                      Text('Junagadh',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                      },
-                                    );
-                                  }),
+                                  // suffix: true,
+                                  // suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                                  // onTap: () {
+                                  //   showCupertinoModalPopup(
+                                  //     context: context,
+                                  //     builder: (context) {
+                                  //       return StatefulBuilder(builder:
+                                  //           (BuildContext context,
+                                  //               StateSetter setState) {
+                                  //         return Material(
+                                  //           color: Colors.transparent,
+                                  //           child: Column(
+                                  //             mainAxisAlignment:
+                                  //                 MainAxisAlignment.end,
+                                  //             children: <Widget>[
+                                  //               Container(
+                                  //                 decoration: BoxDecoration(
+                                  //                   color: Color(0xffffffff),
+                                  //                   border: Border(
+                                  //                     bottom: BorderSide(
+                                  //                       color:
+                                  //                           Color(0xff999999),
+                                  //                       width: 0.0,
+                                  //                     ),
+                                  //                   ),
+                                  //                 ),
+                                  //                 child: Row(
+                                  //                   mainAxisAlignment:
+                                  //                       MainAxisAlignment
+                                  //                           .spaceBetween,
+                                  //                   children: <Widget>[
+                                  //                     Expanded(
+                                  //                       child: CupertinoButton(
+                                  //                         child: Text(''),
+                                  //                         onPressed: () {},
+                                  //                         padding:
+                                  //                             const EdgeInsets
+                                  //                                 .symmetric(
+                                  //                           horizontal: 16.0,
+                                  //                           vertical: 5.0,
+                                  //                         ),
+                                  //                       ),
+                                  //                     ),
+                                  //                     Expanded(
+                                  //                       child: Center(
+                                  //                         child: Text(
+                                  //                           'Select City',
+                                  //                           style: TextStyle(
+                                  //                               color: Colors
+                                  //                                   .black,
+                                  //                               fontSize:
+                                  //                                   displayWidth(
+                                  //                                           context) *
+                                  //                                       0.035),
+                                  //                         ),
+                                  //                       ),
+                                  //                     ),
+                                  //                     Expanded(
+                                  //                       child: CupertinoButton(
+                                  //                         child:
+                                  //                             Text('Confirm'),
+                                  //                         onPressed: () {
+                                  //                           Navigator.pop(
+                                  //                               context);
+                                  //                         },
+                                  //                         padding:
+                                  //                             const EdgeInsets
+                                  //                                 .symmetric(
+                                  //                           horizontal: 16.0,
+                                  //                           vertical: 5.0,
+                                  //                         ),
+                                  //                       ),
+                                  //                     )
+                                  //                   ],
+                                  //                 ),
+                                  //               ),
+                                  //               Container(
+                                  //                 height:
+                                  //                     displayWidth(context) *
+                                  //                         0.5,
+                                  //                 color: Color(0xfff7f7f7),
+                                  //                 child: CupertinoPicker(
+                                  //                   itemExtent:
+                                  //                       displayWidth(context) *
+                                  //                           0.08,
+                                  //                   onSelectedItemChanged:
+                                  //                       (value) {
+                                  //                     setState(() {
+                                  //                       print(
+                                  //                           'Value::  $value');
+                                  //                     });
+                                  //                   },
+                                  //                   children: [
+                                  //                     Text(
+                                  //                       'Surat',
+                                  //                       style: TextStyle(
+                                  //                           color:
+                                  //                               Colors.black),
+                                  //                     ),
+                                  //                     Text('Ahmedabad',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                     Text('Bhavnagar',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                     Text('Rajkot',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                     Text('Amreli',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                     Text('Junagadh',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                   ],
+                                  //                 ),
+                                  //               )
+                                  //             ],
+                                  //           ),
+                                  //         );
+                                  //       });
+                                  //     },
+                                  //   );
+                                  // }
+                                ),
                               Padding(
                                 padding: EdgeInsets.only(
                                     top: displayHeight(context) * 0.01,
@@ -1158,136 +1158,137 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   hint: ld!.value[index].addressStateText,
                                   controller: regionController,
                                   context: context,
-                                  suffix: true,
-                                  enable: false,
-                                  suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                                  onTap: () {
-                                    showCupertinoModalPopup(
-                                      context: context,
-                                      builder: (context) {
-                                        return StatefulBuilder(builder:
-                                            (BuildContext context,
-                                                StateSetter setState) {
-                                          return Material(
-                                            color: Colors.transparent,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: <Widget>[
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xffffffff),
-                                                    border: Border(
-                                                      bottom: BorderSide(
-                                                        color:
-                                                            Color(0xff999999),
-                                                        width: 0.0,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        child: CupertinoButton(
-                                                          child: Text(''),
-                                                          onPressed: () {},
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            horizontal: 16.0,
-                                                            vertical: 5.0,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Center(
-                                                          child: Text(
-                                                            'Select Region',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize:
-                                                                    displayWidth(
-                                                                            context) *
-                                                                        0.035),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: CupertinoButton(
-                                                          child:
-                                                              Text('Confirm'),
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            horizontal: 16.0,
-                                                            vertical: 5.0,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height:
-                                                      displayWidth(context) *
-                                                          0.5,
-                                                  color: Color(0xfff7f7f7),
-                                                  child: CupertinoPicker(
-                                                    itemExtent:
-                                                        displayWidth(context) *
-                                                            0.08,
-                                                    onSelectedItemChanged:
-                                                        (value) {
-                                                      setState(() {
-                                                        print(
-                                                            'Value::  $value');
-                                                      });
-                                                    },
-                                                    children: [
-                                                      Text(
-                                                        'Gujarat',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                      Text('Maharstra',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                      Text('Delhi',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                      Text('Rajasthan',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                      Text('Madhya Pradesh',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                      Text('Chennai',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black)),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                      },
-                                    );
-                                  }),
+                                  // suffix: true,
+                                  // enable: false,
+                                  // suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                                  // onTap: () {
+                                  //   showCupertinoModalPopup(
+                                  //     context: context,
+                                  //     builder: (context) {
+                                  //       return StatefulBuilder(builder:
+                                  //           (BuildContext context,
+                                  //               StateSetter setState) {
+                                  //         return Material(
+                                  //           color: Colors.transparent,
+                                  //           child: Column(
+                                  //             mainAxisAlignment:
+                                  //                 MainAxisAlignment.end,
+                                  //             children: <Widget>[
+                                  //               Container(
+                                  //                 decoration: BoxDecoration(
+                                  //                   color: Color(0xffffffff),
+                                  //                   border: Border(
+                                  //                     bottom: BorderSide(
+                                  //                       color:
+                                  //                           Color(0xff999999),
+                                  //                       width: 0.0,
+                                  //                     ),
+                                  //                   ),
+                                  //                 ),
+                                  //                 child: Row(
+                                  //                   mainAxisAlignment:
+                                  //                       MainAxisAlignment
+                                  //                           .spaceBetween,
+                                  //                   children: <Widget>[
+                                  //                     Expanded(
+                                  //                       child: CupertinoButton(
+                                  //                         child: Text(''),
+                                  //                         onPressed: () {},
+                                  //                         padding:
+                                  //                             const EdgeInsets
+                                  //                                 .symmetric(
+                                  //                           horizontal: 16.0,
+                                  //                           vertical: 5.0,
+                                  //                         ),
+                                  //                       ),
+                                  //                     ),
+                                  //                     Expanded(
+                                  //                       child: Center(
+                                  //                         child: Text(
+                                  //                           'Select Region',
+                                  //                           style: TextStyle(
+                                  //                               color: Colors
+                                  //                                   .black,
+                                  //                               fontSize:
+                                  //                                   displayWidth(
+                                  //                                           context) *
+                                  //                                       0.035),
+                                  //                         ),
+                                  //                       ),
+                                  //                     ),
+                                  //                     Expanded(
+                                  //                       child: CupertinoButton(
+                                  //                         child:
+                                  //                             Text('Confirm'),
+                                  //                         onPressed: () {
+                                  //                           Navigator.pop(
+                                  //                               context);
+                                  //                         },
+                                  //                         padding:
+                                  //                             const EdgeInsets
+                                  //                                 .symmetric(
+                                  //                           horizontal: 16.0,
+                                  //                           vertical: 5.0,
+                                  //                         ),
+                                  //                       ),
+                                  //                     )
+                                  //                   ],
+                                  //                 ),
+                                  //               ),
+                                  //               Container(
+                                  //                 height:
+                                  //                     displayWidth(context) *
+                                  //                         0.5,
+                                  //                 color: Color(0xfff7f7f7),
+                                  //                 child: CupertinoPicker(
+                                  //                   itemExtent:
+                                  //                       displayWidth(context) *
+                                  //                           0.08,
+                                  //                   onSelectedItemChanged:
+                                  //                       (value) {
+                                  //                     setState(() {
+                                  //                       print(
+                                  //                           'Value::  $value');
+                                  //                     });
+                                  //                   },
+                                  //                   children: [
+                                  //                     Text(
+                                  //                       'Gujarat',
+                                  //                       style: TextStyle(
+                                  //                           color:
+                                  //                               Colors.black),
+                                  //                     ),
+                                  //                     Text('Maharstra',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                     Text('Delhi',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                     Text('Rajasthan',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                     Text('Madhya Pradesh',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                     Text('Chennai',
+                                  //                         style: TextStyle(
+                                  //                             color: Colors
+                                  //                                 .black)),
+                                  //                   ],
+                                  //                 ),
+                                  //               )
+                                  //             ],
+                                  //           ),
+                                  //         );
+                                  //       });
+                                  //     },
+                                  //   );
+                                  // }
+                                  ),
                               Padding(
                                 padding: EdgeInsets.only(
                                     top: displayHeight(context) * 0.01,

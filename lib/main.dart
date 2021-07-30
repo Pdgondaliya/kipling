@@ -6,6 +6,7 @@ import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/module/badge_model.dart' as b;
 import 'package:kipling/module/country_model.dart' as c;
+import 'package:kipling/module/create_account_model.dart' as ca;
 import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/splash_data.dart';
@@ -44,8 +45,11 @@ class MyHomePage extends StatefulWidget {
 Future<b.BadgeData>? badgeData;
 Future<c.CountryPickerModel>? futureCountryPickerDataAlbum;
 
+
+
 List<b.BadgeData>? badgeDetailsData;
 List<c.Value>? countryList;
+
 List<b.Content>? contents;
 List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
 List<b.FinalBadgeModel> finalBadgeModel = [];
@@ -53,14 +57,18 @@ List<b.FinalBadgeModel> finalBadgeModel = [];
 class _MyHomePageState extends State<MyHomePage> {
   late Future<Splashdata> futureAlbum;
   late Future<PersonalDetailData> futurePersonDataAlbum;
+  late Future<ca.CreateAccountModel> futureCretaeAccountAlbum;
 
   Logindata? logindata;
   PersonalDetailData? personalDetailData;
   c.CountryPickerModel? countryPickerData;
+  ca.CreateAccountModel? createAccountData;
   List<Todo> taskList = [];
   List<Todo> personalDataList = [];
   List<Logindata> profileList = [];
   List<PersonalDetailData> personalList = [];
+  List<ca.CreateAccountModel> createAccountList = [];
+
 
   late Timer _timer;
 
@@ -71,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
     fetchapi();
     futureAlbum = fetchAlbum();
     futurePersonDataAlbum = fetchPersonData();
+    futureCretaeAccountAlbum = fetchCreateAccountData();
     futureCountryPickerDataAlbum = fetchCountryListData();
     badgeData = fetchBadgeData();
     print("initState");
@@ -114,18 +123,43 @@ class _MyHomePageState extends State<MyHomePage> {
       _timer = Timer.periodic(Duration(seconds: 5), (timer) {
         print("Login Data --->" + logindata.toString());
         print("Personal Data --->" + personalDetailData.toString());
-        if (logindata != null && personalDetailData != null) {
+        if (logindata != null &&
+            personalDetailData != null /*&&
+            createAccountData != null*/) {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => login_screen(
                         ld: logindata,
                         personalDetailData: personalDetailData,
+                        createAccountModel: createAccountData,
                       )));
           _timer.cancel();
         }
       });
       return Splashdata.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  //personalData API
+  Future<ca.CreateAccountModel> fetchCreateAccountData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=sign_up'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("createAccount:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {
+        createAccountData = ca.CreateAccountModel.fromJson(responseJson[0]);
+      });
+
+      return ca.CreateAccountModel.fromJson(responseJson[0]);
     } else {
       throw Exception('Failed to load album');
     }
@@ -249,7 +283,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body:
+          /* Stack(
         children: [
           Image.asset(
             'assets/images/splash_background.jpg',
@@ -269,9 +304,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )
         ],
-      )
+      )*/
 
-      /* FutureBuilder<Splashdata>(
+          FutureBuilder<Splashdata>(
         future: futureAlbum,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -298,8 +333,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           );
         },
-      )*/
-      ,
+      ),
     );
   }
 
