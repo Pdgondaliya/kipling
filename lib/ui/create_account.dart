@@ -62,7 +62,10 @@ class _CreateAccountState extends State<CreateAccount> {
                   child: DropdownButton(
                     value: index == 1 ? 'NL' : dropdownvalue,
                     underline: Container(),
-                    icon: Icon(Icons.keyboard_arrow_down),
+                    icon: Icon(
+                      Icons.arrow_drop_down_rounded,
+                      size: 20,
+                    ),
                     items: <String>['EN', 'NL']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
@@ -100,11 +103,11 @@ class _CreateAccountState extends State<CreateAccount> {
               Container(
                 padding: EdgeInsets.symmetric(
                     horizontal: displayWidth(context) * 0.04,
-                    vertical: displayWidth(context) * 0.02),
+                    vertical: displayWidth(context) * 0.01),
                 child: Text(
                   index == 0 ? ld!.value.titleTextEn : ld!.value.titleTextNl,
                   style: TextStyle(
-                      fontSize: displayWidth(context) * 0.05,
+                      fontSize: displayWidth(context) * 0.08,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
@@ -268,7 +271,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -286,16 +289,37 @@ class _CreateAccountState extends State<CreateAccount> {
                               color: Color(0xff89b14b),
                             ),
                     ),
-                    Text(snUpNews == false ? 'Please select our terms & conditions' : ''),
                     SizedBox(width: 10),
                     Text(
                         index == 0
                             ? ld!.value.fields.optin.titleTextEn
                             : ld!.value.fields.optin.titleTextNl,
-                        style: TextStyle(color: Color(0xff010001)))
+                        style: TextStyle(color: Color(0xff010001))),
                   ],
                 ),
               ),
+              snUpNews == false
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: displayWidth(context) * 0.04,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.check_box_outlined,
+                            color: Colors.transparent,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Please select our terms & conditions',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: displayWidth(context) * 0.04,
@@ -303,7 +327,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     GestureDetector(
                       onTap: () {

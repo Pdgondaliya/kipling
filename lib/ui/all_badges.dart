@@ -195,6 +195,7 @@ class _AllBadgesState extends State<AllBadges> {
                         ),
                         SizedBox(height: 10),
                         Expanded(
+                            flex: 5,
                             child: Text(
                                 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
                                 textAlign: TextAlign.center,
@@ -236,7 +237,7 @@ class _AllBadgesState extends State<AllBadges> {
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
                   child: Container(
-                    height: displayHeight(context) * 0.7,
+                    height: displayHeight(context) * 0.8,
                     padding: EdgeInsets.all(displayHeight(context) * 0.02),
                     child: Column(
                       children: [
@@ -269,37 +270,39 @@ class _AllBadgesState extends State<AllBadges> {
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         // SizedBox(height: 10),
-                        Expanded(
+                        Flexible(
+                          flex: 5,
                             child: Align(
-                          alignment: Alignment.center,
-                          child: Html(
-                            data: """
+                              alignment: Alignment.center,
+                              child: Html(
+                                data: """
                               $desc
                               """,
-                            // child: Text(desc,
-                            //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
-                            //     textAlign: TextAlign.center,
-                            //     style: TextStyle(
-                            //         fontSize: displayHeight(context) * 0.02,
-                            //         color: Colors.black)),
-                          ),
-                        )),
+                                // child: Text(desc,
+                                //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
+                                //     textAlign: TextAlign.center,
+                                //     style: TextStyle(
+                                //         fontSize: displayHeight(context) * 0.02,
+                                //         color: Colors.black)),
+                              ),
+                            )),
                         // SizedBox(height: 10),
-                        Expanded(
+                        Flexible(
+                          flex: 1,
                             child: Align(
-                          alignment: Alignment.center,
-                          child: Html(
-                            data: """
+                              alignment: Alignment.center,
+                              child: Html(
+                                data: """
                               $condition
                               """,
-                            // child: Text(desc,
-                            //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
-                            //     textAlign: TextAlign.center,
-                            //     style: TextStyle(
-                            //         fontSize: displayHeight(context) * 0.02,
-                            //         color: Colors.black)),
-                          ),
-                        )),
+                                // child: Text(desc,
+                                //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
+                                //     textAlign: TextAlign.center,
+                                //     style: TextStyle(
+                                //         fontSize: displayHeight(context) * 0.02,
+                                //         color: Colors.black)),
+                              ),
+                            )),
                         Text(
                           points,
                           // '000 points',
