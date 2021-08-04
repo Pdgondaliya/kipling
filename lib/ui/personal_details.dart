@@ -65,30 +65,30 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     showCupertinoModalPopup(
         context: ctx,
         builder: (_) => Container(
-              height: displayHeight(context) * 0.5,
-              color: Color.fromARGB(255, 255, 255, 255),
-              child: Column(
-                children: [
-                  Container(
-                    height: displayHeight(context) * 0.425,
-                    child: CupertinoDatePicker(
-                        initialDateTime: DateTime.now(),
-                        mode: CupertinoDatePickerMode.date,
-                        onDateTimeChanged: (val) {
-                          setState(() {
-                            _chosenDateTime = val;
-                          });
-                        }),
-                  ),
-
-                  // Close the modal
-                  CupertinoButton(
-                    child: Text('OK'),
-                    onPressed: () => Navigator.of(ctx).pop(),
-                  )
-                ],
+          height: displayHeight(context) * 0.5,
+          color: Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              Container(
+                height: displayHeight(context) * 0.425,
+                child: CupertinoDatePicker(
+                    initialDateTime: DateTime.now(),
+                    mode: CupertinoDatePickerMode.date,
+                    onDateTimeChanged: (val) {
+                      setState(() {
+                        _chosenDateTime = val;
+                      });
+                    }),
               ),
-            ));
+
+              // Close the modal
+              CupertinoButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(ctx).pop(),
+              )
+            ],
+          ),
+        ));
   }
 
   final ImagePicker _picker = ImagePicker();
@@ -124,7 +124,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         return CupertinoAlertDialog(
           title: Text('Leave without saving?'),
           content:
-              Text('If you continue, all the changes you made will be lost.'),
+          Text('If you continue, all the changes you made will be lost.'),
           actions: <Widget>[
             CupertinoDialogAction(
               child: Text(
@@ -167,7 +167,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         title: Text(
           ld!.value[index].titleText,
           style:
-              TextStyle(color: Color(0xff0f0e0e), fontWeight: FontWeight.bold),
+          TextStyle(color: Color(0xff0f0e0e), fontWeight: FontWeight.bold),
         ),
       ),
       body: WillPopScope(
@@ -186,7 +186,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       color: Colors.white,
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: displayHeight(context) * 0.03,
+                            horizontal: displayWidth(context) * 0.08,
                             vertical: displayHeight(context) * 0.05),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -207,48 +207,53 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                         context: context,
                                         builder: (BuildContext context) =>
                                             CupertinoActionSheet(
-                                          cancelButton: CupertinoButton(
-                                            child: Text('Cancel'),
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                          ),
-                                          actions: <CupertinoActionSheetAction>[
-                                            CupertinoActionSheetAction(
-                                              child: const Text('Take a photo'),
-                                              onPressed: () {
-                                                _getFromCamera();
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            CupertinoActionSheetAction(
-                                              child:
+                                              cancelButton: CupertinoButton(
+                                                child: Text('Cancel'),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              ),
+                                              actions: <CupertinoActionSheetAction>[
+                                                CupertinoActionSheetAction(
+                                                  child: const Text('Take a photo'),
+                                                  onPressed: () {
+                                                    _getFromCamera();
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                CupertinoActionSheetAction(
+                                                  child:
                                                   const Text('Upload a photo'),
-                                              onPressed: () {
-                                                _getFromGallery();
-                                                Navigator.pop(context);
-                                              },
-                                            )
-                                          ],
-                                        ),
+                                                  onPressed: () {
+                                                    _getFromGallery();
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            ),
                                       );
                                     },
                                     child: imageFile == null
                                         ? Image.network(
-                                            ld!.value[index]
-                                                .profilePicturePlaceholderUrl,
-                                            height: displayWidth(context) * 0.5,
-                                            width: displayWidth(context) * 0.5,
-                                            fit: BoxFit.contain,
-                                          )
+                                      ld!.value[index]
+                                          .profilePicturePlaceholderUrl,
+                                      height: displayWidth(context) * 0.7,
+                                      width: displayWidth(context) * 0.7,
+                                      fit: BoxFit.contain,
+                                    )
                                         : Container(
-                                            child: Image.file(
-                                              imageFile!,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                      child: Image.file(
+                                        imageFile!,
+                                        fit: BoxFit.cover,
+                                        height: displayWidth(context) * 0.7,
+                                        width: displayWidth(context) * 0.7,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              height: displayHeight(context) * 0.02,
                             ),
                             Text(ld!.value[index].personalInfoTitleText,
                                 style: TextStyle(
@@ -257,7 +262,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     fontWeight: FontWeight.bold)),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: displayHeight(context) * 0.02,
+                                  top: displayHeight(context) * 0.04,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
                                 ld!.value[index].firstNameText,
@@ -271,9 +276,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 hint: ld!.value[index].firstNameText,
                                 controller: firstNameController,
                                 context: context),
+
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: displayHeight(context) * 0.01,
+                                  top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
                                 ld!.value[index].middleNameText,
@@ -289,7 +295,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 context: context),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: displayHeight(context) * 0.01,
+                                  top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
                                 ld!.value[index].lastNameText,
@@ -305,7 +311,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 context: context),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: displayHeight(context) * 0.01,
+                                  top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
                                 ld!.value[index].genderText,
@@ -323,12 +329,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                              StateSetter setState) {
+                                          StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
@@ -342,16 +348,16 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
+                                                        const EdgeInsets
+                                                            .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -363,11 +369,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                           'Select Gender',
                                                           style: TextStyle(
                                                               color:
-                                                                  Colors.black,
+                                                              Colors.black,
                                                               fontSize:
-                                                                  displayWidth(
-                                                                          context) *
-                                                                      0.035),
+                                                              displayWidth(
+                                                                  context) *
+                                                                  0.035),
                                                         ),
                                                       ),
                                                     ),
@@ -379,8 +385,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                               context);
                                                         },
                                                         padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
+                                                        const EdgeInsets
+                                                            .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -391,12 +397,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               ),
                                               Container(
                                                 height:
-                                                    displayWidth(context) * 0.2,
+                                                displayWidth(context) * 0.2,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
                                                   itemExtent:
-                                                      displayWidth(context) *
-                                                          0.08,
+                                                  displayWidth(context) *
+                                                      0.08,
                                                   onSelectedItemChanged:
                                                       (value) {
                                                     setState(() {
@@ -425,7 +431,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                     Text('Female',
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black)),
+                                                            Colors.black)),
                                                   ],
                                                 ),
                                               )
@@ -443,7 +449,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 suffixIcon: Icon(Icons.arrow_drop_down_sharp)),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: displayHeight(context) * 0.01,
+                                  top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
                                 ld!.value[index].birthdayText,
@@ -465,7 +471,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 suffixIcon: Icon(Icons.calendar_today)),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: displayHeight(context) * 0.01,
+                                  top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
                                 ld!.value[index].countryText,
@@ -488,12 +494,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                              StateSetter setState) {
+                                          StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
@@ -507,16 +513,16 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
+                                                        const EdgeInsets
+                                                            .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -528,11 +534,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                           'Select Country',
                                                           style: TextStyle(
                                                               color:
-                                                                  Colors.black,
+                                                              Colors.black,
                                                               fontSize:
-                                                                  displayWidth(
-                                                                          context) *
-                                                                      0.035),
+                                                              displayWidth(
+                                                                  context) *
+                                                                  0.035),
                                                         ),
                                                       ),
                                                     ),
@@ -544,8 +550,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                               context);
                                                         },
                                                         padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
+                                                        const EdgeInsets
+                                                            .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -556,26 +562,26 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               ),
                                               Container(
                                                 height:
-                                                    displayWidth(context) * 0.5,
+                                                displayWidth(context) * 0.5,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
-                                                  itemExtent:
-                                                      displayWidth(context) *
-                                                          0.08,
-                                                  onSelectedItemChanged:
-                                                      (value) {
-                                                    setState(() {
-                                                      print('Value::  $value');
-                                                    });
-                                                  },
-                                                  children: countryList!.map((e) {
-                                                    return Text(
-                                                      e.name,
-                                                      style: TextStyle(
-                                                          color:
-                                                          Colors.black),
-                                                    );
-                                                  }).toList()
+                                                    itemExtent:
+                                                    displayWidth(context) *
+                                                        0.08,
+                                                    onSelectedItemChanged:
+                                                        (value) {
+                                                      setState(() {
+                                                        print('Value::  $value');
+                                                      });
+                                                    },
+                                                    children: countryList!.map((e) {
+                                                      return Text(
+                                                        e.name,
+                                                        style: TextStyle(
+                                                            color:
+                                                            Colors.black),
+                                                      );
+                                                    }).toList()
                                                   /*[
                                                     Text(
                                                       'India',
@@ -622,7 +628,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 }),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: displayHeight(context) * 0.01,
+                                  top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
                                 ld!.value[index].languageText,
@@ -645,12 +651,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                              StateSetter setState) {
+                                          StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
@@ -664,16 +670,16 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
+                                                        const EdgeInsets
+                                                            .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -685,11 +691,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                           'Select Language',
                                                           style: TextStyle(
                                                               color:
-                                                                  Colors.black,
+                                                              Colors.black,
                                                               fontSize:
-                                                                  displayWidth(
-                                                                          context) *
-                                                                      0.035),
+                                                              displayWidth(
+                                                                  context) *
+                                                                  0.035),
                                                         ),
                                                       ),
                                                     ),
@@ -701,8 +707,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                               context);
                                                         },
                                                         padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
+                                                        const EdgeInsets
+                                                            .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -713,12 +719,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               ),
                                               Container(
                                                 height:
-                                                    displayWidth(context) * 0.5,
+                                                displayWidth(context) * 0.5,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
                                                   itemExtent:
-                                                      displayWidth(context) *
-                                                          0.08,
+                                                  displayWidth(context) *
+                                                      0.08,
                                                   onSelectedItemChanged:
                                                       (value) {
                                                     setState(() {
@@ -734,23 +740,23 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                     Text('Gujarati',
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black)),
+                                                            Colors.black)),
                                                     Text('English',
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black)),
+                                                            Colors.black)),
                                                     Text('Marathi',
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black)),
+                                                            Colors.black)),
                                                     Text('Bengali',
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black)),
+                                                            Colors.black)),
                                                     Text('Punjabi',
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.black)),
+                                                            Colors.black)),
                                                   ],
                                                 ),
                                               )
@@ -773,7 +779,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                         elevation: 5,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: displayHeight(context) * 0.03,
+                              horizontal: displayWidth(context) * 0.08,
                               vertical: displayHeight(context) * 0.03),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -836,13 +842,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                         },
                                         child: isChecked == false
                                             ? Icon(
-                                                Icons.check_box_outlined,
-                                                color: Colors.black,
-                                              )
+                                          Icons.check_box_outlined,
+                                          color: Colors.black,
+                                        )
                                             : Icon(
-                                                Icons.check_box,
-                                                color: Color(0xff89b14b),
-                                              ),
+                                          Icons.check_box,
+                                          color: Color(0xff89b14b),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(width: 10),
@@ -850,24 +856,25 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       flex: 10,
                                       child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Text(ld!.value[index].optinText,
                                               style: TextStyle(
                                                   color: Color(0xff010001),
                                                   fontSize:
-                                                      displayWidth(context) *
-                                                          0.05,
+                                                  displayWidth(context) *
+                                                      0.05,
                                                   fontWeight: FontWeight.bold)),
                                           Text(
                                             ld!.value[index].optinDescText,
                                             style: TextStyle(
+                                                height: 1.50,
                                                 color: Color(0xff010001),
                                                 fontSize:
-                                                    displayWidth(context) *
-                                                        0.04),
+                                                displayWidth(context) *
+                                                    0.04),
                                           )
                                         ],
                                       ),
@@ -888,7 +895,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                         elevation: 5,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: displayHeight(context) * 0.03,
+                              horizontal: displayWidth(context) * 0.08,
                               vertical: displayHeight(context) * 0.03),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -922,19 +929,19 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     bottom: displayHeight(context) * 0.01),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(
                                                 top: displayHeight(context) *
-                                                    0.01,
+                                                    0.02,
                                                 bottom: displayHeight(context) *
                                                     0.01),
                                             child: Text(
@@ -943,14 +950,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               style: TextStyle(
                                                   color: Color(0xff010001),
                                                   fontSize:
-                                                      displayWidth(context) *
-                                                          0.04,
+                                                  displayWidth(context) *
+                                                      0.04,
                                                   fontWeight: FontWeight.w500),
                                             ),
                                           ),
                                           _buildtextfields(
                                               width:
-                                                  displayWidth(context) * 0.4,
+                                              displayWidth(context) * 0.4,
                                               hint: ld!.value[index]
                                                   .addressHouseNumberText,
                                               controller: houseNumberController,
@@ -962,14 +969,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(
                                                 top: displayHeight(context) *
-                                                    0.01,
+                                                    0.02,
                                                 bottom: displayHeight(context) *
                                                     0.01),
                                             child: Text(
@@ -978,13 +985,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               style: TextStyle(
                                                   color: Color(0xff010001),
                                                   fontSize:
-                                                      displayWidth(context) *
-                                                          0.04,
+                                                  displayWidth(context) *
+                                                      0.04,
                                                   fontWeight: FontWeight.w500),
                                             ),
                                           ),
                                           _buildtextfields(
-                                              // width: displayWidth(context) * 0.4,
+                                            // width: displayWidth(context) * 0.4,
                                               hint: ld!.value[index]
                                                   .addressHouseNumberSuffixText,
                                               controller: additionController,
@@ -998,7 +1005,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: displayHeight(context) * 0.01,
+                                    top: displayHeight(context) * 0.02,
                                     bottom: displayHeight(context) * 0.01),
                                 child: Text(
                                   ld!.value[index].addressCityText,
@@ -1009,142 +1016,142 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 ),
                               ),
                               _buildtextfields(
-                                  hint: ld!.value[index].addressCityText,
-                                  controller: cityController,
-                                  context: context,
-                                  // suffix: true,
-                                  // suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                                  // onTap: () {
-                                  //   showCupertinoModalPopup(
-                                  //     context: context,
-                                  //     builder: (context) {
-                                  //       return StatefulBuilder(builder:
-                                  //           (BuildContext context,
-                                  //               StateSetter setState) {
-                                  //         return Material(
-                                  //           color: Colors.transparent,
-                                  //           child: Column(
-                                  //             mainAxisAlignment:
-                                  //                 MainAxisAlignment.end,
-                                  //             children: <Widget>[
-                                  //               Container(
-                                  //                 decoration: BoxDecoration(
-                                  //                   color: Color(0xffffffff),
-                                  //                   border: Border(
-                                  //                     bottom: BorderSide(
-                                  //                       color:
-                                  //                           Color(0xff999999),
-                                  //                       width: 0.0,
-                                  //                     ),
-                                  //                   ),
-                                  //                 ),
-                                  //                 child: Row(
-                                  //                   mainAxisAlignment:
-                                  //                       MainAxisAlignment
-                                  //                           .spaceBetween,
-                                  //                   children: <Widget>[
-                                  //                     Expanded(
-                                  //                       child: CupertinoButton(
-                                  //                         child: Text(''),
-                                  //                         onPressed: () {},
-                                  //                         padding:
-                                  //                             const EdgeInsets
-                                  //                                 .symmetric(
-                                  //                           horizontal: 16.0,
-                                  //                           vertical: 5.0,
-                                  //                         ),
-                                  //                       ),
-                                  //                     ),
-                                  //                     Expanded(
-                                  //                       child: Center(
-                                  //                         child: Text(
-                                  //                           'Select City',
-                                  //                           style: TextStyle(
-                                  //                               color: Colors
-                                  //                                   .black,
-                                  //                               fontSize:
-                                  //                                   displayWidth(
-                                  //                                           context) *
-                                  //                                       0.035),
-                                  //                         ),
-                                  //                       ),
-                                  //                     ),
-                                  //                     Expanded(
-                                  //                       child: CupertinoButton(
-                                  //                         child:
-                                  //                             Text('Confirm'),
-                                  //                         onPressed: () {
-                                  //                           Navigator.pop(
-                                  //                               context);
-                                  //                         },
-                                  //                         padding:
-                                  //                             const EdgeInsets
-                                  //                                 .symmetric(
-                                  //                           horizontal: 16.0,
-                                  //                           vertical: 5.0,
-                                  //                         ),
-                                  //                       ),
-                                  //                     )
-                                  //                   ],
-                                  //                 ),
-                                  //               ),
-                                  //               Container(
-                                  //                 height:
-                                  //                     displayWidth(context) *
-                                  //                         0.5,
-                                  //                 color: Color(0xfff7f7f7),
-                                  //                 child: CupertinoPicker(
-                                  //                   itemExtent:
-                                  //                       displayWidth(context) *
-                                  //                           0.08,
-                                  //                   onSelectedItemChanged:
-                                  //                       (value) {
-                                  //                     setState(() {
-                                  //                       print(
-                                  //                           'Value::  $value');
-                                  //                     });
-                                  //                   },
-                                  //                   children: [
-                                  //                     Text(
-                                  //                       'Surat',
-                                  //                       style: TextStyle(
-                                  //                           color:
-                                  //                               Colors.black),
-                                  //                     ),
-                                  //                     Text('Ahmedabad',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                     Text('Bhavnagar',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                     Text('Rajkot',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                     Text('Amreli',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                     Text('Junagadh',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                   ],
-                                  //                 ),
-                                  //               )
-                                  //             ],
-                                  //           ),
-                                  //         );
-                                  //       });
-                                  //     },
-                                  //   );
-                                  // }
-                                ),
+                                hint: ld!.value[index].addressCityText,
+                                controller: cityController,
+                                context: context,
+                                // suffix: true,
+                                // suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                                // onTap: () {
+                                //   showCupertinoModalPopup(
+                                //     context: context,
+                                //     builder: (context) {
+                                //       return StatefulBuilder(builder:
+                                //           (BuildContext context,
+                                //               StateSetter setState) {
+                                //         return Material(
+                                //           color: Colors.transparent,
+                                //           child: Column(
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.end,
+                                //             children: <Widget>[
+                                //               Container(
+                                //                 decoration: BoxDecoration(
+                                //                   color: Color(0xffffffff),
+                                //                   border: Border(
+                                //                     bottom: BorderSide(
+                                //                       color:
+                                //                           Color(0xff999999),
+                                //                       width: 0.0,
+                                //                     ),
+                                //                   ),
+                                //                 ),
+                                //                 child: Row(
+                                //                   mainAxisAlignment:
+                                //                       MainAxisAlignment
+                                //                           .spaceBetween,
+                                //                   children: <Widget>[
+                                //                     Expanded(
+                                //                       child: CupertinoButton(
+                                //                         child: Text(''),
+                                //                         onPressed: () {},
+                                //                         padding:
+                                //                             const EdgeInsets
+                                //                                 .symmetric(
+                                //                           horizontal: 16.0,
+                                //                           vertical: 5.0,
+                                //                         ),
+                                //                       ),
+                                //                     ),
+                                //                     Expanded(
+                                //                       child: Center(
+                                //                         child: Text(
+                                //                           'Select City',
+                                //                           style: TextStyle(
+                                //                               color: Colors
+                                //                                   .black,
+                                //                               fontSize:
+                                //                                   displayWidth(
+                                //                                           context) *
+                                //                                       0.035),
+                                //                         ),
+                                //                       ),
+                                //                     ),
+                                //                     Expanded(
+                                //                       child: CupertinoButton(
+                                //                         child:
+                                //                             Text('Confirm'),
+                                //                         onPressed: () {
+                                //                           Navigator.pop(
+                                //                               context);
+                                //                         },
+                                //                         padding:
+                                //                             const EdgeInsets
+                                //                                 .symmetric(
+                                //                           horizontal: 16.0,
+                                //                           vertical: 5.0,
+                                //                         ),
+                                //                       ),
+                                //                     )
+                                //                   ],
+                                //                 ),
+                                //               ),
+                                //               Container(
+                                //                 height:
+                                //                     displayWidth(context) *
+                                //                         0.5,
+                                //                 color: Color(0xfff7f7f7),
+                                //                 child: CupertinoPicker(
+                                //                   itemExtent:
+                                //                       displayWidth(context) *
+                                //                           0.08,
+                                //                   onSelectedItemChanged:
+                                //                       (value) {
+                                //                     setState(() {
+                                //                       print(
+                                //                           'Value::  $value');
+                                //                     });
+                                //                   },
+                                //                   children: [
+                                //                     Text(
+                                //                       'Surat',
+                                //                       style: TextStyle(
+                                //                           color:
+                                //                               Colors.black),
+                                //                     ),
+                                //                     Text('Ahmedabad',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                     Text('Bhavnagar',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                     Text('Rajkot',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                     Text('Amreli',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                     Text('Junagadh',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                   ],
+                                //                 ),
+                                //               )
+                                //             ],
+                                //           ),
+                                //         );
+                                //       });
+                                //     },
+                                //   );
+                                // }
+                              ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: displayHeight(context) * 0.01,
+                                    top: displayHeight(context) * 0.02,
                                     bottom: displayHeight(context) * 0.01),
                                 child: Text(
                                   ld!.value[index].addressStateText,
@@ -1155,143 +1162,143 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 ),
                               ),
                               _buildtextfields(
-                                  hint: ld!.value[index].addressStateText,
-                                  controller: regionController,
-                                  context: context,
-                                  // suffix: true,
-                                  // enable: false,
-                                  // suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                                  // onTap: () {
-                                  //   showCupertinoModalPopup(
-                                  //     context: context,
-                                  //     builder: (context) {
-                                  //       return StatefulBuilder(builder:
-                                  //           (BuildContext context,
-                                  //               StateSetter setState) {
-                                  //         return Material(
-                                  //           color: Colors.transparent,
-                                  //           child: Column(
-                                  //             mainAxisAlignment:
-                                  //                 MainAxisAlignment.end,
-                                  //             children: <Widget>[
-                                  //               Container(
-                                  //                 decoration: BoxDecoration(
-                                  //                   color: Color(0xffffffff),
-                                  //                   border: Border(
-                                  //                     bottom: BorderSide(
-                                  //                       color:
-                                  //                           Color(0xff999999),
-                                  //                       width: 0.0,
-                                  //                     ),
-                                  //                   ),
-                                  //                 ),
-                                  //                 child: Row(
-                                  //                   mainAxisAlignment:
-                                  //                       MainAxisAlignment
-                                  //                           .spaceBetween,
-                                  //                   children: <Widget>[
-                                  //                     Expanded(
-                                  //                       child: CupertinoButton(
-                                  //                         child: Text(''),
-                                  //                         onPressed: () {},
-                                  //                         padding:
-                                  //                             const EdgeInsets
-                                  //                                 .symmetric(
-                                  //                           horizontal: 16.0,
-                                  //                           vertical: 5.0,
-                                  //                         ),
-                                  //                       ),
-                                  //                     ),
-                                  //                     Expanded(
-                                  //                       child: Center(
-                                  //                         child: Text(
-                                  //                           'Select Region',
-                                  //                           style: TextStyle(
-                                  //                               color: Colors
-                                  //                                   .black,
-                                  //                               fontSize:
-                                  //                                   displayWidth(
-                                  //                                           context) *
-                                  //                                       0.035),
-                                  //                         ),
-                                  //                       ),
-                                  //                     ),
-                                  //                     Expanded(
-                                  //                       child: CupertinoButton(
-                                  //                         child:
-                                  //                             Text('Confirm'),
-                                  //                         onPressed: () {
-                                  //                           Navigator.pop(
-                                  //                               context);
-                                  //                         },
-                                  //                         padding:
-                                  //                             const EdgeInsets
-                                  //                                 .symmetric(
-                                  //                           horizontal: 16.0,
-                                  //                           vertical: 5.0,
-                                  //                         ),
-                                  //                       ),
-                                  //                     )
-                                  //                   ],
-                                  //                 ),
-                                  //               ),
-                                  //               Container(
-                                  //                 height:
-                                  //                     displayWidth(context) *
-                                  //                         0.5,
-                                  //                 color: Color(0xfff7f7f7),
-                                  //                 child: CupertinoPicker(
-                                  //                   itemExtent:
-                                  //                       displayWidth(context) *
-                                  //                           0.08,
-                                  //                   onSelectedItemChanged:
-                                  //                       (value) {
-                                  //                     setState(() {
-                                  //                       print(
-                                  //                           'Value::  $value');
-                                  //                     });
-                                  //                   },
-                                  //                   children: [
-                                  //                     Text(
-                                  //                       'Gujarat',
-                                  //                       style: TextStyle(
-                                  //                           color:
-                                  //                               Colors.black),
-                                  //                     ),
-                                  //                     Text('Maharstra',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                     Text('Delhi',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                     Text('Rajasthan',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                     Text('Madhya Pradesh',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                     Text('Chennai',
-                                  //                         style: TextStyle(
-                                  //                             color: Colors
-                                  //                                 .black)),
-                                  //                   ],
-                                  //                 ),
-                                  //               )
-                                  //             ],
-                                  //           ),
-                                  //         );
-                                  //       });
-                                  //     },
-                                  //   );
-                                  // }
-                                  ),
+                                hint: ld!.value[index].addressStateText,
+                                controller: regionController,
+                                context: context,
+                                // suffix: true,
+                                // enable: false,
+                                // suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                                // onTap: () {
+                                //   showCupertinoModalPopup(
+                                //     context: context,
+                                //     builder: (context) {
+                                //       return StatefulBuilder(builder:
+                                //           (BuildContext context,
+                                //               StateSetter setState) {
+                                //         return Material(
+                                //           color: Colors.transparent,
+                                //           child: Column(
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.end,
+                                //             children: <Widget>[
+                                //               Container(
+                                //                 decoration: BoxDecoration(
+                                //                   color: Color(0xffffffff),
+                                //                   border: Border(
+                                //                     bottom: BorderSide(
+                                //                       color:
+                                //                           Color(0xff999999),
+                                //                       width: 0.0,
+                                //                     ),
+                                //                   ),
+                                //                 ),
+                                //                 child: Row(
+                                //                   mainAxisAlignment:
+                                //                       MainAxisAlignment
+                                //                           .spaceBetween,
+                                //                   children: <Widget>[
+                                //                     Expanded(
+                                //                       child: CupertinoButton(
+                                //                         child: Text(''),
+                                //                         onPressed: () {},
+                                //                         padding:
+                                //                             const EdgeInsets
+                                //                                 .symmetric(
+                                //                           horizontal: 16.0,
+                                //                           vertical: 5.0,
+                                //                         ),
+                                //                       ),
+                                //                     ),
+                                //                     Expanded(
+                                //                       child: Center(
+                                //                         child: Text(
+                                //                           'Select Region',
+                                //                           style: TextStyle(
+                                //                               color: Colors
+                                //                                   .black,
+                                //                               fontSize:
+                                //                                   displayWidth(
+                                //                                           context) *
+                                //                                       0.035),
+                                //                         ),
+                                //                       ),
+                                //                     ),
+                                //                     Expanded(
+                                //                       child: CupertinoButton(
+                                //                         child:
+                                //                             Text('Confirm'),
+                                //                         onPressed: () {
+                                //                           Navigator.pop(
+                                //                               context);
+                                //                         },
+                                //                         padding:
+                                //                             const EdgeInsets
+                                //                                 .symmetric(
+                                //                           horizontal: 16.0,
+                                //                           vertical: 5.0,
+                                //                         ),
+                                //                       ),
+                                //                     )
+                                //                   ],
+                                //                 ),
+                                //               ),
+                                //               Container(
+                                //                 height:
+                                //                     displayWidth(context) *
+                                //                         0.5,
+                                //                 color: Color(0xfff7f7f7),
+                                //                 child: CupertinoPicker(
+                                //                   itemExtent:
+                                //                       displayWidth(context) *
+                                //                           0.08,
+                                //                   onSelectedItemChanged:
+                                //                       (value) {
+                                //                     setState(() {
+                                //                       print(
+                                //                           'Value::  $value');
+                                //                     });
+                                //                   },
+                                //                   children: [
+                                //                     Text(
+                                //                       'Gujarat',
+                                //                       style: TextStyle(
+                                //                           color:
+                                //                               Colors.black),
+                                //                     ),
+                                //                     Text('Maharstra',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                     Text('Delhi',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                     Text('Rajasthan',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                     Text('Madhya Pradesh',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                     Text('Chennai',
+                                //                         style: TextStyle(
+                                //                             color: Colors
+                                //                                 .black)),
+                                //                   ],
+                                //                 ),
+                                //               )
+                                //             ],
+                                //           ),
+                                //         );
+                                //       });
+                                //     },
+                                //   );
+                                // }
+                              ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: displayHeight(context) * 0.01,
+                                    top: displayHeight(context) * 0.02,
                                     bottom: displayHeight(context) * 0.01),
                                 child: Text(
                                   ld!.value[index].countryText,
@@ -1314,12 +1321,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       builder: (context) {
                                         return StatefulBuilder(builder:
                                             (BuildContext context,
-                                                StateSetter setState) {
+                                            StateSetter setState) {
                                           return Material(
                                             color: Colors.transparent,
                                             child: Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              MainAxisAlignment.end,
                                               children: <Widget>[
                                                 Container(
                                                   decoration: BoxDecoration(
@@ -1327,23 +1334,23 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                     border: Border(
                                                       bottom: BorderSide(
                                                         color:
-                                                            Color(0xff999999),
+                                                        Color(0xff999999),
                                                         width: 0.0,
                                                       ),
                                                     ),
                                                   ),
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                     children: <Widget>[
                                                       Expanded(
                                                         child: CupertinoButton(
                                                           child: Text(''),
                                                           onPressed: () {},
                                                           padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
+                                                          const EdgeInsets
+                                                              .symmetric(
                                                             horizontal: 16.0,
                                                             vertical: 5.0,
                                                           ),
@@ -1357,23 +1364,23 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                                 color: Colors
                                                                     .black,
                                                                 fontSize:
-                                                                    displayWidth(
-                                                                            context) *
-                                                                        0.035),
+                                                                displayWidth(
+                                                                    context) *
+                                                                    0.035),
                                                           ),
                                                         ),
                                                       ),
                                                       Expanded(
                                                         child: CupertinoButton(
                                                           child:
-                                                              Text('Confirm'),
+                                                          Text('Confirm'),
                                                           onPressed: () {
                                                             Navigator.pop(
                                                                 context);
                                                           },
                                                           padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
+                                                          const EdgeInsets
+                                                              .symmetric(
                                                             horizontal: 16.0,
                                                             vertical: 5.0,
                                                           ),
@@ -1384,12 +1391,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 ),
                                                 Container(
                                                   height:
-                                                      displayWidth(context) *
-                                                          0.5,
+                                                  displayWidth(context) *
+                                                      0.5,
                                                   color: Color(0xfff7f7f7),
                                                   child: CupertinoPicker(
                                                       itemExtent: displayWidth(
-                                                              context) *
+                                                          context) *
                                                           0.08,
                                                       onSelectedItemChanged:
                                                           (value) {
@@ -1399,15 +1406,15 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                         });
                                                       },
                                                       children:
-                                                          countryList!.map((e) {
+                                                      countryList!.map((e) {
                                                         return Text(
                                                           e.name,
                                                           style: TextStyle(
                                                               color:
-                                                                  Colors.black),
+                                                              Colors.black),
                                                         );
                                                       }).toList()
-                                                      /* [
+                                                    /* [
                                                       Text(
                                                         'Austria',
                                                         style: TextStyle(
@@ -1435,7 +1442,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                               color:
                                                               Colors.black)),
                                                     ],*/
-                                                      ),
+                                                  ),
                                                 )
                                               ],
                                             ),
@@ -1446,7 +1453,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   }),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: displayHeight(context) * 0.01,
+                                    top: displayHeight(context) * 0.02,
                                     bottom: displayHeight(context) * 0.01),
                                 child: Text(
                                   ld!.value[index].addressPostalCodeText,
@@ -1462,7 +1469,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   context: context),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: displayHeight(context) * 0.01,
+                                    top: displayHeight(context) * 0.02,
                                     bottom: displayHeight(context) * 0.01),
                                 child: Text(
                                   ld!.value[index].addressTypeText,
@@ -1487,9 +1494,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                  bottom: displayWidth(context) * 0.02,
-                  left: displayWidth(context) * 0.02,
-                  right: displayWidth(context) * 0.02),
+                  bottom: displayWidth(context) * 0.03,
+                  left: displayWidth(context) * 0.08,
+                  right: displayWidth(context) * 0.08),
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -1525,18 +1532,18 @@ class _PersonalDetailsState extends State<PersonalDetails> {
 
   Widget _buildtextfields(
       {required String hint,
-      required TextEditingController controller,
-      required BuildContext context,
-      bool? suffix,
-      bool enable = true,
-      Icon? suffixIcon,
-      double? width,
-      Function()? onTap,
-      TextInputType? keyboard}) {
+        required TextEditingController controller,
+        required BuildContext context,
+        bool? suffix,
+        bool enable = true,
+        Icon? suffixIcon,
+        double? width,
+        Function()? onTap,
+        TextInputType? keyboard}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // height: displayHeight(context) * 0.07,
+        height: displayHeight(context) * 0.07,
         width: width == null ? double.infinity : width,
         child: TextFormField(
             style: TextStyle(color: Color(0xff010001)),
@@ -1545,7 +1552,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             decoration: InputDecoration(
                 hintText: hint,
                 hintStyle:
-                    const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
+                const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
                 border: InputBorder.none,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black38, width: 1.0),

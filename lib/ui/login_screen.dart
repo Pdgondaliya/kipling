@@ -118,45 +118,45 @@ class _login_screenState extends State<login_screen> {
                           alignment: Alignment.topLeft,
                           child: Form(
                               child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: displayHeight(context) * 0.005,
-                                    bottom: displayHeight(context) * 0.01),
-                                child: Text(
-                                  ld.value[index].emailText,
-                                  style: TextStyle(
-                                      color: Color(0xff010001),
-                                      fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              _buildtextfields(
-                                  hint: ld.value[index].emailPlaceholderText,
-                                  controller: emailController,
-                                  context: context),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    0,
-                                    displayHeight(context) * 0.02,
-                                    0,
-                                    displayHeight(context) * 0.01),
-                                child: Text(
-                                  ld.value[index].passwordText,
-                                  style: TextStyle(
-                                      color: Color(0xff010001),
-                                      fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              _buildtextfields(
-                                  hint: ld.value[index].passwordPlaceholderText,
-                                  controller: emailController,
-                                  context: context)
-                            ],
-                          )),
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: displayHeight(context) * 0.005,
+                                        bottom: displayHeight(context) * 0.01),
+                                    child: Text(
+                                      ld.value[index].emailText,
+                                      style: TextStyle(
+                                          color: Color(0xff010001),
+                                          fontSize: displayWidth(context) * 0.04,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  _buildtextfields(
+                                      hint: ld.value[index].emailPlaceholderText,
+                                      controller: emailController,
+                                      context: context),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0,
+                                        displayHeight(context) * 0.02,
+                                        0,
+                                        displayHeight(context) * 0.01),
+                                    child: Text(
+                                      ld.value[index].passwordText,
+                                      style: TextStyle(
+                                          color: Color(0xff010001),
+                                          fontSize: displayWidth(context) * 0.04,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  _buildtextfields(
+                                      hint: ld.value[index].passwordPlaceholderText,
+                                      controller: emailController,
+                                      context: context)
+                                ],
+                              )),
                         ),
                         Container(
                           width: double.infinity,
@@ -169,8 +169,8 @@ class _login_screenState extends State<login_screen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => PersonalDetails(
-                                            ld: widget.personalDetailData,
-                                          )));
+                                        ld: widget.personalDetailData,
+                                      )));
                             },
                             style: ElevatedButton.styleFrom(
                               primary: const Color(0xFF2d2c2e),
@@ -205,8 +205,8 @@ class _login_screenState extends State<login_screen> {
                           child: Row(children: <Widget>[
                             Expanded(
                                 child: Divider(
-                              color: Colors.black54,
-                            )),
+                                  color: Colors.black54,
+                                )),
                             Padding(
                               padding: EdgeInsets.only(
                                   left: displayWidth(context) * 0.03,
@@ -221,8 +221,8 @@ class _login_screenState extends State<login_screen> {
                             ),
                             const Expanded(
                                 child: Divider(
-                              color: Colors.black54,
-                            )),
+                                  color: Colors.black54,
+                                )),
                           ]),
                         ),
 
@@ -257,7 +257,7 @@ class _login_screenState extends State<login_screen> {
                                       MaterialPageRoute(
                                           builder: (context) => CreateAccount(
                                               createAccountModel:
-                                                  widget.createAccountModel))),
+                                              widget.createAccountModel))),
                                   child: Text(
                                     ld.value[index].registerLinkText,
                                     style: TextStyle(
@@ -281,8 +281,8 @@ class _login_screenState extends State<login_screen> {
 
 Widget _buildtextfields(
     {required String hint,
-    required TextEditingController controller,
-    required BuildContext context}) {
+      required TextEditingController controller,
+      required BuildContext context}) {
   return Container(
     height: displayHeight(context) * 0.07,
     width: double.infinity,
@@ -305,8 +305,8 @@ Widget _buildtextfields(
 
 Widget _buildLoginButton(
     {required Buttons icon,
-    required String buttonText,
-    required BuildContext context}) {
+      required String buttonText,
+      required BuildContext context}) {
   return Container(
     height: displayHeight(context) * 0.03,
     width: double.infinity,

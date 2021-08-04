@@ -3,16 +3,16 @@ import 'package:kipling/MediaQuery/get_mediaquery.dart';
 
 Widget buildtextfields(
     {required String hint,
-    required TextEditingController controller,
-    required BuildContext context,
-    bool? suffix,
-    bool enable = true,
-    FormFieldValidator<String>? validator,
-    Icon? suffixIcon,
-    double? width,
-    Function()? onTap,
-    bool? isPassword,
-    TextInputType? keyboard}) {
+      required TextEditingController controller,
+      required BuildContext context,
+      bool? suffix,
+      bool enable = true,
+      FormFieldValidator<String>? validator,
+      Icon? suffixIcon,
+      double? width,
+      Function()? onTap,
+      bool? isPassword,
+      TextInputType? keyboard}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
@@ -24,10 +24,12 @@ Widget buildtextfields(
           controller: controller,
           obscureText: isPassword == true ? true : false,
           validator: validator,
+
           decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 10),
               hintText: hint,
               hintStyle:
-                  const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
+              const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
               border: InputBorder.none,
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.black38, width: 1.0),
