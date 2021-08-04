@@ -55,7 +55,7 @@ class _CreateAccountState extends State<CreateAccount> {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                    top: displayHeight(context) * 0.02,
+                    top: displayHeight(context) * 0.04,
                     right: displayWidth(context) * 0.04),
                 child: Container(
                   alignment: Alignment.topRight,
@@ -265,6 +265,9 @@ class _CreateAccountState extends State<CreateAccount> {
                   ],
                 ),
               ),
+              SizedBox(
+                height: displayWidth(context) * 0.04,
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: displayWidth(context) * 0.04,
@@ -398,7 +401,9 @@ class _CreateAccountState extends State<CreateAccount> {
                         index == 0
                             ? ld!.value.loginLinkTextEn
                             : ld!.value.loginLinkTextNl,
-                        style: TextStyle(color: Color(0xff89b14b)),
+                        style: TextStyle(
+                            color: Color(0xff89b14b),
+                            fontWeight: FontWeight.bold),
                       ),
                     )
                   ],
