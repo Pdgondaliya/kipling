@@ -129,7 +129,7 @@ class _login_screenState extends State<login_screen> {
                                       ld.value[index].emailText,
                                       style: TextStyle(
                                           color: Color(0xff010001),
-                                          fontSize: displayWidth(context) * 0.04,
+                                          fontSize: displayWidth(context) * 0.05,
                                           fontFamily: 'Kipling_Bold',),
                                     ),
                                   ),
@@ -147,7 +147,7 @@ class _login_screenState extends State<login_screen> {
                                       ld.value[index].passwordText,
                                       style: TextStyle(
                                           color: Color(0xff010001),
-                                          fontSize: displayWidth(context) * 0.04,
+                                          fontSize: displayWidth(context) * 0.05,
                                           fontFamily: 'Kipling_Bold'),
                                     ),
                                   ),
@@ -266,7 +266,7 @@ class _login_screenState extends State<login_screen> {
                                         fontSize: displayWidth(context) * 0.045,
                                         color: Color(0xff88b04a),
                                         fontFamily: 'Kipling_Bold'),
-                                  ),
+                                  )
                                 ),
                               ),
                             ]),

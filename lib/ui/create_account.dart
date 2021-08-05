@@ -397,7 +397,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               : ld!.value.fields.generalPermission.titleTextNl,
                           style: TextStyle(
                               color: Color(0xff010001),
-                              fontSize: displayWidth(context) * 0.04,
+                              fontSize: displayWidth(context) * 0.05,
                               fontFamily: 'Kipling_Regular'),
                         )
                       ],
@@ -444,7 +444,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.05,
-                              fontFamily: 'Kipling_Bold'),
+                              fontFamily: 'Kipling_Regular'),
                         ),
                         SizedBox(width: 10),
                         GestureDetector(
@@ -456,7 +456,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             style: TextStyle(
                                 color: Color(0xff89b14b),
                                 fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Bold'),
+                                fontFamily: 'Kipling_Regular'),
                           ),
                         )
                       ],
