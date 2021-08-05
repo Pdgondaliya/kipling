@@ -159,7 +159,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.01,
+                        vertical: displayWidth(context) * 0.02,
                         // horizontal: displayWidth(context) * 0.04,
                       ),
                       child: Column(
@@ -194,7 +194,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.01,
+                        vertical: displayWidth(context) * 0.02,
                         // horizontal: displayWidth(context) * 0.04,
                       ),
                       child: Column(
@@ -231,7 +231,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.01,
+                        vertical: displayWidth(context) * 0.02,
                         // horizontal: displayWidth(context) * 0.04,
                       ),
                       child: Column(
@@ -267,7 +267,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.01,
+                        vertical: displayWidth(context) * 0.02,
                         // horizontal: displayWidth(context) * 0.04,
                       ),
                       child: Column(
@@ -307,7 +307,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                     ),
                     SizedBox(
-                      height: displayWidth(context) * 0.03,
+                      height: displayWidth(context) * 0.05,
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -372,7 +372,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                         // horizontal: displayWidth(context) * 0.04,
-                        vertical: displayWidth(context) * 0.03,
+                        vertical: displayWidth(context) * 0.04,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -420,7 +420,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         style: ElevatedButton.styleFrom(
                           primary: const Color(0xFF2d2c2e),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0)
+                              borderRadius: BorderRadius.circular(0.0)
                           ),
                         ),
                         child: Text(
@@ -462,7 +462,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               style: TextStyle(
                                   color: Color(0xff89b14b),
                                   fontSize: displayWidth(context) * 0.05,
-                                  fontFamily: 'Kipling_Regular'),
+                                  fontFamily: 'Kipling_Bold'),
                             ),
                           )
                         ],

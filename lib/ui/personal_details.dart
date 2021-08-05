@@ -1533,7 +1533,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF88b14a),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
+                          borderRadius: BorderRadius.circular(0.0)),
                     ),
                     child: Text(
                       ld!.value[index].saveButtonText,
