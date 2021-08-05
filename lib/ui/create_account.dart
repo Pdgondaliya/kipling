@@ -135,7 +135,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               : ld!.value.fields.name.titleTextNl,
                           style: TextStyle(
                               color: Color(0xff010001),
-                              fontSize: displayWidth(context) * 0.04,
+                              fontSize: displayWidth(context) * 0.03,
                               fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
@@ -170,7 +170,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               : ld!.value.fields.lastName.titleTextNl,
                           style: TextStyle(
                               color: Color(0xff010001),
-                              fontSize: displayWidth(context) * 0.04,
+                              fontSize: displayWidth(context) * 0.03,
                               fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
@@ -205,7 +205,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               : ld!.value.fields.emailAddress.titleTextNl,
                           style: TextStyle(
                               color: Color(0xff010001),
-                              fontSize: displayWidth(context) * 0.04,
+                              fontSize: displayWidth(context) * 0.03,
                               fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
@@ -242,7 +242,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               : ld!.value.fields.password.titleTextNl,
                           style: TextStyle(
                               color: Color(0xff010001),
-                              fontSize: displayWidth(context) * 0.04,
+                              fontSize: displayWidth(context) * 0.03,
                               fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
@@ -278,7 +278,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               : ld!.value.fields.confirmPassword.titleTextNl,
                           style: TextStyle(
                               color: Color(0xff010001),
-                              fontSize: displayWidth(context) * 0.04,
+                              fontSize: displayWidth(context) * 0.03,
                               fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
