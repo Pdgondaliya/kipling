@@ -66,30 +66,30 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     showCupertinoModalPopup(
         context: ctx,
         builder: (_) => Container(
-          height: displayHeight(context) * 0.5,
-          color: Color.fromARGB(255, 255, 255, 255),
-          child: Column(
-            children: [
-              Container(
-                height: displayHeight(context) * 0.425,
-                child: CupertinoDatePicker(
-                    initialDateTime: DateTime.now(),
-                    mode: CupertinoDatePickerMode.date,
-                    onDateTimeChanged: (val) {
-                      setState(() {
-                        _chosenDateTime = val;
-                      });
-                    }),
-              ),
+              height: displayHeight(context) * 0.5,
+              color: Color.fromARGB(255, 255, 255, 255),
+              child: Column(
+                children: [
+                  Container(
+                    height: displayHeight(context) * 0.425,
+                    child: CupertinoDatePicker(
+                        initialDateTime: DateTime.now(),
+                        mode: CupertinoDatePickerMode.date,
+                        onDateTimeChanged: (val) {
+                          setState(() {
+                            _chosenDateTime = val;
+                          });
+                        }),
+                  ),
 
-              // Close the modal
-              CupertinoButton(
-                child: Text('OK'),
-                onPressed: () => Navigator.of(ctx).pop(),
-              )
-            ],
-          ),
-        ));
+                  // Close the modal
+                  CupertinoButton(
+                    child: Text('OK'),
+                    onPressed: () => Navigator.of(ctx).pop(),
+                  )
+                ],
+              ),
+            ));
   }
 
   final ImagePicker _picker = ImagePicker();
@@ -133,7 +133,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         return CupertinoAlertDialog(
           title: Text('Leave without saving?'),
           content:
-          Text('If you continue, all the changes you made will be lost.'),
+              Text('If you continue, all the changes you made will be lost.'),
           actions: <Widget>[
             CupertinoDialogAction(
               child: Text(
@@ -176,7 +176,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         title: Text(
           ld!.value[index].titleText,
           style:
-          TextStyle(color: Color(0xff0f0e0e), fontWeight: FontWeight.bold),
+              TextStyle(color: Color(0xff0f0e0e), fontWeight: FontWeight.bold),
         ),
       ),
       body: WillPopScope(
@@ -216,53 +216,53 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                           context: context,
                                           builder: (BuildContext context) =>
                                               CupertinoActionSheet(
-                                                cancelButton: CupertinoButton(
-                                                  child: Text('Cancel'),
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                ),
-                                                actions: <
-                                                    CupertinoActionSheetAction>[
-                                                  CupertinoActionSheetAction(
-                                                    child:
+                                            cancelButton: CupertinoButton(
+                                              child: Text('Cancel'),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            actions: <
+                                                CupertinoActionSheetAction>[
+                                              CupertinoActionSheetAction(
+                                                child:
                                                     const Text('Take a photo'),
-                                                    onPressed: () {
-                                                      _getFromCamera();
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                  CupertinoActionSheetAction(
-                                                    child: const Text(
-                                                        'Upload a photo'),
-                                                    onPressed: () {
-                                                      _getFromGallery();
-                                                      Navigator.pop(context);
-                                                    },
-                                                  )
-                                                ],
+                                                onPressed: () {
+                                                  _getFromCamera();
+                                                  Navigator.pop(context);
+                                                },
                                               ),
+                                              CupertinoActionSheetAction(
+                                                child: const Text(
+                                                    'Upload a photo'),
+                                                onPressed: () {
+                                                  _getFromGallery();
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          ),
                                         );
                                       },
                                       child: imageFile != null
                                           ? Container(
-                                        child: Image.file(
-                                          imageFile!,
-                                          fit: BoxFit.cover,
-                                          height:
-                                          displayWidth(context) * 0.7,
-                                          width:
-                                          displayWidth(context) * 0.7,
-                                        ),
-                                      )
+                                              child: Image.file(
+                                                imageFile!,
+                                                fit: BoxFit.cover,
+                                                height:
+                                                    displayWidth(context) * 0.7,
+                                                width:
+                                                    displayWidth(context) * 0.7,
+                                              ),
+                                            )
                                           : Image.network(
-                                        ld!.value[index]
-                                            .profilePicturePlaceholderUrl,
-                                        height:
-                                        displayWidth(context) * 0.7,
-                                        width:
-                                        displayWidth(context) * 0.7,
-                                        fit: BoxFit.cover,
-                                      )),
+                                              ld!.value[index]
+                                                  .profilePicturePlaceholderUrl,
+                                              height:
+                                                  displayWidth(context) * 0.7,
+                                              width:
+                                                  displayWidth(context) * 0.7,
+                                              fit: BoxFit.cover,
+                                            )),
                                 ),
                               ),
                             ),
@@ -315,7 +315,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 style: TextStyle(
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.04,
-                                  fontFamily: 'Kipling_Regular',),
+                                  fontFamily: 'Kipling_Regular',
+                                ),
                               ),
                             ),
                             _buildtextfields(
@@ -342,12 +343,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                          StateSetter setState) {
+                                              StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
@@ -361,16 +362,16 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -382,11 +383,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                           'Select Gender',
                                                           style: TextStyle(
                                                               color:
-                                                              Colors.black,
+                                                                  Colors.black,
                                                               fontSize:
-                                                              displayWidth(
-                                                                  context) *
-                                                                  0.035),
+                                                                  displayWidth(
+                                                                          context) *
+                                                                      0.035),
                                                         ),
                                                       ),
                                                     ),
@@ -398,8 +399,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                               context);
                                                         },
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -410,12 +411,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               ),
                                               Container(
                                                 height:
-                                                displayWidth(context) * 0.2,
+                                                    displayWidth(context) * 0.2,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
                                                   itemExtent:
-                                                  displayWidth(context) *
-                                                      0.08,
+                                                      displayWidth(context) *
+                                                          0.08,
                                                   onSelectedItemChanged:
                                                       (value) {
                                                     setState(() {
@@ -444,7 +445,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                     Text('Female',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                   ],
                                                 ),
                                               )
@@ -507,12 +508,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                          StateSetter setState) {
+                                              StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
@@ -526,16 +527,16 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -547,11 +548,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                           'Select Country',
                                                           style: TextStyle(
                                                               color:
-                                                              Colors.black,
+                                                                  Colors.black,
                                                               fontSize:
-                                                              displayWidth(
-                                                                  context) *
-                                                                  0.035),
+                                                                  displayWidth(
+                                                                          context) *
+                                                                      0.035),
                                                         ),
                                                       ),
                                                     ),
@@ -563,8 +564,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                               context);
                                                         },
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -575,12 +576,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               ),
                                               Container(
                                                 height:
-                                                displayWidth(context) * 0.5,
+                                                    displayWidth(context) * 0.5,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
                                                     itemExtent:
-                                                    displayWidth(context) *
-                                                        0.08,
+                                                        displayWidth(context) *
+                                                            0.08,
                                                     onSelectedItemChanged:
                                                         (value) {
                                                       setState(() {
@@ -589,15 +590,15 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                       });
                                                     },
                                                     children:
-                                                    countryList!.map((e) {
+                                                        countryList!.map((e) {
                                                       return Text(
                                                         e.name,
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black),
+                                                                Colors.black),
                                                       );
                                                     }).toList()
-                                                  /*[
+                                                    /*[
                                                     Text(
                                                       'India',
                                                       style: TextStyle(
@@ -632,7 +633,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                             color:
                                                                 Colors.black)),
                                                   ],*/
-                                                ),
+                                                    ),
                                               )
                                             ],
                                           ),
@@ -666,12 +667,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                          StateSetter setState) {
+                                              StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
@@ -685,16 +686,16 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -706,11 +707,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                           'Select Language',
                                                           style: TextStyle(
                                                               color:
-                                                              Colors.black,
+                                                                  Colors.black,
                                                               fontSize:
-                                                              displayWidth(
-                                                                  context) *
-                                                                  0.035),
+                                                                  displayWidth(
+                                                                          context) *
+                                                                      0.035),
                                                         ),
                                                       ),
                                                     ),
@@ -722,8 +723,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                               context);
                                                         },
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -734,12 +735,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               ),
                                               Container(
                                                 height:
-                                                displayWidth(context) * 0.5,
+                                                    displayWidth(context) * 0.5,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
                                                   itemExtent:
-                                                  displayWidth(context) *
-                                                      0.08,
+                                                      displayWidth(context) *
+                                                          0.08,
                                                   onSelectedItemChanged:
                                                       (value) {
                                                     setState(() {
@@ -755,23 +756,23 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                     Text('Gujarati',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                     Text('English',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                     Text('Marathi',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                     Text('Bengali',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                     Text('Punjabi',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                   ],
                                                 ),
                                               )
@@ -857,13 +858,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                         },
                                         child: isChecked == false
                                             ? Icon(
-                                          Icons.check_box_outlined,
-                                          color: Colors.black,
-                                        )
+                                                Icons.check_box_outlined,
+                                                color: Colors.black,
+                                              )
                                             : Icon(
-                                          Icons.check_box,
-                                          color: Color(0xff89b14b),
-                                        ),
+                                                Icons.check_box,
+                                                color: Color(0xff89b14b),
+                                              ),
                                       ),
                                     ),
                                     SizedBox(width: 10),
@@ -871,16 +872,16 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       flex: 10,
                                       child: Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(ld!.value[index].optinText,
                                               style: TextStyle(
                                                   color: Color(0xff010001),
                                                   fontSize:
-                                                  displayWidth(context) *
-                                                      0.05,
+                                                      displayWidth(context) *
+                                                          0.05,
                                                   fontWeight: FontWeight.bold)),
                                           Text(
                                             ld!.value[index].optinDescText,
@@ -888,8 +889,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 height: 1.50,
                                                 color: Color(0xff010001),
                                                 fontSize:
-                                                displayWidth(context) *
-                                                    0.04),
+                                                    displayWidth(context) *
+                                                        0.04),
                                           )
                                         ],
                                       ),
@@ -944,14 +945,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     bottom: displayHeight(context) * 0.01),
                                 child: Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(
@@ -965,14 +966,15 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               style: TextStyle(
                                                   color: Color(0xff010001),
                                                   fontSize:
-                                                  displayWidth(context) *
-                                                      0.04,
-                                                  fontFamily: 'Kipling_Regular'),
+                                                      displayWidth(context) *
+                                                          0.04,
+                                                  fontFamily:
+                                                      'Kipling_Regular'),
                                             ),
                                           ),
                                           _buildtextfields(
                                               width:
-                                              displayWidth(context) * 0.4,
+                                                  displayWidth(context) * 0.4,
                                               hint: ld!.value[index]
                                                   .addressHouseNumberText,
                                               controller: houseNumberController,
@@ -984,9 +986,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(
@@ -1000,13 +1002,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               style: TextStyle(
                                                   color: Color(0xff010001),
                                                   fontSize:
-                                                  displayWidth(context) *
-                                                      0.04,
-                                                  fontFamily: 'Kipling_Regular'),
+                                                      displayWidth(context) *
+                                                          0.04,
+                                                  fontFamily:
+                                                      'Kipling_Regular'),
                                             ),
                                           ),
                                           _buildtextfields(
-                                            // width: displayWidth(context) * 0.4,
+                                              // width: displayWidth(context) * 0.4,
                                               hint: ld!.value[index]
                                                   .addressHouseNumberSuffixText,
                                               controller: additionController,
@@ -1173,7 +1176,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.04,
-                                    fontFamily: 'Kipling_Regular',),
+                                    fontFamily: 'Kipling_Regular',
+                                  ),
                                 ),
                               ),
                               _buildtextfields(
@@ -1336,12 +1340,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       builder: (context) {
                                         return StatefulBuilder(builder:
                                             (BuildContext context,
-                                            StateSetter setState) {
+                                                StateSetter setState) {
                                           return Material(
                                             color: Colors.transparent,
                                             child: Column(
                                               mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                                  MainAxisAlignment.end,
                                               children: <Widget>[
                                                 Container(
                                                   decoration: BoxDecoration(
@@ -1349,23 +1353,23 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                     border: Border(
                                                       bottom: BorderSide(
                                                         color:
-                                                        Color(0xff999999),
+                                                            Color(0xff999999),
                                                         width: 0.0,
                                                       ),
                                                     ),
                                                   ),
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: <Widget>[
                                                       Expanded(
                                                         child: CupertinoButton(
                                                           child: Text(''),
                                                           onPressed: () {},
                                                           padding:
-                                                          const EdgeInsets
-                                                              .symmetric(
+                                                              const EdgeInsets
+                                                                  .symmetric(
                                                             horizontal: 16.0,
                                                             vertical: 5.0,
                                                           ),
@@ -1379,23 +1383,23 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                                 color: Colors
                                                                     .black,
                                                                 fontSize:
-                                                                displayWidth(
-                                                                    context) *
-                                                                    0.035),
+                                                                    displayWidth(
+                                                                            context) *
+                                                                        0.035),
                                                           ),
                                                         ),
                                                       ),
                                                       Expanded(
                                                         child: CupertinoButton(
                                                           child:
-                                                          Text('Confirm'),
+                                                              Text('Confirm'),
                                                           onPressed: () {
                                                             Navigator.pop(
                                                                 context);
                                                           },
                                                           padding:
-                                                          const EdgeInsets
-                                                              .symmetric(
+                                                              const EdgeInsets
+                                                                  .symmetric(
                                                             horizontal: 16.0,
                                                             vertical: 5.0,
                                                           ),
@@ -1406,12 +1410,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 ),
                                                 Container(
                                                   height:
-                                                  displayWidth(context) *
-                                                      0.5,
+                                                      displayWidth(context) *
+                                                          0.5,
                                                   color: Color(0xfff7f7f7),
                                                   child: CupertinoPicker(
                                                       itemExtent: displayWidth(
-                                                          context) *
+                                                              context) *
                                                           0.08,
                                                       onSelectedItemChanged:
                                                           (value) {
@@ -1421,15 +1425,15 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                         });
                                                       },
                                                       children:
-                                                      countryList!.map((e) {
+                                                          countryList!.map((e) {
                                                         return Text(
                                                           e.name,
                                                           style: TextStyle(
                                                               color:
-                                                              Colors.black),
+                                                                  Colors.black),
                                                         );
                                                       }).toList()
-                                                    /* [
+                                                      /* [
                                                       Text(
                                                         'Austria',
                                                         style: TextStyle(
@@ -1457,7 +1461,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                               color:
                                                               Colors.black)),
                                                     ],*/
-                                                  ),
+                                                      ),
                                                 )
                                               ],
                                             ),
@@ -1475,7 +1479,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.04,
-                                    fontFamily: 'Kipling_Regular',),
+                                    fontFamily: 'Kipling_Regular',
+                                  ),
                                 ),
                               ),
                               _buildtextfields(
@@ -1527,14 +1532,15 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     },
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF88b14a),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0)),
                     ),
                     child: Text(
                       ld!.value[index].saveButtonText,
                       style: TextStyle(
                           fontSize: displayWidth(context) * 0.04,
                           color: Color(0xfffcfdfd),
-                          fontFamily: 'Kipling_Bold'
-                      ),
+                          fontFamily: 'Kipling_Regular'),
                     ),
                   ),
                 ),
@@ -1548,41 +1554,45 @@ class _PersonalDetailsState extends State<PersonalDetails> {
 
   Widget _buildtextfields(
       {required String hint,
-        required TextEditingController controller,
-        required BuildContext context,
-        bool? suffix,
-        bool enable = true,
-        Icon? suffixIcon,
-        double? width,
-        Function()? onTap,
-        TextInputType? keyboard}) {
+      required TextEditingController controller,
+      required BuildContext context,
+      bool? suffix,
+      bool enable = true,
+      Icon? suffixIcon,
+      double? width,
+      Function()? onTap,
+      TextInputType? keyboard}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: displayHeight(context) * 0.06,
+        height: displayHeight(context) * 0.051,
         width: width == null ? double.infinity : width,
         child: TextFormField(
-            style: TextStyle(color: Color(0xff010001), fontFamily: 'Kipling_Regular'),
+            style: TextStyle(
+                color: Color(0xff010001), fontFamily: 'Kipling_Regular'),
             keyboardType: keyboard,
             controller: controller,
             decoration: InputDecoration(
                 hintText: hint,
                 hintStyle:
-                const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
+                    const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
                 border: InputBorder.none,
-                focusedBorder:  OutlineInputBorder(
-                  borderRadius:BorderRadius.circular(0.0),
-                  borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                  borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5), width: 1.0),
                 ),
                 enabled: enable == true ? true : false,
                 suffixIcon: suffix != true ? null : suffixIcon,
                 enabledBorder: OutlineInputBorder(
-                  borderRadius:BorderRadius.circular(0.0),
-                  borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                  borderRadius: BorderRadius.circular(0.0),
+                  borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5), width: 1.0),
                 ),
                 disabledBorder: OutlineInputBorder(
-                  borderRadius:BorderRadius.circular(0.0),
-                  borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                  borderRadius: BorderRadius.circular(0.0),
+                  borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.5), width: 1.0),
                 ))),
       ),
     );

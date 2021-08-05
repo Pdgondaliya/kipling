@@ -16,11 +16,10 @@ Widget buildtextfields(
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      height: displayHeight(context) * 0.06,
+      height: displayHeight(context) * 0.051,
       width: width == null ? double.infinity : width,
       child: TextFormField(
-          style: TextStyle(
-              color: Color(0xff010001)),
+          style: TextStyle(color: Color(0xff010001)),
           keyboardType: keyboard,
           controller: controller,
           obscureText: isPassword == true ? true : false,
@@ -31,27 +30,31 @@ Widget buildtextfields(
               hintStyle:
                   const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
               border: InputBorder.none,
-              focusedBorder:  OutlineInputBorder(
+              focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0),
-                borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                borderSide:
+                    BorderSide(color: Colors.grey.withOpacity(0.5), width: 1.0),
               ),
               enabled: enable == true ? true : false,
               suffixIcon: suffix != true ? null : suffixIcon,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0),
-                borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                borderSide:
+                    BorderSide(color: Colors.grey.withOpacity(0.5), width: 1.0),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0),
-                borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                borderSide: BorderSide(color: Colors.red, width: 1.0),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0),
-                borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                borderSide:
+                    BorderSide(color: Colors.grey.withOpacity(0.5), width: 1.0),
               ),
-              disabledBorder:  OutlineInputBorder(
+              disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0),
-                borderSide: BorderSide(color: Colors.black38, width: 1.0),
+                borderSide:
+                    BorderSide(color: Colors.grey.withOpacity(0.5), width: 1.0),
               ))),
     ),
   );

@@ -174,12 +174,15 @@ class _login_screenState extends State<login_screen> {
                             },
                             style: ElevatedButton.styleFrom(
                               primary: const Color(0xFF2d2c2e),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0)
+                              ),
                             ),
                             child: Text(
                               ld.value[index].logInButtonText,
                               style: TextStyle(
                                 fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Bold',
+                                fontFamily: 'Kipling_Regular',
                                 color: Color(0xfffcfdfd),
                               ),
                             ),
@@ -248,7 +251,7 @@ class _login_screenState extends State<login_screen> {
                                 style: TextStyle(
                                     fontSize: displayWidth(context) * 0.045,
                                     color: Color(0xff0f0e0e),
-                                    fontFamily: 'Kipling_Bold'),
+                                    fontFamily: 'Kipling_Regular'),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
@@ -265,7 +268,7 @@ class _login_screenState extends State<login_screen> {
                                     style: TextStyle(
                                         fontSize: displayWidth(context) * 0.045,
                                         color: Color(0xff88b04a),
-                                        fontFamily: 'Kipling_Bold'),
+                                        fontFamily: 'Kipling_Regular'),
                                   )
                                 ),
                               ),
