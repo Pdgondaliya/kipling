@@ -136,7 +136,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.05,
-                              fontFamily: 'Kipling_Bold'),
+                              fontFamily: 'Kipling_Regular'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -171,7 +171,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.05,
-                              fontFamily: 'Kipling_Bold'),
+                              fontFamily: 'Kipling_Regular'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -206,7 +206,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.05,
-                              fontFamily: 'Kipling_Bold'),
+                              fontFamily: 'Kipling_Regular'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -243,7 +243,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.05,
-                              fontFamily: 'Kipling_Bold'),
+                              fontFamily: 'Kipling_Regular'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -279,7 +279,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.05,
-                              fontFamily: 'Kipling_Bold'),
+                              fontFamily: 'Kipling_Regular'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -338,7 +338,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 : ld!.value.fields.optin.titleTextNl,
                             style: TextStyle(
                                 color: Color(0xff010001),
-                                fontSize: displayWidth(context) * 0.04,
+                                fontSize: displayWidth(context) * 0.05,
                                 fontFamily: 'Kipling_Bold')),
                       ],
                     ),
