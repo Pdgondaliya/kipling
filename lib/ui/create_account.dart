@@ -339,7 +339,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             style: TextStyle(
                                 color: Color(0xff010001),
                                 fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Bold')),
+                                fontFamily: 'Kipling_Regular')),
                       ],
                     ),
                   ),
@@ -359,7 +359,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         SizedBox(width: 10),
                         Text(
                           'Please select our terms & conditions',
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(color: Colors.red, fontFamily: 'Kipling_Regular'),
                         ),
                       ],
                     ),
@@ -398,7 +398,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.04,
-                              fontFamily: 'Kipling_Bold'),
+                              fontFamily: 'Kipling_Regular'),
                         )
                       ],
                     ),
@@ -443,7 +443,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               : ld!.value.titleTextNl,
                           style: TextStyle(
                               color: Color(0xff010001),
-                              fontSize: displayWidth(context) * 0.04,
+                              fontSize: displayWidth(context) * 0.05,
                               fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(width: 10),
@@ -455,7 +455,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 : ld!.value.loginLinkTextNl,
                             style: TextStyle(
                                 color: Color(0xff89b14b),
-                                fontSize: displayWidth(context) * 0.04,
+                                fontSize: displayWidth(context) * 0.05,
                                 fontFamily: 'Kipling_Bold'),
                           ),
                         )
