@@ -1559,7 +1559,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: displayHeight(context) * 0.07,
+        height: displayHeight(context) * 0.06,
         width: width == null ? double.infinity : width,
         child: TextFormField(
             style: TextStyle(color: Color(0xff010001), fontFamily: 'Kipling_Regular'),
