@@ -72,13 +72,15 @@ class _CreateAccountState extends State<CreateAccount> {
     showCupertinoModalPopup(
         context: ctx,
         builder: (_) => Container(
-              height: displayWidth(context) * 0.8,
+              height: displayHeight(context) * 0.5,
+              color: Color.fromARGB(255, 255, 255, 255),
               child: Column(
                 children: [
                   Container(
-                    height: 400,
+                    height: displayHeight(context) * 0.425,
                     child: CupertinoDatePicker(
                         initialDateTime: DateTime.now(),
+                        mode: CupertinoDatePickerMode.date,
                         onDateTimeChanged: (val) {
                           setState(() {
                             currentDate = val;
@@ -99,6 +101,39 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
             ));
   }
+
+  // void _selectDateiOS(ctx) {
+  //   // showCupertinoModalPopup is a built-in function of the cupertino library
+  //   showCupertinoModalPopup(
+  //       context: ctx,
+  //       builder: (_) => Container(
+  //             height: displayWidth(context) * 0.8,
+  //             child: Column(
+  //               children: [
+  //                 Container(
+  //                   height: 400,
+  //                   child: CupertinoDatePicker(
+  //                       initialDateTime: DateTime.now(),
+  //                       onDateTimeChanged: (val) {
+  //                         setState(() {
+  //                           currentDate = val;
+  //
+  //                           final DateFormat formatter =
+  //                               DateFormat('dd-MM-yyyy');
+  //                           dateController.text = formatter.format(currentDate);
+  //                         });
+  //                       }),
+  //                 ),
+  //
+  //                 // Close the modal
+  //                 CupertinoButton(
+  //                   child: Text('OK'),
+  //                   onPressed: () => Navigator.of(ctx).pop(),
+  //                 )
+  //               ],
+  //             ),
+  //           ));
+  // }
 
   @override
   Widget build(BuildContext context) {

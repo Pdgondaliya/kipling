@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/text_field.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/module/login_data.dart';
@@ -130,10 +131,10 @@ class _login_screenState extends State<login_screen> {
                                       style: TextStyle(
                                           color: Color(0xff010001),
                                           fontSize: displayWidth(context) * 0.05,
-                                          fontFamily: 'Kipling_Bold',),
+                                          fontFamily: 'Kipling_Regular',),
                                     ),
                                   ),
-                                  _buildtextfields(
+                                  buildtextfields(
                                       hint: ld.value[index].emailPlaceholderText,
                                       controller: emailController,
                                       context: context),
@@ -148,10 +149,10 @@ class _login_screenState extends State<login_screen> {
                                       style: TextStyle(
                                           color: Color(0xff010001),
                                           fontSize: displayWidth(context) * 0.05,
-                                          fontFamily: 'Kipling_Bold'),
+                                          fontFamily: 'Kipling_Regular'),
                                     ),
                                   ),
-                                  _buildtextfields(
+                                  buildtextfields(
                                       hint: ld.value[index].passwordPlaceholderText,
                                       controller: emailController,
                                       context: context)
@@ -284,29 +285,29 @@ class _login_screenState extends State<login_screen> {
   }
 }
 
-Widget _buildtextfields(
-    {required String hint,
-      required TextEditingController controller,
-      required BuildContext context}) {
-  return Container(
-    height: displayHeight(context) * 0.07,
-    width: double.infinity,
-    child: TextFormField(
-        style: TextStyle(color: Colors.white, fontFamily: 'Kipling_Regular'),
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
-          border: InputBorder.none,
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black38, width: 1.0),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black38, width: 1.0),
-          ),
-        )),
-  );
-}
+// Widget buildtextfields(
+//     {required String hint,
+//       required TextEditingController controller,
+//       required BuildContext context}) {
+//   return Container(
+//     height: displayHeight(context) * 0.07,
+//     width: double.infinity,
+//     child: TextFormField(
+//         style: TextStyle(color: Colors.white, fontFamily: 'Kipling_Regular'),
+//         controller: controller,
+//         decoration: InputDecoration(
+//           hintText: hint,
+//           hintStyle: const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
+//           border: InputBorder.none,
+//           focusedBorder: const OutlineInputBorder(
+//             borderSide: BorderSide(color: Colors.black38, width: 1.0),
+//           ),
+//           enabledBorder: const OutlineInputBorder(
+//             borderSide: BorderSide(color: Colors.black38, width: 1.0),
+//           ),
+//         )),
+//   );
+// }
 
 Widget _buildLoginButton(
     {required Buttons icon,
