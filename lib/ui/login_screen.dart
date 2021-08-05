@@ -130,7 +130,7 @@ class _login_screenState extends State<login_screen> {
                                       style: TextStyle(
                                           color: Color(0xff010001),
                                           fontSize: displayWidth(context) * 0.04,
-                                          fontWeight: FontWeight.bold),
+                                          fontFamily: 'Kipling_Bold',),
                                     ),
                                   ),
                                   _buildtextfields(
@@ -148,7 +148,7 @@ class _login_screenState extends State<login_screen> {
                                       style: TextStyle(
                                           color: Color(0xff010001),
                                           fontSize: displayWidth(context) * 0.04,
-                                          fontWeight: FontWeight.bold),
+                                          fontFamily: 'Kipling_Bold'),
                                     ),
                                   ),
                                   _buildtextfields(
@@ -179,6 +179,7 @@ class _login_screenState extends State<login_screen> {
                               ld.value[index].logInButtonText,
                               style: TextStyle(
                                 fontSize: displayWidth(context) * 0.05,
+                                fontFamily: 'Kipling_Bold',
                                 color: Color(0xfffcfdfd),
                               ),
                             ),
@@ -192,7 +193,7 @@ class _login_screenState extends State<login_screen> {
                             style: TextStyle(
                                 fontSize: displayWidth(context) * 0.05,
                                 color: Color(0xff91b557),
-                                fontWeight: FontWeight.normal),
+                                fontFamily: 'Kipling_Regular',),
                           ),
                         ),
                         const SizedBox(
@@ -215,6 +216,7 @@ class _login_screenState extends State<login_screen> {
                                 "OR",
                                 style: TextStyle(
                                   fontSize: displayWidth(context) * 0.040,
+                                  fontFamily: 'Kipling_Regular',
                                   color: Color(0xffadadac),
                                 ),
                               ),
@@ -246,7 +248,7 @@ class _login_screenState extends State<login_screen> {
                                 style: TextStyle(
                                     fontSize: displayWidth(context) * 0.045,
                                     color: Color(0xff0f0e0e),
-                                    fontWeight: FontWeight.bold),
+                                    fontFamily: 'Kipling_Bold'),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
@@ -263,7 +265,7 @@ class _login_screenState extends State<login_screen> {
                                     style: TextStyle(
                                         fontSize: displayWidth(context) * 0.045,
                                         color: Color(0xff88b04a),
-                                        fontWeight: FontWeight.bold),
+                                        fontFamily: 'Kipling_Bold'),
                                   ),
                                 ),
                               ),
@@ -287,7 +289,7 @@ Widget _buildtextfields(
     height: displayHeight(context) * 0.07,
     width: double.infinity,
     child: TextFormField(
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white, fontFamily: 'Kipling_Regular'),
         controller: controller,
         decoration: InputDecoration(
           hintText: hint,
