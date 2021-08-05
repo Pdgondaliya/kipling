@@ -31,21 +31,26 @@ Widget buildtextfields(
               hintStyle:
                   const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
               border: InputBorder.none,
-              focusedBorder: const OutlineInputBorder(
+              focusedBorder:  OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0),
                 borderSide: BorderSide(color: Colors.black38, width: 1.0),
               ),
               enabled: enable == true ? true : false,
               suffixIcon: suffix != true ? null : suffixIcon,
-              enabledBorder: const OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0),
                 borderSide: BorderSide(color: Colors.black38, width: 1.0),
               ),
               errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0),
                 borderSide: BorderSide(color: Colors.black38, width: 1.0),
               ),
               focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0),
                 borderSide: BorderSide(color: Colors.black38, width: 1.0),
               ),
-              disabledBorder: const OutlineInputBorder(
+              disabledBorder:  OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0),
                 borderSide: BorderSide(color: Colors.black38, width: 1.0),
               ))),
     ),
