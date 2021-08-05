@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/custom_widget/text_field.dart';
@@ -20,6 +24,8 @@ class _CreateAccountState extends State<CreateAccount> {
 
   TextEditingController fNameController = TextEditingController();
   TextEditingController lNameController = TextEditingController();
+  TextEditingController mNameController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController cnfPasswordController = TextEditingController();
@@ -42,6 +48,56 @@ class _CreateAccountState extends State<CreateAccount> {
     //   // items.clear();
     //   items.add(i.languageCode.toUpperCase());
     // }
+  }
+
+  DateTime currentDate = DateTime.now();
+
+  Future<void> _selectDateAndroid(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2050));
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        currentDate = pickedDate;
+
+        final DateFormat formatter = DateFormat('dd-MM-yyyy');
+        dateController.text = formatter.format(currentDate);
+      });
+  }
+
+  void _selectDateiOS(ctx) {
+    // showCupertinoModalPopup is a built-in function of the cupertino library
+    showCupertinoModalPopup(
+        context: ctx,
+        builder: (_) => Container(
+              height: displayWidth(context) * 0.8,
+              child: Column(
+                children: [
+                  Container(
+                    height: 400,
+                    child: CupertinoDatePicker(
+                        initialDateTime: DateTime.now(),
+                        onDateTimeChanged: (val) {
+                          setState(() {
+                            currentDate = val;
+
+                            final DateFormat formatter =
+                                DateFormat('dd-MM-yyyy');
+                            dateController.text = formatter.format(currentDate);
+                          });
+                        }),
+                  ),
+
+                  // Close the modal
+                  CupertinoButton(
+                    child: Text('OK'),
+                    onPressed: () => Navigator.of(ctx).pop(),
+                  )
+                ],
+              ),
+            ));
   }
 
   @override
@@ -100,378 +156,459 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                   ),
                 ),
-                Padding( padding: EdgeInsets.symmetric(
-                    horizontal: displayWidth(context) * 0.08), child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        // horizontal: displayWidth(context) * 0.04,
-                        //   vertical: displayWidth(context) * 0.01
-                      ),
-                      child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: Text(
-                            index == 0
-                                ? ld!.value.titleTextEn
-                                : ld!.value.titleTextNl,
-                            style: TextStyle(
-                                fontSize: displayWidth(context) * 0.09,
-                                fontFamily: 'Kipling_Bold',
-                                color: Colors.black),
-                          )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        // left: displayWidth(context) * 0.04,
-                        // right: displayWidth(context) * 0.04,
-                        top: displayWidth(context) * 0.05,
-                        bottom: displayWidth(context) * 0.01,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            index == 0
-                                ? ld!.value.fields.name.titleTextEn
-                                : ld!.value.fields.name.titleTextNl,
-                            style: TextStyle(
-                                color: Color(0xff010001),
-                                fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Regular'),
-                          ),
-                          SizedBox(height: 5),
-                          buildtextfields(
-                              context: context,
-                              controller: fNameController,
-                              hint: index == 0
-                                  ? ld!.value.fields.name.placeholderTextEn
-                                  : ld!.value.fields.name.placeholderTextNl,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter First name';
-                                }
-                                return null;
-                              },
-                              keyboard: TextInputType.text),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.02,
-                        // horizontal: displayWidth(context) * 0.04,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            index == 0
-                                ? ld!.value.fields.lastName.titleTextEn
-                                : ld!.value.fields.lastName.titleTextNl,
-                            style: TextStyle(
-                                color: Color(0xff010001),
-                                fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Regular'),
-                          ),
-                          SizedBox(height: 5),
-                          buildtextfields(
-                              context: context,
-                              controller: lNameController,
-                              hint: index == 0
-                                  ? ld!.value.fields.lastName.placeholderTextEn
-                                  : ld!.value.fields.lastName.placeholderTextNl,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter Last name';
-                                }
-                                return null;
-                              },
-                              keyboard: TextInputType.text)
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.02,
-                        // horizontal: displayWidth(context) * 0.04,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            index == 0
-                                ? ld!.value.fields.emailAddress.titleTextEn
-                                : ld!.value.fields.emailAddress.titleTextNl,
-                            style: TextStyle(
-                                color: Color(0xff010001),
-                                fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Regular'),
-                          ),
-                          SizedBox(height: 5),
-                          buildtextfields(
-                              context: context,
-                              controller: emailController,
-                              hint: index == 0
-                                  ? ld!
-                                  .value.fields.emailAddress.placeholderTextEn
-                                  : ld!.value.fields.emailAddress
-                                  .placeholderTextNl,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter Email address';
-                                }
-                                return null;
-                              },
-                              keyboard: TextInputType.emailAddress)
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.02,
-                        // horizontal: displayWidth(context) * 0.04,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            index == 0
-                                ? ld!.value.fields.password.titleTextEn
-                                : ld!.value.fields.password.titleTextNl,
-                            style: TextStyle(
-                                color: Color(0xff010001),
-                                fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Regular'),
-                          ),
-                          SizedBox(height: 5),
-                          buildtextfields(
-                              context: context,
-                              isPassword: true,
-                              controller: passwordController,
-                              hint: index == 0
-                                  ? ld!.value.fields.password.placeholderTextEn
-                                  : ld!.value.fields.password.placeholderTextNl,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter Password';
-                                }
-                                return null;
-                              },
-                              keyboard: TextInputType.text)
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.02,
-                        // horizontal: displayWidth(context) * 0.04,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            index == 0
-                                ? ld!.value.fields.confirmPassword.titleTextEn
-                                : ld!.value.fields.confirmPassword.titleTextNl,
-                            style: TextStyle(
-                                color: Color(0xff010001),
-                                fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Regular'),
-                          ),
-                          SizedBox(height: 5),
-                          buildtextfields(
-                              context: context,
-                              isPassword: true,
-                              controller: cnfPasswordController,
-                              hint: index == 0
-                                  ? ld!.value.fields.confirmPassword
-                                  .placeholderTextEn
-                                  : ld!.value.fields.confirmPassword
-                                  .placeholderTextNl,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter confirm password';
-                                } else if (cnfPasswordController.text !=
-                                    passwordController.text) {
-                                  return 'Password and Confirm Password must be same';
-                                }
-                                return null;
-                              },
-                              keyboard: TextInputType.text)
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: displayWidth(context) * 0.05,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        // horizontal: displayWidth(context) * 0.04,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                snUpNews = !snUpNews;
-                              });
-                            },
-                            child: snUpNews == false
-                                ? Icon(
-                              Icons.check_box_outlined,
-                              color: Colors.black,
-                            )
-                                : Icon(
-                              Icons.check_box,
-                              color: Color(0xff89b14b),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: displayWidth(context) * 0.08),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            // horizontal: displayWidth(context) * 0.04,
+                            //   vertical: displayWidth(context) * 0.01
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
+                        child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
                               index == 0
-                                  ? ld!.value.fields.optin.titleTextEn
-                                  : ld!.value.fields.optin.titleTextNl,
+                                  ? ld!.value.titleTextEn
+                                  : ld!.value.titleTextNl,
+                              style: TextStyle(
+                                  fontSize: displayWidth(context) * 0.09,
+                                  fontFamily: 'Kipling_Bold',
+                                  color: Colors.black),
+                            )),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          // left: displayWidth(context) * 0.04,
+                          // right: displayWidth(context) * 0.04,
+                          top: displayWidth(context) * 0.05,
+                          bottom: displayWidth(context) * 0.01,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              index == 0
+                                  ? ld!.value.fields.name.titleTextEn
+                                  : ld!.value.fields.name.titleTextNl,
                               style: TextStyle(
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
-                                  fontFamily: 'Kipling_Regular')),
-                        ],
-                      ),
-                    ),
-                    snUpNews == false
-                        ? Padding(
-                      padding: EdgeInsets.symmetric(
-                        // horizontal: displayWidth(context) * 0.04,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.check_box_outlined,
-                            color: Colors.transparent,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Please select our terms & conditions',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontFamily: 'Kipling_Regular'),
-                          ),
-                        ],
-                      ),
-                    )
-                        : Container(),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        // horizontal: displayWidth(context) * 0.04,
-                        top: displayWidth(context) * 0.04,
-                        bottom: displayWidth(context) * 0.02
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                privacyPolicy = !privacyPolicy;
-                              });
-                            },
-                            child: privacyPolicy == false
-                                ? Icon(
-                              Icons.check_box_outlined,
-                              color: Colors.black,
-                            )
-                                : Icon(
-                              Icons.check_box,
-                              color: Color(0xff89b14b),
+                                  fontFamily: 'Kipling_Regular'),
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            index == 0
-                                ? ld!.value.fields.generalPermission.titleTextEn
-                                : ld!.value.fields.generalPermission.titleTextNl,
-                            style: TextStyle(
-                                color: Color(0xff010001),
-                                fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Regular'),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: displayHeight(context) * 0.07,
-                      margin: EdgeInsets.only(top: displayHeight(context) * 0.03),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_fromKey.currentState!.validate()) {
-                            Navigator.pop(context);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: const Color(0xFF2d2c2e),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0.0)
-                          ),
-                        ),
-                        child: Text(
-                          index == 0
-                              ? ld!.value.fields.signUp.titleTextEn
-                              : ld!.value.fields.signUp.titleTextNl,
-                          style: TextStyle(
-                              fontSize: displayWidth(context) * 0.05,
-                              color: Color(0xfffcfdfd),
-                              fontFamily: 'Kipling_Regular'),
+                            SizedBox(height: 5),
+                            buildtextfields(
+                                context: context,
+                                controller: fNameController,
+                                hint: index == 0
+                                    ? ld!.value.fields.name.placeholderTextEn
+                                    : ld!.value.fields.name.placeholderTextNl,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter First name';
+                                  }
+                                  return null;
+                                },
+                                keyboard: TextInputType.text),
+                          ],
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: displayWidth(context) * 0.05,
-                        // horizontal: displayWidth(context) * 0.04
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            index == 0
-                                ? ld!.value.loginTextEn
-                                : ld!.value.titleTextNl,
-                            style: TextStyle(
-                                color: Color(0xff010001),
-                                fontSize: displayWidth(context) * 0.05,
-                                fontFamily: 'Kipling_Regular'),
-                          ),
-                          SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Text(
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: displayWidth(context) * 0.02,
+                          // horizontal: displayWidth(context) * 0.04,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
                               index == 0
-                                  ? ld!.value.loginLinkTextEn
-                                  : ld!.value.loginLinkTextNl,
+                                  ? ld!.value.fields.lastName.titleTextEn
+                                  : ld!.value.fields.lastName.titleTextNl,
                               style: TextStyle(
-                                  color: Color(0xff89b14b),
+                                  color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
-                                  fontFamily: 'Kipling_Bold'),
+                                  fontFamily: 'Kipling_Regular'),
                             ),
-                          )
-                        ],
+                            SizedBox(height: 5),
+                            buildtextfields(
+                                context: context,
+                                controller: lNameController,
+                                hint: index == 0
+                                    ? ld!
+                                        .value.fields.lastName.placeholderTextEn
+                                    : ld!.value.fields.lastName
+                                        .placeholderTextNl,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter Last name';
+                                  }
+                                  return null;
+                                },
+                                keyboard: TextInputType.text)
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ),),
-
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: displayWidth(context) * 0.02,
+                          // horizontal: displayWidth(context) * 0.04,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              index == 0
+                                  ? ld!.value.fields.middleName.titleTextEn
+                                  : ld!.value.fields.middleName.titleTextNl,
+                              style: TextStyle(
+                                  color: Color(0xff010001),
+                                  fontSize: displayWidth(context) * 0.05,
+                                  fontFamily: 'Kipling_Regular'),
+                            ),
+                            SizedBox(height: 5),
+                            buildtextfields(
+                                context: context,
+                                controller: mNameController,
+                                hint: index == 0
+                                    ? ld!.value.fields.middleName
+                                        .placeholderTextEn
+                                    : ld!.value.fields.middleName
+                                        .placeholderTextNl,
+                                keyboard: TextInputType.text)
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: displayWidth(context) * 0.02,
+                          // horizontal: displayWidth(context) * 0.04,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              index == 0
+                                  ? ld!.value.fields.birthDate.titleTextEn
+                                  : ld!.value.fields.birthDate.titleTextNl,
+                              style: TextStyle(
+                                  color: Color(0xff010001),
+                                  fontSize: displayWidth(context) * 0.05,
+                                  fontFamily: 'Kipling_Regular'),
+                            ),
+                            SizedBox(height: 5),
+                            GestureDetector(
+                                onTap: () => Platform.isAndroid
+                                    ? _selectDateAndroid(context)
+                                    : _selectDateiOS(context),
+                                child: buildtextfields(
+                                    enable: false,
+                                    context: context,
+                                    controller: dateController,
+                                    hint: index == 0
+                                        ? ld!.value.fields.birthDate
+                                            .placeholderTextEn
+                                        : ld!.value.fields.birthDate
+                                            .placeholderTextNl,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please select Birth date';
+                                      }
+                                      return null;
+                                    },
+                                    keyboard: TextInputType.text))
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: displayWidth(context) * 0.02,
+                          // horizontal: displayWidth(context) * 0.04,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              index == 0
+                                  ? ld!.value.fields.emailAddress.titleTextEn
+                                  : ld!.value.fields.emailAddress.titleTextNl,
+                              style: TextStyle(
+                                  color: Color(0xff010001),
+                                  fontSize: displayWidth(context) * 0.05,
+                                  fontFamily: 'Kipling_Regular'),
+                            ),
+                            SizedBox(height: 5),
+                            buildtextfields(
+                                context: context,
+                                controller: emailController,
+                                hint: index == 0
+                                    ? ld!.value.fields.emailAddress
+                                        .placeholderTextEn
+                                    : ld!.value.fields.emailAddress
+                                        .placeholderTextNl,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter Email address';
+                                  }
+                                  return null;
+                                },
+                                keyboard: TextInputType.emailAddress)
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: displayWidth(context) * 0.02,
+                          // horizontal: displayWidth(context) * 0.04,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              index == 0
+                                  ? ld!.value.fields.password.titleTextEn
+                                  : ld!.value.fields.password.titleTextNl,
+                              style: TextStyle(
+                                  color: Color(0xff010001),
+                                  fontSize: displayWidth(context) * 0.05,
+                                  fontFamily: 'Kipling_Regular'),
+                            ),
+                            SizedBox(height: 5),
+                            buildtextfields(
+                                context: context,
+                                isPassword: true,
+                                controller: passwordController,
+                                hint: index == 0
+                                    ? ld!
+                                        .value.fields.password.placeholderTextEn
+                                    : ld!.value.fields.password
+                                        .placeholderTextNl,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter Password';
+                                  }
+                                  return null;
+                                },
+                                keyboard: TextInputType.text)
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: displayWidth(context) * 0.02,
+                          // horizontal: displayWidth(context) * 0.04,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              index == 0
+                                  ? ld!.value.fields.confirmPassword.titleTextEn
+                                  : ld!
+                                      .value.fields.confirmPassword.titleTextNl,
+                              style: TextStyle(
+                                  color: Color(0xff010001),
+                                  fontSize: displayWidth(context) * 0.05,
+                                  fontFamily: 'Kipling_Regular'),
+                            ),
+                            SizedBox(height: 5),
+                            buildtextfields(
+                                context: context,
+                                isPassword: true,
+                                controller: cnfPasswordController,
+                                hint: index == 0
+                                    ? ld!.value.fields.confirmPassword
+                                        .placeholderTextEn
+                                    : ld!.value.fields.confirmPassword
+                                        .placeholderTextNl,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter confirm password';
+                                  } else if (cnfPasswordController.text !=
+                                      passwordController.text) {
+                                    return 'Password and Confirm Password must be same';
+                                  }
+                                  return null;
+                                },
+                                keyboard: TextInputType.text)
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: displayWidth(context) * 0.05,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            // horizontal: displayWidth(context) * 0.04,
+                            ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  snUpNews = !snUpNews;
+                                });
+                              },
+                              child: snUpNews == false
+                                  ? Icon(
+                                      Icons.check_box_outlined,
+                                      color: Colors.black,
+                                    )
+                                  : Icon(
+                                      Icons.check_box,
+                                      color: Color(0xff89b14b),
+                                    ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                                index == 0
+                                    ? ld!.value.fields.optin.titleTextEn
+                                    : ld!.value.fields.optin.titleTextNl,
+                                style: TextStyle(
+                                    color: Color(0xff010001),
+                                    fontSize: displayWidth(context) * 0.05,
+                                    fontFamily: 'Kipling_Regular')),
+                          ],
+                        ),
+                      ),
+                      snUpNews == false
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(
+                                  // horizontal: displayWidth(context) * 0.04,
+                                  ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.check_box_outlined,
+                                    color: Colors.transparent,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Please select our terms & conditions',
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontFamily: 'Kipling_Regular'),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            // horizontal: displayWidth(context) * 0.04,
+                            top: displayWidth(context) * 0.04,
+                            bottom: displayWidth(context) * 0.02),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  privacyPolicy = !privacyPolicy;
+                                });
+                              },
+                              child: privacyPolicy == false
+                                  ? Icon(
+                                      Icons.check_box_outlined,
+                                      color: Colors.black,
+                                    )
+                                  : Icon(
+                                      Icons.check_box,
+                                      color: Color(0xff89b14b),
+                                    ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              index == 0
+                                  ? ld!.value.fields.generalPermission
+                                      .titleTextEn
+                                  : ld!.value.fields.generalPermission
+                                      .titleTextNl,
+                              style: TextStyle(
+                                  color: Color(0xff010001),
+                                  fontSize: displayWidth(context) * 0.05,
+                                  fontFamily: 'Kipling_Regular'),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: displayHeight(context) * 0.07,
+                        margin:
+                            EdgeInsets.only(top: displayHeight(context) * 0.03),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_fromKey.currentState!.validate()) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFF2d2c2e),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0)),
+                          ),
+                          child: Text(
+                            index == 0
+                                ? ld!.value.fields.signUp.titleTextEn
+                                : ld!.value.fields.signUp.titleTextNl,
+                            style: TextStyle(
+                                fontSize: displayWidth(context) * 0.05,
+                                color: Color(0xfffcfdfd),
+                                fontFamily: 'Kipling_Regular'),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: displayWidth(context) * 0.05,
+                          // horizontal: displayWidth(context) * 0.04
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              index == 0
+                                  ? ld!.value.loginTextEn
+                                  : ld!.value.titleTextNl,
+                              style: TextStyle(
+                                  color: Color(0xff010001),
+                                  fontSize: displayWidth(context) * 0.05,
+                                  fontFamily: 'Kipling_Regular'),
+                            ),
+                            SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: Text(
+                                index == 0
+                                    ? ld!.value.loginLinkTextEn
+                                    : ld!.value.loginLinkTextNl,
+                                style: TextStyle(
+                                    color: Color(0xff89b14b),
+                                    fontSize: displayWidth(context) * 0.05,
+                                    fontFamily: 'Kipling_Bold'),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ],
             )),
       ),

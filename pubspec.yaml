@@ -39,9 +39,10 @@ dependencies:
   path_provider: ^2.0.2
   cached_network_image: ^3.1.0
   flutter_signin_button: ^2.0.0
-  fluttertoast: ^8.0.7
-  image_picker: ^0.8.2
-  flutter_html: ^2.1.0
+  fluttertoast: ^8.0.8
+  image_picker: ^0.8.3
+  flutter_html: ^2.1.1
+  intl: ^0.17.0
 
 
   # The following adds the Cupertino Icons font to your application.
