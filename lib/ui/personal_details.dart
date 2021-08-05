@@ -972,24 +972,18 @@ margin: EdgeInsets.zero,
                                       mainAxisAlignment:
                                       MainAxisAlignment.start,
                                       children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              top: displayHeight(context) *
-                                                  0.02,
-                                              bottom: displayHeight(context) *
-                                                  0.01),
-                                          child: Text(
-                                            ld!.value[index]
-                                                .addressHouseNumberText,
-                                            style: TextStyle(
-                                                color: Color(0xff010001),
-                                                fontSize:
-                                                displayWidth(context) *
-                                                    0.05,
-                                                fontFamily:
-                                                'Kipling_Regular'),
-                                          ),
+                                        Text(
+                                          ld!.value[index]
+                                              .addressHouseNumberText,
+                                          style: TextStyle(
+                                              color: Color(0xff010001),
+                                              fontSize:
+                                              displayWidth(context) *
+                                                  0.05,
+                                              fontFamily:
+                                              'Kipling_Regular'),
                                         ),
+                                        SizedBox(height: displayHeight(context) * 0.01),
                                         buildtextfields(
                                             width:
                                             displayWidth(context) * 0.4,
@@ -1009,24 +1003,18 @@ margin: EdgeInsets.zero,
                                       mainAxisAlignment:
                                       MainAxisAlignment.start,
                                       children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              top: displayHeight(context) *
-                                                  0.02,
-                                              bottom: displayHeight(context) *
-                                                  0.01),
-                                          child: Text(
-                                            ld!.value[index]
-                                                .addressHouseNumberSuffixText,
-                                            style: TextStyle(
-                                                color: Color(0xff010001),
-                                                fontSize:
-                                                displayWidth(context) *
-                                                    0.05,
-                                                fontFamily:
-                                                'Kipling_Regular'),
-                                          ),
+                                        Text(
+                                          ld!.value[index]
+                                              .addressHouseNumberSuffixText,
+                                          style: TextStyle(
+                                              color: Color(0xff010001),
+                                              fontSize:
+                                              displayWidth(context) *
+                                                  0.05,
+                                              fontFamily:
+                                              'Kipling_Regular'),
                                         ),
+                                        SizedBox(height: displayHeight(context) * 0.01),
                                         buildtextfields(
                                           // width: displayWidth(context) * 0.4,
                                             hint: ld!.value[index]
@@ -1042,7 +1030,7 @@ margin: EdgeInsets.zero,
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: displayHeight(context) * 0.02,
+                                  top: displayHeight(context) * 0.01,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
                                 ld!.value[index].addressCityText,
