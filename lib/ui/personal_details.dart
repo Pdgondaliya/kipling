@@ -26,6 +26,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController birthDayController = TextEditingController();
   TextEditingController streetNameController = TextEditingController();
   TextEditingController houseNumberController = TextEditingController();
   TextEditingController additionController = TextEditingController();
@@ -101,7 +102,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
       maxHeight: 1800,
     );
     if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+
+      print('Image From Gallery: ${imageFile!.path}');
     }
   }
 
@@ -112,7 +117,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
       maxHeight: 1800,
     );
     if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+
+      print('Image From Camera: ${imageFile!.path}');
     }
   }
 
@@ -202,53 +211,58 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: GestureDetector(
-                                    onTap: () {
-                                      showCupertinoModalPopup<void>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            CupertinoActionSheet(
-                                              cancelButton: CupertinoButton(
-                                                child: Text('Cancel'),
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                              ),
-                                              actions: <CupertinoActionSheetAction>[
-                                                CupertinoActionSheetAction(
-                                                  child: const Text('Take a photo'),
-                                                  onPressed: () {
-                                                    _getFromCamera();
-                                                    Navigator.pop(context);
-                                                  },
+                                      onTap: () {
+                                        showCupertinoModalPopup<void>(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              CupertinoActionSheet(
+                                                cancelButton: CupertinoButton(
+                                                  child: Text('Cancel'),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
                                                 ),
-                                                CupertinoActionSheetAction(
-                                                  child:
-                                                  const Text('Upload a photo'),
-                                                  onPressed: () {
-                                                    _getFromGallery();
-                                                    Navigator.pop(context);
-                                                  },
-                                                )
-                                              ],
-                                            ),
-                                      );
-                                    },
-                                    child: imageFile == null
-                                        ? Image.network(
-                                      ld!.value[index]
-                                          .profilePicturePlaceholderUrl,
-                                      height: displayWidth(context) * 0.7,
-                                      width: displayWidth(context) * 0.7,
-                                      fit: BoxFit.contain,
-                                    )
-                                        : Container(
-                                      child: Image.file(
-                                        imageFile!,
+                                                actions: <
+                                                    CupertinoActionSheetAction>[
+                                                  CupertinoActionSheetAction(
+                                                    child:
+                                                    const Text('Take a photo'),
+                                                    onPressed: () {
+                                                      _getFromCamera();
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  CupertinoActionSheetAction(
+                                                    child: const Text(
+                                                        'Upload a photo'),
+                                                    onPressed: () {
+                                                      _getFromGallery();
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                        );
+                                      },
+                                      child: imageFile != null
+                                          ? Container(
+                                        child: Image.file(
+                                          imageFile!,
+                                          fit: BoxFit.cover,
+                                          height:
+                                          displayWidth(context) * 0.7,
+                                          width:
+                                          displayWidth(context) * 0.7,
+                                        ),
+                                      )
+                                          : Image.network(
+                                        ld!.value[index]
+                                            .profilePicturePlaceholderUrl,
+                                        height:
+                                        displayWidth(context) * 0.7,
+                                        width:
+                                        displayWidth(context) * 0.7,
                                         fit: BoxFit.cover,
-                                        height: displayWidth(context) * 0.7,
-                                        width: displayWidth(context) * 0.7,
-                                      ),
-                                    ),
-                                  ),
+                                      )),
                                 ),
                               ),
                             ),
@@ -259,7 +273,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
-                                    fontWeight: FontWeight.bold)),
+                                    fontFamily: 'Kipling_Bold')),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.04,
@@ -269,14 +283,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.04,
-                                    fontWeight: FontWeight.w500),
+                                    fontFamily: 'Kipling_Regular'),
                               ),
                             ),
                             _buildtextfields(
                                 hint: ld!.value[index].firstNameText,
                                 controller: firstNameController,
                                 context: context),
-
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.02,
@@ -286,7 +299,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.04,
-                                    fontWeight: FontWeight.w500),
+                                    fontFamily: 'Kipling_Regular'),
                               ),
                             ),
                             _buildtextfields(
@@ -300,9 +313,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               child: Text(
                                 ld!.value[index].lastNameText,
                                 style: TextStyle(
-                                    color: Color(0xff010001),
-                                    fontSize: displayWidth(context) * 0.04,
-                                    fontWeight: FontWeight.w500),
+                                  color: Color(0xff010001),
+                                  fontSize: displayWidth(context) * 0.04,
+                                  fontFamily: 'Kipling_Regular',),
                               ),
                             ),
                             _buildtextfields(
@@ -318,7 +331,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.04,
-                                    fontWeight: FontWeight.w500),
+                                    fontFamily: 'Kipling_Regular'),
                               ),
                             ),
                             _buildtextfields(
@@ -456,7 +469,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.04,
-                                    fontWeight: FontWeight.w500),
+                                    fontFamily: 'Kipling_Regular'),
                               ),
                             ),
                             _buildtextfields(
@@ -465,7 +478,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   _showDatePicker(context);
                                 },
                                 hint: ld!.value[index].birthdayText,
-                                controller: countryController,
+                                controller: birthDayController,
                                 context: context,
                                 suffix: true,
                                 suffixIcon: Icon(Icons.calendar_today)),
@@ -478,7 +491,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.04,
-                                    fontWeight: FontWeight.w500),
+                                    fontFamily: 'Kipling_Regular'),
                               ),
                             ),
                             _buildtextfields(
@@ -571,10 +584,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                     onSelectedItemChanged:
                                                         (value) {
                                                       setState(() {
-                                                        print('Value::  $value');
+                                                        print(
+                                                            'Value::  $value');
                                                       });
                                                     },
-                                                    children: countryList!.map((e) {
+                                                    children:
+                                                    countryList!.map((e) {
                                                       return Text(
                                                         e.name,
                                                         style: TextStyle(
@@ -635,7 +650,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.04,
-                                    fontWeight: FontWeight.w500),
+                                    fontFamily: 'Kipling_Regular'),
                               ),
                             ),
                             _buildtextfields(
@@ -789,7 +804,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.05,
-                                      fontWeight: FontWeight.bold)),
+                                      fontFamily: 'Kipling_Bold')),
                               Padding(
                                 padding: EdgeInsets.only(
                                     top: displayHeight(context) * 0.03,
@@ -799,7 +814,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.w500),
+                                      fontFamily: 'Kipling_Regular'),
                                 ),
                               ),
                               _buildtextfields(
@@ -816,7 +831,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.w500),
+                                      fontFamily: 'Kipling_Regular'),
                                 ),
                               ),
                               _buildtextfields(
@@ -905,7 +920,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.05,
-                                      fontWeight: FontWeight.bold)),
+                                      fontFamily: 'Kipling_Bold')),
                               Padding(
                                 padding: EdgeInsets.only(
                                     top: displayHeight(context) * 0.03,
@@ -915,12 +930,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.w500),
+                                      fontFamily: 'Kipling_Regular'),
                                 ),
                               ),
                               _buildtextfields(
                                   hint: ld!.value[index].addressLine1Text,
-                                  controller: phoneNumberController,
+                                  controller: streetNameController,
                                   context: context,
                                   keyboard: TextInputType.number),
                               Padding(
@@ -952,7 +967,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                   fontSize:
                                                   displayWidth(context) *
                                                       0.04,
-                                                  fontWeight: FontWeight.w500),
+                                                  fontFamily: 'Kipling_Regular'),
                                             ),
                                           ),
                                           _buildtextfields(
@@ -987,7 +1002,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                   fontSize:
                                                   displayWidth(context) *
                                                       0.04,
-                                                  fontWeight: FontWeight.w500),
+                                                  fontFamily: 'Kipling_Regular'),
                                             ),
                                           ),
                                           _buildtextfields(
@@ -1012,7 +1027,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.w500),
+                                      fontFamily: 'Kipling_Regular'),
                                 ),
                               ),
                               _buildtextfields(
@@ -1156,9 +1171,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 child: Text(
                                   ld!.value[index].addressStateText,
                                   style: TextStyle(
-                                      color: Color(0xff010001),
-                                      fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.w500),
+                                    color: Color(0xff010001),
+                                    fontSize: displayWidth(context) * 0.04,
+                                    fontFamily: 'Kipling_Regular',),
                                 ),
                               ),
                               _buildtextfields(
@@ -1305,7 +1320,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.w500),
+                                      fontFamily: 'Kipling_Regular'),
                                 ),
                               ),
                               _buildtextfields(
@@ -1458,9 +1473,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 child: Text(
                                   ld!.value[index].addressPostalCodeText,
                                   style: TextStyle(
-                                      color: Color(0xff010001),
-                                      fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.w500),
+                                    color: Color(0xff010001),
+                                    fontSize: displayWidth(context) * 0.04,
+                                    fontFamily: 'Kipling_Regular',),
                                 ),
                               ),
                               _buildtextfields(
@@ -1476,7 +1491,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.04,
-                                      fontWeight: FontWeight.w500),
+                                      fontFamily: 'Kipling_Regular'),
                                 ),
                               ),
                               _buildtextfields(
@@ -1516,8 +1531,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     child: Text(
                       ld!.value[index].saveButtonText,
                       style: TextStyle(
-                        fontSize: displayWidth(context) * 0.04,
-                        color: Color(0xfffcfdfd),
+                          fontSize: displayWidth(context) * 0.04,
+                          color: Color(0xfffcfdfd),
+                          fontFamily: 'Kipling_Bold'
                       ),
                     ),
                   ),
@@ -1546,7 +1562,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         height: displayHeight(context) * 0.07,
         width: width == null ? double.infinity : width,
         child: TextFormField(
-            style: TextStyle(color: Color(0xff010001)),
+            style: TextStyle(color: Color(0xff010001), fontFamily: 'Kipling_Regular'),
             keyboardType: keyboard,
             controller: controller,
             decoration: InputDecoration(
@@ -1554,15 +1570,18 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 hintStyle:
                 const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
                 border: InputBorder.none,
-                focusedBorder: const OutlineInputBorder(
+                focusedBorder:  OutlineInputBorder(
+                  borderRadius:BorderRadius.circular(0.0),
                   borderSide: BorderSide(color: Colors.black38, width: 1.0),
                 ),
                 enabled: enable == true ? true : false,
                 suffixIcon: suffix != true ? null : suffixIcon,
-                enabledBorder: const OutlineInputBorder(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius:BorderRadius.circular(0.0),
                   borderSide: BorderSide(color: Colors.black38, width: 1.0),
                 ),
-                disabledBorder: const OutlineInputBorder(
+                disabledBorder: OutlineInputBorder(
+                  borderRadius:BorderRadius.circular(0.0),
                   borderSide: BorderSide(color: Colors.black38, width: 1.0),
                 ))),
       ),

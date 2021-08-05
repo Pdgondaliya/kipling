@@ -114,7 +114,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           : ld!.value.titleTextNl,
                       style: TextStyle(
                           fontSize: displayWidth(context) * 0.09,
-                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Kipling_Bold',
                           color: Colors.black),
                     ),
                   ),
@@ -136,7 +136,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.04,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -171,7 +171,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.04,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -206,7 +206,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.04,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -243,7 +243,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.04,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -279,7 +279,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.04,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(height: 5),
                         buildtextfields(
@@ -339,7 +339,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             style: TextStyle(
                                 color: Color(0xff010001),
                                 fontSize: displayWidth(context) * 0.04,
-                                fontWeight: FontWeight.bold)),
+                                fontFamily: 'Kipling_Bold')),
                       ],
                     ),
                   ),
@@ -398,7 +398,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.04,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: 'Kipling_Bold'),
                         )
                       ],
                     ),
@@ -421,8 +421,9 @@ class _CreateAccountState extends State<CreateAccount> {
                             ? ld!.value.fields.signUp.titleTextEn
                             : ld!.value.fields.signUp.titleTextNl,
                         style: TextStyle(
-                          fontSize: displayWidth(context) * 0.05,
-                          color: Color(0xfffcfdfd),
+                            fontSize: displayWidth(context) * 0.05,
+                            color: Color(0xfffcfdfd),
+                            fontFamily: 'Kipling_Bold'
                         ),
                       ),
                     ),
@@ -443,7 +444,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color(0xff010001),
                               fontSize: displayWidth(context) * 0.04,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: 'Kipling_Bold'),
                         ),
                         SizedBox(width: 10),
                         GestureDetector(
@@ -455,7 +456,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             style: TextStyle(
                                 color: Color(0xff89b14b),
                                 fontSize: displayWidth(context) * 0.04,
-                                fontWeight: FontWeight.bold),
+                                fontFamily: 'Kipling_Bold'),
                           ),
                         )
                       ],

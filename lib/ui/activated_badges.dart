@@ -56,7 +56,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: displayHeight(context) * 0.025,
-                          fontWeight: FontWeight.w500),
+                          fontFamily: 'Kipling_Bold',),
                     ),
                     SizedBox(height: 10),
                     Text(
@@ -65,7 +65,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                       style: TextStyle(
                           color: Color(0xff8ab250),
                           fontSize: displayHeight(context) * 0.02,
-                          fontWeight: FontWeight.normal),
+                          fontFamily: 'Kipling_Bold'),
                     )
                   ],
                 ),
@@ -117,6 +117,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                           'You have found',
                           style: TextStyle(
                               fontSize: displayHeight(context) * 0.02,
+                              fontFamily: 'Kipling_Bold',
                               color: Color(0xff8ab250)),
                         ),
                         SizedBox(height: 10),
@@ -124,7 +125,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                           badgeName,
                           style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         // SizedBox(height: 10),
@@ -164,7 +165,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                           // '000 points',
                           style: TextStyle(
                               color: Color(0xff8ab250),
-                              fontWeight: FontWeight.bold,
+                             fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         SizedBox(height: 10),
@@ -177,6 +178,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                             'Done',
                             style: TextStyle(
                               color: Colors.white,
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.03,
                             ),
                           ),

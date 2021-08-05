@@ -97,7 +97,7 @@ class _AllBadgesState extends State<AllBadges> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: displayHeight(context) * 0.025,
-                            fontWeight: FontWeight.w500),
+                            fontFamily: 'Kipling_Bold',),
                       ),
                       SizedBox(height: 10),
                       Text(
@@ -105,7 +105,7 @@ class _AllBadgesState extends State<AllBadges> {
                         style: TextStyle(
                             color: Color(0xff8ab250),
                             fontSize: displayHeight(context) * 0.02,
-                            fontWeight: FontWeight.normal),
+                            fontFamily: 'Kipling_Bold'),
                       )
                     ],
                   ),
@@ -138,7 +138,7 @@ class _AllBadgesState extends State<AllBadges> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: displayHeight(context) * 0.025,
-                            fontWeight: FontWeight.w500),
+                            fontFamily: 'Kipling_Bold'),
                       ),
                       SizedBox(height: 10),
                       Text(
@@ -146,7 +146,7 @@ class _AllBadgesState extends State<AllBadges> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: displayHeight(context) * 0.02,
-                            fontWeight: FontWeight.normal),
+                            fontFamily: 'Kipling_Bold'),
                       )
                     ],
                   ),
@@ -190,7 +190,7 @@ class _AllBadgesState extends State<AllBadges> {
                           'Badge Name',
                           style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         SizedBox(height: 10),
@@ -200,6 +200,7 @@ class _AllBadgesState extends State<AllBadges> {
                                 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
+                                  fontFamily: 'Kipling_Regular',
                                     fontSize: displayHeight(context) * 0.02,
                                     color: Colors.black))),
                         SizedBox(height: 10),
@@ -207,7 +208,7 @@ class _AllBadgesState extends State<AllBadges> {
                           '000 points',
                           style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         SizedBox(height: 10),
@@ -220,6 +221,7 @@ class _AllBadgesState extends State<AllBadges> {
                             'Done',
                             style: TextStyle(
                               color: Colors.white,
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.03,
                             ),
                           ),
@@ -259,6 +261,7 @@ class _AllBadgesState extends State<AllBadges> {
                           'You have found',
                           style: TextStyle(
                               fontSize: displayHeight(context) * 0.02,
+                              fontFamily: 'Kipling_Bold',
                               color: Color(0xff8ab250)),
                         ),
                         SizedBox(height: 10),
@@ -266,7 +269,7 @@ class _AllBadgesState extends State<AllBadges> {
                           badgeName,
                           style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         // SizedBox(height: 10),
@@ -308,7 +311,7 @@ class _AllBadgesState extends State<AllBadges> {
                           // '000 points',
                           style: TextStyle(
                               color: Color(0xff8ab250),
-                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         SizedBox(height: 10),
@@ -321,6 +324,7 @@ class _AllBadgesState extends State<AllBadges> {
                             'Done',
                             style: TextStyle(
                               color: Colors.white,
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.03,
                             ),
                           ),
