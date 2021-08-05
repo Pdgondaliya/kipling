@@ -370,9 +370,10 @@ class _CreateAccountState extends State<CreateAccount> {
                     )
                         : Container(),
                     Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: EdgeInsets.only(
                         // horizontal: displayWidth(context) * 0.04,
-                        vertical: displayWidth(context) * 0.04,
+                        top: displayWidth(context) * 0.04,
+                        bottom: displayWidth(context) * 0.02
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
