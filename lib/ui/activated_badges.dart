@@ -22,7 +22,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: GridView.builder(
+        body:  GridView.builder(
             shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.only(
@@ -32,9 +32,9 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
             itemCount: finalActivatedBadgeModel!.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: displayHeight(context) * 0.00099,
+                childAspectRatio: displayWidth(context) * 0.0021,
                 crossAxisSpacing: displayWidth(context) * 0.009,
-                mainAxisSpacing: displayWidth(context) * 0.0007),
+                mainAxisSpacing: displayWidth(context) * 0.00009),
             itemBuilder: (BuildContext context, int k) {
               return GestureDetector(
                 onTap: () => dialog(
@@ -48,43 +48,28 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                     SizedBox(
                         width: displayWidth(context) * 0.30,
                         height: displayWidth(context) * 0.30,
-                        child: Image.network(finalActivatedBadgeModel![k].url
-                            .toString())),
-                    SizedBox(height: 10),
+                        child: Image.network(
+                            finalActivatedBadgeModel![k].url.toString())),
+                    SizedBox(height: displayWidth(context) * 0.005),
                     Text(
                       finalActivatedBadgeModel![k].title.toString(),
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: displayHeight(context) * 0.025,
-                          fontFamily: 'Kipling_Bold',),
+                        color: Colors.black,
+                        fontSize: displayHeight(context) * 0.02,
+                        fontFamily: 'Kipling_Bold',),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: displayWidth(context) * 0.005),
                     Text(
-                      finalActivatedBadgeModel![k].point_needed
-                          .toString(),
+                      finalActivatedBadgeModel![k].point_needed.toString(),
                       style: TextStyle(
                           color: Color(0xff8ab250),
-                          fontSize: displayHeight(context) * 0.02,
-                          fontFamily: 'Kipling_Bold'),
+                          fontSize: displayHeight(context) * 0.015,
+                          fontFamily: 'Kipling_Regular'),
                     )
                   ],
                 ),
               );
             })
-
-        /*ListView.builder(
-          shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
-          itemCount: badgeDetailsData!.length,
-          itemBuilder: (BuildContext context, int i) {
-            return ListView.builder(
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                itemCount: badgeDetailsData![i].contents!.length,
-                itemBuilder: (BuildContext context, int j) {
-                  return
-                });
-          }),*/
         );
   }
 
@@ -95,7 +80,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
                   child: Container(
-                    height: displayHeight(context) * 0.7,
+                    height: displayHeight(context) * 0.85,
                     padding: EdgeInsets.all(displayHeight(context) * 0.02),
                     child: Column(
                       children: [
@@ -110,9 +95,12 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                           ),
                         ),
                         SizedBox(
-                            width: displayWidth(context) * 0.35,
-                            height: displayWidth(context) * 0.35,
-                            child: Image.network(image)),
+                            width: displayWidth(context) * 0.25,
+                            height: displayWidth(context) * 0.25,
+                            child: Image.network(
+                              image,
+                              fit: BoxFit.contain,
+                            )),
                         Text(
                           'You have found',
                           style: TextStyle(
@@ -120,7 +108,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                               fontFamily: 'Kipling_Bold',
                               color: Color(0xff8ab250)),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: displayWidth(context) * 0.005),
                         Text(
                           badgeName,
                           style: TextStyle(
@@ -129,46 +117,46 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         // SizedBox(height: 10),
-                        Expanded(
+                        Flexible(
+                            flex: 7,
                             child: Align(
-                          alignment: Alignment.center,
-                          child: Html(
-                            data: """
+                              alignment: Alignment.center,
+                              child: Html(
+                                data: """
                               $desc
                               """,
-                            // child: Text(desc,
-                            //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
-                            //     textAlign: TextAlign.center,
-                            //     style: TextStyle(
-                            //         fontSize: displayHeight(context) * 0.02,
-                            //         color: Colors.black)),
-                          ),
-                        )),
-                        // SizedBox(height: 10),
-                        Expanded(
+                                style: {
+                                  "body": Style(
+                                    fontFamily: 'Kipling_Regular'
+                                  ),
+                                },
+                              ),
+                            )),
+                        Flexible(
+                            flex: 1,
                             child: Align(
-                          alignment: Alignment.center,
-                          child: Html(
-                            data: """
+                              alignment: Alignment.center,
+                              child: Html(
+                                data: """
                               $condition
                               """,
-                            // child: Text(desc,
-                            //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
-                            //     textAlign: TextAlign.center,
-                            //     style: TextStyle(
-                            //         fontSize: displayHeight(context) * 0.02,
-                            //         color: Colors.black)),
-                          ),
-                        )),
+                                style: {
+                                  "body": Style(
+                                      fontFamily: 'Kipling_Regular'
+                                  ),
+                                },
+                              ),
+                            )),
+                        SizedBox(height: displayWidth(context) * 0.005),
                         Text(
                           points,
                           // '000 points',
                           style: TextStyle(
                               color: Color(0xff8ab250),
-                             fontFamily: 'Kipling_Bold',
+                              fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: displayWidth(context) * 0.005),
                         RaisedButton(
                           color: Color(0xff2c2d2e),
                           onPressed: () {
@@ -178,7 +166,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                             'Done',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Kipling_Bold',
+                              fontFamily: 'Kipling_Regular',
                               fontSize: displayHeight(context) * 0.03,
                             ),
                           ),

@@ -656,7 +656,7 @@
         <entry key="retrofit">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/retrofit-2.0.0/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/retrofit-2.0.1/lib" />
             </list>
           </value>
         </entry>
@@ -1005,7 +1005,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/pub_semver-2.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-1.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-3.0.1/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/retrofit-2.0.0/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/retrofit-2.0.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/retrofit_generator-2.0.0+3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/shelf-1.2.0/lib" />

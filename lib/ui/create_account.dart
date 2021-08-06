@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/custom_widget/text_field.dart';
+import 'package:kipling/module/register_user_model.dart';
 import 'package:kipling/ui/login_screen.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -18,9 +22,7 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  late CreateAccountModel createAccountModel;
   String dropdownvalue = 'EN';
-  var items = [];
 
   TextEditingController fNameController = TextEditingController();
   TextEditingController lNameController = TextEditingController();
@@ -32,22 +34,73 @@ class _CreateAccountState extends State<CreateAccount> {
 
   bool snUpNews = true;
   bool privacyPolicy = true;
+  bool isLoader = false;
+
+  String languageCode = 'en';
+  String finalDate = '';
 
   GlobalKey<FormState> _fromKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   CreateAccountModel? ld;
 
+  Dio _dio = Dio();
+
+  Future<RegisterUserModel> createAccountAPI({
+    String? name,
+    String? mName,
+    String? lName,
+    String? dob,
+    String? languageCode,
+    String? emailAddress,
+    bool? emailPrimary,
+    bool? isOption,
+    bool? isGeneral,
+  }) async {
+    isLoader = true;
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl: 'https://api-mobile-app-staging.loyalty-cloud.com/v1/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.post(
+        "customers-service/customers",
+        data: {
+          "name": name,
+          "middle_name": mName,
+          "last_name": lName,
+          "birth_date": dob, //"1988-01-21T00:00:00Z"
+          "language_code": languageCode,
+          "emails": [
+            {"email_address": emailAddress, "primary": emailPrimary}
+          ],
+          "optin": isOption,
+          "general_permission": isGeneral
+        },
+      );
+      isLoader = false;
+      Fluttertoast.showToast(
+          msg: 'Registered Successfully',
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.black);
+      return RegisterUserModel.fromJson(response.data);
+    } on DioError catch (e) {
+      isLoader = false;
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        var errorMessage = errorData["message"];
+        throw Exception(errorMessage);
+      } else {
+        isLoader = false;
+        throw SocketException("");
+      }
+    }
+  }
+
   @override
   void initState() {
     ld = widget.createAccountModel;
-    // print(widget.createAccountModel?.name);
-    // createAccountModel = widget.createAccountModel!;
-    // for (var i in createAccountModel) {
-    //   print(i.languageCode.toString().toUpperCase());
-    //   // items.clear();
-    //   items.add(i.languageCode.toUpperCase());
-    // }
   }
 
   DateTime currentDate = DateTime.now();
@@ -64,6 +117,15 @@ class _CreateAccountState extends State<CreateAccount> {
 
         final DateFormat formatter = DateFormat('dd-MM-yyyy');
         dateController.text = formatter.format(currentDate);
+
+        final DateFormat df = DateFormat('yyyy-MM-dd');
+        String d = df.format(currentDate);
+
+        DateFormat tf = new DateFormat("HH:mm:ss");
+        String s = tf.format(currentDate);
+
+        print('dateResult: ${d + 'T' + s + 'Z'}');
+        finalDate = d + 'T' + s + 'Z';
       });
   }
 
@@ -102,39 +164,6 @@ class _CreateAccountState extends State<CreateAccount> {
             ));
   }
 
-  // void _selectDateiOS(ctx) {
-  //   // showCupertinoModalPopup is a built-in function of the cupertino library
-  //   showCupertinoModalPopup(
-  //       context: ctx,
-  //       builder: (_) => Container(
-  //             height: displayWidth(context) * 0.8,
-  //             child: Column(
-  //               children: [
-  //                 Container(
-  //                   height: 400,
-  //                   child: CupertinoDatePicker(
-  //                       initialDateTime: DateTime.now(),
-  //                       onDateTimeChanged: (val) {
-  //                         setState(() {
-  //                           currentDate = val;
-  //
-  //                           final DateFormat formatter =
-  //                               DateFormat('dd-MM-yyyy');
-  //                           dateController.text = formatter.format(currentDate);
-  //                         });
-  //                       }),
-  //                 ),
-  //
-  //                 // Close the modal
-  //                 CupertinoButton(
-  //                   child: Text('OK'),
-  //                   onPressed: () => Navigator.of(ctx).pop(),
-  //                 )
-  //               ],
-  //             ),
-  //           ));
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,9 +198,15 @@ class _CreateAccountState extends State<CreateAccount> {
                           dropdownvalue = newValue!;
                           setState(() {
                             if (dropdownvalue == 'EN') {
-                              index = 0;
+                              setState(() {
+                                index = 0;
+                                languageCode = 'en';
+                              });
                             } else if (dropdownvalue == 'NL') {
-                              index = 1;
+                              setState(() {
+                                index = 1;
+                                languageCode = 'nl';
+                              });
                             }
                           });
                         });
@@ -588,7 +623,16 @@ class _CreateAccountState extends State<CreateAccount> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_fromKey.currentState!.validate()) {
-                              Navigator.pop(context);
+                              createAccountAPI(
+                                  dob: finalDate,
+                                  emailAddress: emailController.text,
+                                  emailPrimary: true,
+                                  isGeneral: privacyPolicy,
+                                  isOption: snUpNews,
+                                  languageCode: languageCode,
+                                  lName: lNameController.text,
+                                  mName: mNameController.text,
+                                  name: fNameController.text);
                             }
                           },
                           style: ElevatedButton.styleFrom(

@@ -73,9 +73,9 @@ class _AllBadgesState extends State<AllBadges> {
               itemCount: finalBadgeModel!.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: displayHeight(context) * 0.00099,
+                  childAspectRatio: displayWidth(context) * 0.0021,
                   crossAxisSpacing: displayWidth(context) * 0.009,
-                  mainAxisSpacing: displayWidth(context) * 0.0007),
+                  mainAxisSpacing: displayWidth(context) * 0.00009),
               itemBuilder: (BuildContext context, int k) {
                 return GestureDetector(
                   onTap: () => dialog1(
@@ -91,21 +91,21 @@ class _AllBadgesState extends State<AllBadges> {
                           height: displayWidth(context) * 0.30,
                           child: Image.network(
                               finalBadgeModel![k].url.toString())),
-                      SizedBox(height: 10),
+                      SizedBox(height: displayWidth(context) * 0.005),
                       Text(
                         finalBadgeModel![k].title.toString(),
                         style: TextStyle(
                             color: Colors.black,
-                            fontSize: displayHeight(context) * 0.025,
+                            fontSize: displayHeight(context) * 0.02,
                             fontFamily: 'Kipling_Bold',),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: displayWidth(context) * 0.005),
                       Text(
                         finalBadgeModel![k].point_needed.toString(),
                         style: TextStyle(
                             color: Color(0xff8ab250),
-                            fontSize: displayHeight(context) * 0.02,
-                            fontFamily: 'Kipling_Bold'),
+                            fontSize: displayHeight(context) * 0.015,
+                            fontFamily: 'Kipling_Regular'),
                       )
                     ],
                   ),
@@ -132,7 +132,7 @@ class _AllBadgesState extends State<AllBadges> {
                           height: displayWidth(context) * 0.30,
                           child: Image.asset(
                               allBadgesModelList[index].image.toString())),
-                      SizedBox(height: 10),
+                      SizedBox(height: displayWidth(context) * 0.005),
                       Text(
                         allBadgesModelList[index].title.toString(),
                         style: TextStyle(
@@ -140,7 +140,7 @@ class _AllBadgesState extends State<AllBadges> {
                             fontSize: displayHeight(context) * 0.025,
                             fontFamily: 'Kipling_Bold'),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: displayWidth(context) * 0.005),
                       Text(
                         allBadgesModelList[index].subTitle.toString(),
                         style: TextStyle(
@@ -161,7 +161,7 @@ class _AllBadgesState extends State<AllBadges> {
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
                   child: Container(
-                    height: displayHeight(context) * 0.7,
+                    height: displayHeight(context) * 0.85,
                     padding: EdgeInsets.all(displayHeight(context) * 0.02),
                     child: Column(
                       children: [
@@ -176,16 +176,10 @@ class _AllBadgesState extends State<AllBadges> {
                           ),
                         ),
                         SizedBox(
-                            width: displayWidth(context) * 0.35,
-                            height: displayWidth(context) * 0.35,
+                            width: displayWidth(context) * 0.25,
+                            height: displayWidth(context) * 0.25,
                             child: Image.asset('assets/images/image.png')),
-                        // Text(
-                        //   'You have found',
-                        //   style: TextStyle(
-                        //       fontSize: displayHeight(context) * 0.02,
-                        //       color: Color(0xff8ab250)),
-                        // ),
-                        SizedBox(height: 10),
+                        SizedBox(height: displayWidth(context) * 0.005),
                         Text(
                           'Badge Name',
                           style: TextStyle(
@@ -193,9 +187,8 @@ class _AllBadgesState extends State<AllBadges> {
                               fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
-                        SizedBox(height: 10),
                         Expanded(
-                            flex: 5,
+                            flex: 7,
                             child: Text(
                                 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
                                 textAlign: TextAlign.center,
@@ -203,7 +196,7 @@ class _AllBadgesState extends State<AllBadges> {
                                   fontFamily: 'Kipling_Regular',
                                     fontSize: displayHeight(context) * 0.02,
                                     color: Colors.black))),
-                        SizedBox(height: 10),
+                        SizedBox(height: displayWidth(context) * 0.005),
                         Text(
                           '000 points',
                           style: TextStyle(
@@ -211,7 +204,7 @@ class _AllBadgesState extends State<AllBadges> {
                               fontFamily: 'Kipling_Bold',
                               fontSize: displayHeight(context) * 0.04),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: displayWidth(context) * 0.005),
                         RaisedButton(
                           color: Color(0xff0279fc),
                           onPressed: () {
@@ -221,7 +214,7 @@ class _AllBadgesState extends State<AllBadges> {
                             'Done',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Kipling_Bold',
+                              fontFamily: 'Kipling_Regular',
                               fontSize: displayHeight(context) * 0.03,
                             ),
                           ),
@@ -238,101 +231,101 @@ class _AllBadgesState extends State<AllBadges> {
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
-                  child: Container(
-                    height: displayHeight(context) * 0.8,
-                    padding: EdgeInsets.all(displayHeight(context) * 0.02),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icon(
-                              Icons.close,
-                              color: Colors.black,
-                            ),
-                          ),
+              child: Container(
+                height: displayHeight(context) * 0.85,
+                padding: EdgeInsets.all(displayHeight(context) * 0.02),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.black,
                         ),
-                        SizedBox(
-                            width: displayWidth(context) * 0.35,
-                            height: displayWidth(context) * 0.35,
-                            child: Image.network(image)),
-                        Text(
-                          'You have found',
-                          style: TextStyle(
-                              fontSize: displayHeight(context) * 0.02,
-                              fontFamily: 'Kipling_Bold',
-                              color: Color(0xff8ab250)),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          badgeName,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'Kipling_Bold',
-                              fontSize: displayHeight(context) * 0.04),
-                        ),
-                        // SizedBox(height: 10),
-                        Flexible(
-                          flex: 5,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Html(
-                                data: """
+                      ),
+                    ),
+                    SizedBox(
+                        width: displayWidth(context) * 0.25,
+                        height: displayWidth(context) * 0.25,
+                        child: Image.network(
+                          image,
+                          fit: BoxFit.contain,
+                        )),
+                    Text(
+                      'You have found',
+                      style: TextStyle(
+                          fontSize: displayHeight(context) * 0.02,
+                          fontFamily: 'Kipling_Bold',
+                          color: Color(0xff8ab250)),
+                    ),
+                    SizedBox(height: displayWidth(context) * 0.005),
+                    Text(
+                      badgeName,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Kipling_Bold',
+                          fontSize: displayHeight(context) * 0.04),
+                    ),
+                    Flexible(
+                        flex: 7,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Html(data: """
                               $desc
                               """,
-                                // child: Text(desc,
-                                //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
-                                //     textAlign: TextAlign.center,
-                                //     style: TextStyle(
-                                //         fontSize: displayHeight(context) * 0.02,
-                                //         color: Colors.black)),
-                              ),
-                            )),
-                        // SizedBox(height: 10),
-                        Flexible(
-                          flex: 1,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Html(
-                                data: """
+                            style: {
+                            "body": Style(
+                            fontFamily: 'Kipling_Regular'
+                            ),
+                            },
+                          ),
+                        )),
+                    // SizedBox(height: 10),
+                    Flexible(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Html(
+                            data: """
                               $condition
                               """,
-                                // child: Text(desc,
-                                //     // 'Welcome to the city of Lights - Bonjour Paris! Paris monument-lined boulevards, museums, classical bistros and boutiques are enhanced by a  new wave of multimedia galleries.',
-                                //     textAlign: TextAlign.center,
-                                //     style: TextStyle(
-                                //         fontSize: displayHeight(context) * 0.02,
-                                //         color: Colors.black)),
+                            style: {
+                              "body": Style(
+                                  fontFamily: 'Kipling_Regular'
                               ),
-                            )),
-                        Text(
-                          points,
-                          // '000 points',
-                          style: TextStyle(
-                              color: Color(0xff8ab250),
-                              fontFamily: 'Kipling_Bold',
-                              fontSize: displayHeight(context) * 0.04),
-                        ),
-                        SizedBox(height: 10),
-                        RaisedButton(
-                          color: Color(0xff2c2d2e),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Done',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Kipling_Bold',
-                              fontSize: displayHeight(context) * 0.03,
-                            ),
+                            },
                           ),
-                        )
-                      ],
+                        )),
+                    SizedBox(height: displayWidth(context) * 0.005),
+                    Text(
+                      points,
+                      // '000 points',
+                      style: TextStyle(
+                          color: Color(0xff8ab250),
+                          fontFamily: 'Kipling_Bold',
+                          fontSize: displayHeight(context) * 0.04),
                     ),
-                  ),
-                )));
+                    SizedBox(height: displayWidth(context) * 0.005),
+                    RaisedButton(
+                      color: Color(0xff2c2d2e),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Done',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Kipling_Regular',
+                          fontSize: displayHeight(context) * 0.03,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )));
   }
 }
 

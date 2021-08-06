@@ -10,6 +10,7 @@ import 'package:kipling/main.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/ui/badge_screen.dart';
 import 'package:kipling/ui/login_screen.dart';
+import 'package:dio/dio.dart' as d;
 
 class PersonalDetails extends StatefulWidget {
   const PersonalDetails({this.ld});
@@ -45,10 +46,58 @@ class _PersonalDetailsState extends State<PersonalDetails> {
 
   PersonalDetailData? ld;
 
-  PersistentBottomSheetController? _controller;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  File? imageFile = File('');
+
+  DateTime _chosenDateTime = DateTime.now();
+
+  d.Dio dio = d.Dio();
 
   var items = [];
+
+  String genderValue = 'Male';
+
+  Future<String?> uploadImage(int id) async {
+    try {
+      d.Response response;
+
+      d.FormData formData = new d.FormData.fromMap({'id': id});
+      formData.files.add(
+        MapEntry("avatar_url", await d.MultipartFile.fromFile(imageFile!.path)),
+      );
+
+      response = await dio.post(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/upload?avatar_url=${imageFile!.path}&id=$id',
+          options: d.Options(headers: {"content-type": 'application/json'}),
+          data: formData);
+      print('response --------> ${response.toString()}');
+      if (response == null) {
+        print('response ---null-----> ${response.statusMessage.toString()}');
+        return null;
+      } else if (response.statusCode == 200) {
+        print(
+            'response.statusMessage --------> ${response.statusMessage.toString()}');
+        print("Response is---> ${response.data}");
+        if (response.data['status'] == false) {
+          print(" In status falseResponse is---> ${response.data}");
+// return LoginResponse.fromJson(response.data);
+        } else {
+          print(
+              'response. true response data --------> ${response.data.toString()}');
+// SharedPreferences prefs=await SharedPreferences.getInstance();
+// prefs.setString('UserId',response.data['data']['user_id'].toString() );
+          return response.data['data']['user_id'].toString();
+        }
+      } else {
+        print('12345555556 ------>${response.statusMessage.toString()}');
+        print('22222222 ------>${response.statusCode.toString()}');
+        throw new Exception(response.data);
+      }
+    } on d.DioError catch (e) {
+      print('12345555556');
+      print(e);
+// throw handleError(e);
+    }
+  }
 
   @override
   void initState() {
@@ -60,8 +109,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
       items.add(i.languageCode.toUpperCase());
     }
   }
-
-  DateTime _chosenDateTime = DateTime.now();
 
   Future<void> _selectDateAndroid(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -113,8 +160,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               ),
             ));
   }
-
-  File? imageFile = File('');
 
   _getFromGallery() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
@@ -218,7 +263,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   Container(
                     width: displayWidth(context),
                     child: Card(
-margin: EdgeInsets.zero,
+                      margin: EdgeInsets.zero,
                       elevation: 5,
                       color: Colors.white,
                       child: Padding(
@@ -239,41 +284,41 @@ margin: EdgeInsets.zero,
                                   width: displayWidth(context) * 0.25,
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      image: imageFile != null
+                                      image: imageFile!.path != ''
                                           ? DecorationImage(
-                                          image: NetworkImage(
-                                            ld!.value[index]
-                                                .profilePicturePlaceholderUrl,
-                                          ))
+                                              image: FileImage(imageFile!))
                                           : DecorationImage(
-                                          image: FileImage(imageFile!))),
+                                              image: NetworkImage(
+                                              ld!.value[index]
+                                                  .profilePicturePlaceholderUrl,
+                                            ))),
                                   child: GestureDetector(onTap: () {
                                     showCupertinoModalPopup<void>(
                                       context: context,
                                       builder: (BuildContext context) =>
                                           CupertinoActionSheet(
-                                            cancelButton: CupertinoButton(
-                                              child: Text('Cancel'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                            actions: <CupertinoActionSheetAction>[
-                                              CupertinoActionSheetAction(
-                                                child: const Text('Take a photo'),
-                                                onPressed: () {
-                                                  _getFromCamera();
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              CupertinoActionSheetAction(
-                                                child: const Text('Upload a photo'),
-                                                onPressed: () {
-                                                  _getFromGallery();
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
+                                        cancelButton: CupertinoButton(
+                                          child: Text('Cancel'),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                        actions: <CupertinoActionSheetAction>[
+                                          CupertinoActionSheetAction(
+                                            child: const Text('Take a photo'),
+                                            onPressed: () {
+                                              _getFromCamera();
+                                              Navigator.pop(context);
+                                            },
                                           ),
+                                          CupertinoActionSheetAction(
+                                            child: const Text('Upload a photo'),
+                                            onPressed: () {
+                                              _getFromGallery();
+                                              Navigator.pop(context);
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     );
                                   }),
                                 ),
@@ -348,132 +393,178 @@ margin: EdgeInsets.zero,
                                     fontFamily: 'Kipling_Regular'),
                               ),
                             ),
+                            Platform.isAndroid ? Container(
+                              padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.02),
+                              alignment: Alignment.center,
+                              height: displayHeight(context) * 0.054,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      width: 1.0)),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                isDense: true,
+                                value: genderValue,
+                                underline: Container(),
+                                items: [
+                                  DropdownMenuItem(
+                                    child: Text('Male'),
+                                    value: 'Male',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Female"),
+                                    value: 'Female',
+                                  )
+                                ],
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    genderValue = value!;
+                                  });
+                                },
+                                hint: Text(
+                                  ld!.value[index].genderText,
+                                  style: TextStyle(
+                                      fontFamily: 'Kipling_Regular',
+                                      color: Color(0xff9f9e9f),
+                                      fontSize: displayWidth(context) * 0.035),
+                                ),
+                              ),
+                            ) :
+
                             buildtextfields(
-                                enable: false,
-                                onTap: () {
-                                  showCupertinoModalPopup(
-                                    context: context,
-                                    builder: (context) {
-                                      return StatefulBuilder(builder:
-                                          (BuildContext context,
-                                          StateSetter setState) {
-                                        return Material(
-                                          color: Colors.transparent,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffffffff),
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                      color: Color(0xff999999),
-                                                      width: 0.0,
+                                    enable: false,
+                                    onTap: () {
+                                      showCupertinoModalPopup(
+                                        context: context,
+                                        builder: (context) {
+                                          return StatefulBuilder(builder:
+                                              (BuildContext context,
+                                                  StateSetter setState) {
+                                            return Material(
+                                              color: Colors.transparent,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xffffffff),
+                                                      border: Border(
+                                                        bottom: BorderSide(
+                                                          color:
+                                                              Color(0xff999999),
+                                                          width: 0.0,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: <Widget>[
+                                                        Expanded(
+                                                          child:
+                                                              CupertinoButton(
+                                                            child: Text(''),
+                                                            onPressed: () {},
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 16.0,
+                                                              vertical: 5.0,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Center(
+                                                            child: Text(
+                                                              'Select Gender',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      displayWidth(
+                                                                              context) *
+                                                                          0.035),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child:
+                                                              CupertinoButton(
+                                                            child:
+                                                                Text('Confirm'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 16.0,
+                                                              vertical: 5.0,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      child: CupertinoButton(
-                                                        child: Text(''),
-                                                        onPressed: () {},
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
-                                                          horizontal: 16.0,
-                                                          vertical: 5.0,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Center(
-                                                        child: Text(
-                                                          'Select Gender',
+                                                  Container(
+                                                    height:
+                                                        displayWidth(context) *
+                                                            0.2,
+                                                    color: Color(0xfff7f7f7),
+                                                    child: CupertinoPicker(
+                                                      itemExtent: displayWidth(
+                                                              context) *
+                                                          0.08,
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        setState(() {
+                                                          print(
+                                                              'Value::  $value');
+                                                          setState(() {
+                                                            if (value == 0) {
+                                                              setState(() {
+                                                                selectedGender ==
+                                                                    'Male';
+                                                              });
+                                                            } else if (value ==
+                                                                1) {
+                                                              setState(() {
+                                                                selectedGender ==
+                                                                    'Female';
+                                                              });
+                                                            }
+                                                          });
+                                                        });
+                                                      },
+                                                      children: [
+                                                        Text(
+                                                          'Male',
                                                           style: TextStyle(
                                                               color:
-                                                              Colors.black,
-                                                              fontSize:
-                                                              displayWidth(
-                                                                  context) *
-                                                                  0.035),
+                                                                  Colors.black),
                                                         ),
-                                                      ),
+                                                        Text('Female',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black)),
+                                                      ],
                                                     ),
-                                                    Expanded(
-                                                      child: CupertinoButton(
-                                                        child: Text('Confirm'),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
-                                                          horizontal: 16.0,
-                                                          vertical: 5.0,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                                  )
+                                                ],
                                               ),
-                                              Container(
-                                                height:
-                                                displayWidth(context) * 0.2,
-                                                color: Color(0xfff7f7f7),
-                                                child: CupertinoPicker(
-                                                  itemExtent:
-                                                  displayWidth(context) *
-                                                      0.08,
-                                                  onSelectedItemChanged:
-                                                      (value) {
-                                                    setState(() {
-                                                      print('Value::  $value');
-                                                      setState(() {
-                                                        if (value == 0) {
-                                                          setState(() {
-                                                            selectedGender ==
-                                                                'Male';
-                                                          });
-                                                        } else if (value == 1) {
-                                                          setState(() {
-                                                            selectedGender ==
-                                                                'Female';
-                                                          });
-                                                        }
-                                                      });
-                                                    });
-                                                  },
-                                                  children: [
-                                                    Text(
-                                                      'Male',
-                                                      style: TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                    Text('Female',
-                                                        style: TextStyle(
-                                                            color:
-                                                            Colors.black)),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      });
+                                            );
+                                          });
+                                        },
+                                      );
                                     },
-                                  );
-                                },
-                                hint: ld!.value[index].genderText,
-                                controller: genderController,
-                                context: context,
-                                suffix: true,
-                                suffixIcon: Icon(Icons.arrow_drop_down_sharp)),
+                                    hint: ld!.value[index].genderText,
+                                    controller: genderController,
+                                    context: context,
+                                    suffix: true,
+                                    suffixIcon: Icon(Icons.arrow_drop_down_sharp)),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.02,
@@ -508,6 +599,43 @@ margin: EdgeInsets.zero,
                                     fontFamily: 'Kipling_Regular'),
                               ),
                             ),
+                            Platform.isAndroid ? Container(
+                              padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.02),
+                              alignment: Alignment.center,
+                              height: displayHeight(context) * 0.054,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      width: 1.0)),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                isDense: true,
+                                value: genderValue,
+                                underline: Container(),
+                                items: [
+                                  DropdownMenuItem(
+                                    child: Text('Male'),
+                                    value: 'Male',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Female"),
+                                    value: 'Female',
+                                  )
+                                ],
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    genderValue = value!;
+                                  });
+                                },
+                                hint: Text(
+                                  ld!.value[index].genderText,
+                                  style: TextStyle(
+                                      fontFamily: 'Kipling_Regular',
+                                      color: Color(0xff9f9e9f),
+                                      fontSize: displayWidth(context) * 0.035),
+                                ),
+                              ),
+                            ) :
                             buildtextfields(
                                 hint: ld!.value[index].countryText,
                                 controller: countryController,
@@ -521,12 +649,12 @@ margin: EdgeInsets.zero,
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                          StateSetter setState) {
+                                              StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
@@ -540,16 +668,16 @@ margin: EdgeInsets.zero,
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -561,11 +689,11 @@ margin: EdgeInsets.zero,
                                                           'Select Country',
                                                           style: TextStyle(
                                                               color:
-                                                              Colors.black,
+                                                                  Colors.black,
                                                               fontSize:
-                                                              displayWidth(
-                                                                  context) *
-                                                                  0.035),
+                                                                  displayWidth(
+                                                                          context) *
+                                                                      0.035),
                                                         ),
                                                       ),
                                                     ),
@@ -577,8 +705,8 @@ margin: EdgeInsets.zero,
                                                               context);
                                                         },
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -589,12 +717,12 @@ margin: EdgeInsets.zero,
                                               ),
                                               Container(
                                                 height:
-                                                displayWidth(context) * 0.5,
+                                                    displayWidth(context) * 0.5,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
                                                     itemExtent:
-                                                    displayWidth(context) *
-                                                        0.08,
+                                                        displayWidth(context) *
+                                                            0.08,
                                                     onSelectedItemChanged:
                                                         (value) {
                                                       setState(() {
@@ -603,15 +731,15 @@ margin: EdgeInsets.zero,
                                                       });
                                                     },
                                                     children:
-                                                    countryList!.map((e) {
+                                                        countryList!.map((e) {
                                                       return Text(
                                                         e.name,
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black),
+                                                                Colors.black),
                                                       );
                                                     }).toList()
-                                                  /*[
+                                                    /*[
                                                     Text(
                                                       'India',
                                                       style: TextStyle(
@@ -646,7 +774,7 @@ margin: EdgeInsets.zero,
                                                             color:
                                                                 Colors.black)),
                                                   ],*/
-                                                ),
+                                                    ),
                                               )
                                             ],
                                           ),
@@ -680,12 +808,12 @@ margin: EdgeInsets.zero,
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                          StateSetter setState) {
+                                              StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
@@ -699,16 +827,16 @@ margin: EdgeInsets.zero,
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -720,11 +848,11 @@ margin: EdgeInsets.zero,
                                                           'Select Language',
                                                           style: TextStyle(
                                                               color:
-                                                              Colors.black,
+                                                                  Colors.black,
                                                               fontSize:
-                                                              displayWidth(
-                                                                  context) *
-                                                                  0.035),
+                                                                  displayWidth(
+                                                                          context) *
+                                                                      0.035),
                                                         ),
                                                       ),
                                                     ),
@@ -736,8 +864,8 @@ margin: EdgeInsets.zero,
                                                               context);
                                                         },
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -748,12 +876,12 @@ margin: EdgeInsets.zero,
                                               ),
                                               Container(
                                                 height:
-                                                displayWidth(context) * 0.5,
+                                                    displayWidth(context) * 0.5,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
                                                   itemExtent:
-                                                  displayWidth(context) *
-                                                      0.08,
+                                                      displayWidth(context) *
+                                                          0.08,
                                                   onSelectedItemChanged:
                                                       (value) {
                                                     setState(() {
@@ -769,23 +897,23 @@ margin: EdgeInsets.zero,
                                                     Text('Gujarati',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                     Text('English',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                     Text('Marathi',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                     Text('Bengali',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                     Text('Punjabi',
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black)),
+                                                                Colors.black)),
                                                   ],
                                                 ),
                                               )
@@ -801,12 +929,11 @@ margin: EdgeInsets.zero,
                       ),
                     ),
                   ),
-
                   SizedBox(height: 10),
                   Container(
                     width: displayWidth(context),
-                    child: Card(margin: EdgeInsets.zero,
-
+                    child: Card(
+                      margin: EdgeInsets.zero,
                       color: Colors.white,
                       elevation: 5,
                       child: Padding(
@@ -874,13 +1001,13 @@ margin: EdgeInsets.zero,
                                       },
                                       child: isChecked == false
                                           ? Icon(
-                                        Icons.check_box_outlined,
-                                        color: Colors.black,
-                                      )
+                                              Icons.check_box_outlined,
+                                              color: Colors.black,
+                                            )
                                           : Icon(
-                                        Icons.check_box,
-                                        color: Color(0xff89b14b),
-                                      ),
+                                              Icons.check_box,
+                                              color: Color(0xff89b14b),
+                                            ),
                                     ),
                                   ),
                                   SizedBox(width: 10),
@@ -888,16 +1015,16 @@ margin: EdgeInsets.zero,
                                     flex: 10,
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(ld!.value[index].optinText,
                                             style: TextStyle(
                                                 color: Color(0xff010001),
                                                 fontSize:
-                                                displayWidth(context) *
-                                                    0.05,
+                                                    displayWidth(context) *
+                                                        0.05,
                                                 fontWeight: FontWeight.bold)),
                                         Text(
                                           ld!.value[index].optinDescText,
@@ -905,8 +1032,7 @@ margin: EdgeInsets.zero,
                                               height: 1.50,
                                               color: Color(0xff010001),
                                               fontSize:
-                                              displayWidth(context) *
-                                                  0.05),
+                                                  displayWidth(context) * 0.05),
                                         )
                                       ],
                                     ),
@@ -934,7 +1060,7 @@ margin: EdgeInsets.zero,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(ld!.value[index].addressTypeText,
+                            Text(ld!.value[index].addressTitleText,
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.06,
@@ -962,15 +1088,15 @@ margin: EdgeInsets.zero,
                                   bottom: displayHeight(context) * 0.01),
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(
                                     flex: 2,
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
                                           ld!.value[index]
@@ -978,15 +1104,14 @@ margin: EdgeInsets.zero,
                                           style: TextStyle(
                                               color: Color(0xff010001),
                                               fontSize:
-                                              displayWidth(context) *
-                                                  0.05,
-                                              fontFamily:
-                                              'Kipling_Regular'),
+                                                  displayWidth(context) * 0.05,
+                                              fontFamily: 'Kipling_Regular'),
                                         ),
-                                        SizedBox(height: displayHeight(context) * 0.01),
+                                        SizedBox(
+                                            height:
+                                                displayHeight(context) * 0.01),
                                         buildtextfields(
-                                            width:
-                                            displayWidth(context) * 0.4,
+                                            width: displayWidth(context) * 0.4,
                                             hint: ld!.value[index]
                                                 .addressHouseNumberText,
                                             controller: houseNumberController,
@@ -999,9 +1124,9 @@ margin: EdgeInsets.zero,
                                     flex: 2,
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
                                           ld!.value[index]
@@ -1009,14 +1134,14 @@ margin: EdgeInsets.zero,
                                           style: TextStyle(
                                               color: Color(0xff010001),
                                               fontSize:
-                                              displayWidth(context) *
-                                                  0.05,
-                                              fontFamily:
-                                              'Kipling_Regular'),
+                                                  displayWidth(context) * 0.05,
+                                              fontFamily: 'Kipling_Regular'),
                                         ),
-                                        SizedBox(height: displayHeight(context) * 0.01),
+                                        SizedBox(
+                                            height:
+                                                displayHeight(context) * 0.01),
                                         buildtextfields(
-                                          // width: displayWidth(context) * 0.4,
+                                            // width: displayWidth(context) * 0.4,
                                             hint: ld!.value[index]
                                                 .addressHouseNumberSuffixText,
                                             controller: additionController,
@@ -1041,139 +1166,9 @@ margin: EdgeInsets.zero,
                               ),
                             ),
                             buildtextfields(
-                              hint: ld!.value[index].addressCityText,
-                              controller: cityController,
-                              context: context,
-                              // suffix: true,
-                              // suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                              // onTap: () {
-                              //   showCupertinoModalPopup(
-                              //     context: context,
-                              //     builder: (context) {
-                              //       return StatefulBuilder(builder:
-                              //           (BuildContext context,
-                              //               StateSetter setState) {
-                              //         return Material(
-                              //           color: Colors.transparent,
-                              //           child: Column(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.end,
-                              //             children: <Widget>[
-                              //               Container(
-                              //                 decoration: BoxDecoration(
-                              //                   color: Color(0xffffffff),
-                              //                   border: Border(
-                              //                     bottom: BorderSide(
-                              //                       color:
-                              //                           Color(0xff999999),
-                              //                       width: 0.0,
-                              //                     ),
-                              //                   ),
-                              //                 ),
-                              //                 child: Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment
-                              //                           .spaceBetween,
-                              //                   children: <Widget>[
-                              //                     Expanded(
-                              //                       child: CupertinoButton(
-                              //                         child: Text(''),
-                              //                         onPressed: () {},
-                              //                         padding:
-                              //                             const EdgeInsets
-                              //                                 .symmetric(
-                              //                           horizontal: 16.0,
-                              //                           vertical: 5.0,
-                              //                         ),
-                              //                       ),
-                              //                     ),
-                              //                     Expanded(
-                              //                       child: Center(
-                              //                         child: Text(
-                              //                           'Select City',
-                              //                           style: TextStyle(
-                              //                               color: Colors
-                              //                                   .black,
-                              //                               fontSize:
-                              //                                   displayWidth(
-                              //                                           context) *
-                              //                                       0.035),
-                              //                         ),
-                              //                       ),
-                              //                     ),
-                              //                     Expanded(
-                              //                       child: CupertinoButton(
-                              //                         child:
-                              //                             Text('Confirm'),
-                              //                         onPressed: () {
-                              //                           Navigator.pop(
-                              //                               context);
-                              //                         },
-                              //                         padding:
-                              //                             const EdgeInsets
-                              //                                 .symmetric(
-                              //                           horizontal: 16.0,
-                              //                           vertical: 5.0,
-                              //                         ),
-                              //                       ),
-                              //                     )
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //               Container(
-                              //                 height:
-                              //                     displayWidth(context) *
-                              //                         0.5,
-                              //                 color: Color(0xfff7f7f7),
-                              //                 child: CupertinoPicker(
-                              //                   itemExtent:
-                              //                       displayWidth(context) *
-                              //                           0.08,
-                              //                   onSelectedItemChanged:
-                              //                       (value) {
-                              //                     setState(() {
-                              //                       print(
-                              //                           'Value::  $value');
-                              //                     });
-                              //                   },
-                              //                   children: [
-                              //                     Text(
-                              //                       'Surat',
-                              //                       style: TextStyle(
-                              //                           color:
-                              //                               Colors.black),
-                              //                     ),
-                              //                     Text('Ahmedabad',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                     Text('Bhavnagar',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                     Text('Rajkot',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                     Text('Amreli',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                     Text('Junagadh',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                   ],
-                              //                 ),
-                              //               )
-                              //             ],
-                              //           ),
-                              //         );
-                              //       });
-                              //     },
-                              //   );
-                              // }
-                            ),
+                                hint: ld!.value[index].addressCityText,
+                                controller: cityController,
+                                context: context),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.02,
@@ -1188,140 +1183,9 @@ margin: EdgeInsets.zero,
                               ),
                             ),
                             buildtextfields(
-                              hint: ld!.value[index].addressStateText,
-                              controller: regionController,
-                              context: context,
-                              // suffix: true,
-                              // enable: false,
-                              // suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                              // onTap: () {
-                              //   showCupertinoModalPopup(
-                              //     context: context,
-                              //     builder: (context) {
-                              //       return StatefulBuilder(builder:
-                              //           (BuildContext context,
-                              //               StateSetter setState) {
-                              //         return Material(
-                              //           color: Colors.transparent,
-                              //           child: Column(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.end,
-                              //             children: <Widget>[
-                              //               Container(
-                              //                 decoration: BoxDecoration(
-                              //                   color: Color(0xffffffff),
-                              //                   border: Border(
-                              //                     bottom: BorderSide(
-                              //                       color:
-                              //                           Color(0xff999999),
-                              //                       width: 0.0,
-                              //                     ),
-                              //                   ),
-                              //                 ),
-                              //                 child: Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment
-                              //                           .spaceBetween,
-                              //                   children: <Widget>[
-                              //                     Expanded(
-                              //                       child: CupertinoButton(
-                              //                         child: Text(''),
-                              //                         onPressed: () {},
-                              //                         padding:
-                              //                             const EdgeInsets
-                              //                                 .symmetric(
-                              //                           horizontal: 16.0,
-                              //                           vertical: 5.0,
-                              //                         ),
-                              //                       ),
-                              //                     ),
-                              //                     Expanded(
-                              //                       child: Center(
-                              //                         child: Text(
-                              //                           'Select Region',
-                              //                           style: TextStyle(
-                              //                               color: Colors
-                              //                                   .black,
-                              //                               fontSize:
-                              //                                   displayWidth(
-                              //                                           context) *
-                              //                                       0.035),
-                              //                         ),
-                              //                       ),
-                              //                     ),
-                              //                     Expanded(
-                              //                       child: CupertinoButton(
-                              //                         child:
-                              //                             Text('Confirm'),
-                              //                         onPressed: () {
-                              //                           Navigator.pop(
-                              //                               context);
-                              //                         },
-                              //                         padding:
-                              //                             const EdgeInsets
-                              //                                 .symmetric(
-                              //                           horizontal: 16.0,
-                              //                           vertical: 5.0,
-                              //                         ),
-                              //                       ),
-                              //                     )
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //               Container(
-                              //                 height:
-                              //                     displayWidth(context) *
-                              //                         0.5,
-                              //                 color: Color(0xfff7f7f7),
-                              //                 child: CupertinoPicker(
-                              //                   itemExtent:
-                              //                       displayWidth(context) *
-                              //                           0.08,
-                              //                   onSelectedItemChanged:
-                              //                       (value) {
-                              //                     setState(() {
-                              //                       print(
-                              //                           'Value::  $value');
-                              //                     });
-                              //                   },
-                              //                   children: [
-                              //                     Text(
-                              //                       'Gujarat',
-                              //                       style: TextStyle(
-                              //                           color:
-                              //                               Colors.black),
-                              //                     ),
-                              //                     Text('Maharstra',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                     Text('Delhi',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                     Text('Rajasthan',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                     Text('Madhya Pradesh',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                     Text('Chennai',
-                              //                         style: TextStyle(
-                              //                             color: Colors
-                              //                                 .black)),
-                              //                   ],
-                              //                 ),
-                              //               )
-                              //             ],
-                              //           ),
-                              //         );
-                              //       });
-                              //     },
-                              //   );
-                              // }
-                            ),
+                                hint: ld!.value[index].addressStateText,
+                                controller: regionController,
+                                context: context),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.02,
@@ -1347,36 +1211,35 @@ margin: EdgeInsets.zero,
                                     builder: (context) {
                                       return StatefulBuilder(builder:
                                           (BuildContext context,
-                                          StateSetter setState) {
+                                              StateSetter setState) {
                                         return Material(
                                           color: Colors.transparent,
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
                                                   color: Color(0xffffffff),
                                                   border: Border(
                                                     bottom: BorderSide(
-                                                      color:
-                                                      Color(0xff999999),
+                                                      color: Color(0xff999999),
                                                       width: 0.0,
                                                     ),
                                                   ),
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: <Widget>[
                                                     Expanded(
                                                       child: CupertinoButton(
                                                         child: Text(''),
                                                         onPressed: () {},
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -1387,26 +1250,25 @@ margin: EdgeInsets.zero,
                                                         child: Text(
                                                           'Select Country',
                                                           style: TextStyle(
-                                                              color: Colors
-                                                                  .black,
+                                                              color:
+                                                                  Colors.black,
                                                               fontSize:
-                                                              displayWidth(
-                                                                  context) *
-                                                                  0.035),
+                                                                  displayWidth(
+                                                                          context) *
+                                                                      0.035),
                                                         ),
                                                       ),
                                                     ),
                                                     Expanded(
                                                       child: CupertinoButton(
-                                                        child:
-                                                        Text('Confirm'),
+                                                        child: Text('Confirm'),
                                                         onPressed: () {
                                                           Navigator.pop(
                                                               context);
                                                         },
                                                         padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                           horizontal: 16.0,
                                                           vertical: 5.0,
                                                         ),
@@ -1417,13 +1279,12 @@ margin: EdgeInsets.zero,
                                               ),
                                               Container(
                                                 height:
-                                                displayWidth(context) *
-                                                    0.5,
+                                                    displayWidth(context) * 0.5,
                                                 color: Color(0xfff7f7f7),
                                                 child: CupertinoPicker(
-                                                    itemExtent: displayWidth(
-                                                        context) *
-                                                        0.08,
+                                                    itemExtent:
+                                                        displayWidth(context) *
+                                                            0.08,
                                                     onSelectedItemChanged:
                                                         (value) {
                                                       setState(() {
@@ -1432,43 +1293,14 @@ margin: EdgeInsets.zero,
                                                       });
                                                     },
                                                     children:
-                                                    countryList!.map((e) {
+                                                        countryList!.map((e) {
                                                       return Text(
                                                         e.name,
                                                         style: TextStyle(
                                                             color:
-                                                            Colors.black),
+                                                                Colors.black),
                                                       );
-                                                    }).toList()
-                                                  /* [
-                                                      Text(
-                                                        'Austria',
-                                                        style: TextStyle(
-                                                            color: Colors
-                                                                .black),
-                                                      ),
-                                                      Text('Myanmar',
-                                                          style: TextStyle(
-                                                              color:
-                                                              Colors.black)),
-                                                      Text('Afghanistan',
-                                                          style: TextStyle(
-                                                              color:
-                                                              Colors.black)),
-                                                      Text('Bhutan',
-                                                          style: TextStyle(
-                                                              color:
-                                                              Colors.black)),
-                                                      Text('Pakistan',
-                                                          style: TextStyle(
-                                                              color:
-                                                              Colors.black)),
-                                                      Text('India',
-                                                          style: TextStyle(
-                                                              color:
-                                                              Colors.black)),
-                                                    ],*/
-                                                ),
+                                                    }).toList()),
                                               )
                                             ],
                                           ),
@@ -1506,10 +1338,14 @@ margin: EdgeInsets.zero,
                                     fontFamily: 'Kipling_Regular'),
                               ),
                             ),
-                            buildtextfields(
-                                hint: ld!.value[index].addressTypeText,
-                                controller: companyOptionalController,
-                                context: context),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: displayWidth(context) * 0.13),
+                              child: buildtextfields(
+                                  hint: ld!.value[index].addressTypeText,
+                                  controller: companyOptionalController,
+                                  context: context),
+                            ),
                           ],
                         ),
                       ),
@@ -1537,7 +1373,7 @@ margin: EdgeInsets.zero,
                               builder: (context) => BadgeScreen()));
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF88b14a),
+                      primary: Color(0xFF88b14a),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0.0)),
                     ),
@@ -1557,50 +1393,4 @@ margin: EdgeInsets.zero,
       ),
     );
   }
-
-// Widget buildtextfields(
-//     {required String hint,
-//     required TextEditingController controller,
-//     required BuildContext context,
-//     bool? suffix,
-//     bool enable = true,
-//     Icon? suffixIcon,
-//     double? width,
-//     Function()? onTap,
-//     TextInputType? keyboard}) {
-//   return GestureDetector(
-//     onTap: onTap,
-//     child: Container(
-//       height: displayHeight(context) * 0.051,
-//       width: width == null ? double.infinity : width,
-//       child: TextFormField(
-//           style: TextStyle(
-//               color: Color(0xff010001), fontFamily: 'Kipling_Regular'),
-//           keyboardType: keyboard,
-//           controller: controller,
-//           decoration: InputDecoration(
-//               hintText: hint,
-//               hintStyle:
-//                   const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
-//               border: InputBorder.none,
-//               focusedBorder: OutlineInputBorder(
-//                 borderRadius: BorderRadius.circular(0.0),
-//                 borderSide: BorderSide(
-//                     color: Colors.grey.withOpacity(0.5), width: 1.0),
-//               ),
-//               enabled: enable == true ? true : false,
-//               suffixIcon: suffix != true ? null : suffixIcon,
-//               enabledBorder: OutlineInputBorder(
-//                 borderRadius: BorderRadius.circular(0.0),
-//                 borderSide: BorderSide(
-//                     color: Colors.grey.withOpacity(0.5), width: 1.0),
-//               ),
-//               disabledBorder: OutlineInputBorder(
-//                 borderRadius: BorderRadius.circular(0.0),
-//                 borderSide: BorderSide(
-//                     color: Colors.grey.withOpacity(0.5), width: 1.0),
-//               ))),
-//     ),
-//   );
-// }
 }

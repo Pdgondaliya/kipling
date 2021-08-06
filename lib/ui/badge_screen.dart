@@ -31,7 +31,7 @@ class _BadgeScreenState extends State<BadgeScreen> {
           title: Text(
             finalBadgeModel != [] ? 'My Collectables' : 'Badges',
             style: TextStyle(
-                color: Color(0xff0f0e0e), fontWeight: FontWeight.bold),
+                color: Color(0xff0f0e0e), fontFamily: 'Kipling_Bold'),
           ),
           bottom: TabBar(
             labelColor: Colors.black,
@@ -39,10 +39,12 @@ class _BadgeScreenState extends State<BadgeScreen> {
             unselectedLabelStyle: TextStyle(
               fontSize: displayWidth(context) * 0.05,
               color: Color(0xff9f9e9f),
+              fontFamily: 'Kipling_Regular'
             ),
             labelStyle: TextStyle(
               fontSize: displayWidth(context) * 0.05,
               color: Colors.black,
+              fontFamily: 'Kipling_Regular'
             ),
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: UnderlineTabIndicator(

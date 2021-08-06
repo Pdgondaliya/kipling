@@ -19,7 +19,7 @@ Widget buildtextfields(
       height: displayHeight(context) * 0.054,
       width: width == null ? double.infinity : width,
       child: TextFormField(
-          style: TextStyle(color: Color(0xff010001)),
+          style: TextStyle(color: Color(0xff010001), fontFamily: 'Kipling_Regular'),
           keyboardType: keyboard,
           controller: controller,
           obscureText: isPassword == true ? true : false,
@@ -28,7 +28,7 @@ Widget buildtextfields(
               contentPadding: EdgeInsets.symmetric(horizontal: 10),
               hintText: hint,
               hintStyle:
-                  const TextStyle(fontSize: 17, color: Color(0xff9f9e9f)),
+                  const TextStyle(fontSize: 17, color: Color(0xff9f9e9f), fontFamily: 'Kipling_Regular'),
               border: InputBorder.none,
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0),

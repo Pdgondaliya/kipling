@@ -11,6 +11,7 @@ import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/splash_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:kipling/module/welcome_model.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'Database/db_data.dart';
 import 'Database/db_helper.dart';
@@ -44,15 +45,18 @@ class MyHomePage extends StatefulWidget {
 
 Future<b.BadgeData>? badgeData;
 Future<c.CountryPickerModel>? futureCountryPickerDataAlbum;
-
-
+Future<WelComeScreenModel>? futureWelComeScreenAlbum;
 
 List<b.BadgeData>? badgeDetailsData;
 List<c.Value>? countryList;
+List<WelComeScreenModel>? welComeScreenList;
+
+WelComeScreenModel? welcomeData;
 
 List<b.Content>? contents;
 List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
 List<b.FinalBadgeModel> finalBadgeModel = [];
+List<WelComeScreenModel> welcomeModel = [];
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<Splashdata> futureAlbum;
@@ -81,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
     futurePersonDataAlbum = fetchPersonData();
     futureCretaeAccountAlbum = fetchCreateAccountData();
     futureCountryPickerDataAlbum = fetchCountryListData();
+    futureWelComeScreenAlbum = fetchWelComeData();
     badgeData = fetchBadgeData();
     print("initState");
   }
@@ -143,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  //personalData API
+  //createAccount API
   Future<ca.CreateAccountModel> fetchCreateAccountData() async {
     var response = await http.get(
       Uri.parse(
@@ -160,6 +165,29 @@ class _MyHomePageState extends State<MyHomePage> {
       });
 
       return ca.CreateAccountModel.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  //Welcome API
+  Future<WelComeScreenModel> fetchWelComeData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=welcome'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("welcomeScreen:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {
+        welcomeData = WelComeScreenModel.fromJson(responseJson[0]);
+      });
+
+
+      return WelComeScreenModel.fromJson(responseJson[0]);
     } else {
       throw Exception('Failed to load album');
     }
