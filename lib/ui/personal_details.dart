@@ -1150,7 +1150,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(
-                                    flex: 2,
+                                    flex: 1,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -1179,8 +1179,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       ],
                                     ),
                                   ),
+                                  SizedBox(width: 10),
                                   Flexible(
-                                    flex: 2,
+                                    flex: 1,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,

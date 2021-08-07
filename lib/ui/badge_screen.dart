@@ -48,9 +48,8 @@ class _BadgeScreenState extends State<BadgeScreen> {
             ),
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(color: Color(0xff0279fc), width: 5),
+              borderSide: BorderSide(color: finalBadgeModel != [] ? Color(0xff8ab250): Color(0xff0279fc), width: 5),
             ),
-            indicatorWeight: 15,
             indicatorColor: Color(0xff0279fc),
             tabs: [
               Tab(

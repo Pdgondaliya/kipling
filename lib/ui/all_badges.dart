@@ -73,9 +73,9 @@ class _AllBadgesState extends State<AllBadges> {
               itemCount: finalBadgeModel!.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: displayWidth(context) * 0.0021,
+                  childAspectRatio: displayWidth(context) * 0.00295,
                   crossAxisSpacing: displayWidth(context) * 0.009,
-                  mainAxisSpacing: displayWidth(context) * 0.00009),
+                  mainAxisSpacing: displayWidth(context) * 0.00099),
               itemBuilder: (BuildContext context, int k) {
                 return GestureDetector(
                   onTap: () => dialog1(
@@ -232,8 +232,8 @@ class _AllBadgesState extends State<AllBadges> {
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
               child: Container(
-                height: displayHeight(context) * 0.85,
-                padding: EdgeInsets.all(displayHeight(context) * 0.02),
+                height: displayHeight(context) * 0.68,
+                padding: EdgeInsets.all(displayWidth(context) * 0.02),
                 child: Column(
                   children: [
                     Align(
@@ -268,36 +268,55 @@ class _AllBadgesState extends State<AllBadges> {
                           fontFamily: 'Kipling_Bold',
                           fontSize: displayHeight(context) * 0.04),
                     ),
-                    Flexible(
-                        flex: 7,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Html(data: """
+                    // SizedBox(height: 10),
+                    // Flexible(
+                    //     child: Align(
+                    //       alignment: Alignment.center,
+                    //       child: Html(
+                    //         data: """
+                    //       $desc
+                    //       """,
+                    //         style: {
+                    //           "body": Style(
+                    //             fontFamily: 'Kipling_Regular'
+                    //           ),
+                    //         },
+                    //       ),
+                    //     )),
+                    Html(
+                      data: """
                               $desc
                               """,
-                            style: {
-                            "body": Style(
-                            fontFamily: 'Kipling_Regular'
-                            ),
-                            },
-                          ),
-                        )),
-                    // SizedBox(height: 10),
-                    Flexible(
-                        flex: 1,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Html(
-                            data: """
+                      style: {
+                        "body": Style(
+                            fontFamily: 'Kipling_Regular',
+                            textAlign: TextAlign.center),
+                      },
+                    ),
+                    Html(
+                      data: """
                               $condition
                               """,
-                            style: {
-                              "body": Style(
-                                  fontFamily: 'Kipling_Regular'
-                              ),
-                            },
-                          ),
-                        )),
+                      style: {
+                        "body": Style(
+                            fontFamily: 'Kipling_Regular',
+                            textAlign: TextAlign.center),
+                      },
+                    ),
+                    // Flexible(
+                    //     child: Align(
+                    //       alignment: Alignment.center,
+                    //       child: Html(
+                    //         data: """
+                    //       $condition
+                    //       """,
+                    //         style: {
+                    //           "body": Style(
+                    //               fontFamily: 'Kipling_Regular'
+                    //           ),
+                    //         },
+                    //       ),
+                    //     )),
                     SizedBox(height: displayWidth(context) * 0.005),
                     Text(
                       points,
@@ -309,6 +328,7 @@ class _AllBadgesState extends State<AllBadges> {
                     ),
                     SizedBox(height: displayWidth(context) * 0.005),
                     RaisedButton(
+                      padding: EdgeInsets.symmetric(vertical: displayWidth(context) * 0.03),
                       color: Color(0xff2c2d2e),
                       onPressed: () {
                         Navigator.pop(context);

@@ -22,7 +22,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:  GridView.builder(
+        body: GridView.builder(
             shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.only(
@@ -32,9 +32,9 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
             itemCount: finalActivatedBadgeModel!.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: displayWidth(context) * 0.0021,
+                childAspectRatio: displayWidth(context) * 0.00295,
                 crossAxisSpacing: displayWidth(context) * 0.009,
-                mainAxisSpacing: displayWidth(context) * 0.00009),
+                mainAxisSpacing: displayWidth(context) * 0.00099),
             itemBuilder: (BuildContext context, int k) {
               return GestureDetector(
                 onTap: () => dialog(
@@ -56,7 +56,8 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: displayHeight(context) * 0.02,
-                        fontFamily: 'Kipling_Bold',),
+                        fontFamily: 'Kipling_Bold',
+                      ),
                     ),
                     SizedBox(height: displayWidth(context) * 0.005),
                     Text(
@@ -69,8 +70,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                   ],
                 ),
               );
-            })
-        );
+            }));
   }
 
   dialog(String image, String badgeName, String desc, String points,
@@ -80,8 +80,8 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
                   child: Container(
-                    height: displayHeight(context) * 0.85,
-                    padding: EdgeInsets.all(displayHeight(context) * 0.02),
+                    height: displayHeight(context) * 0.68,
+                    padding: EdgeInsets.all(displayWidth(context) * 0.02),
                     child: Column(
                       children: [
                         Align(
@@ -117,36 +117,54 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                               fontSize: displayHeight(context) * 0.04),
                         ),
                         // SizedBox(height: 10),
-                        Flexible(
-                            flex: 7,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Html(
-                                data: """
+                        // Flexible(
+                        //     child: Align(
+                        //       alignment: Alignment.center,
+                        //       child: Html(
+                        //         data: """
+                        //       $desc
+                        //       """,
+                        //         style: {
+                        //           "body": Style(
+                        //             fontFamily: 'Kipling_Regular'
+                        //           ),
+                        //         },
+                        //       ),
+                        //     )),
+                        Html(
+                          data: """
                               $desc
                               """,
-                                style: {
-                                  "body": Style(
-                                    fontFamily: 'Kipling_Regular'
-                                  ),
-                                },
-                              ),
-                            )),
-                        Flexible(
-                            flex: 1,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Html(
-                                data: """
+                          style: {
+                            "body": Style(
+                                fontFamily: 'Kipling_Regular',
+                                textAlign: TextAlign.center),
+                          },
+                        ),
+                        Html(
+                          data: """
                               $condition
                               """,
-                                style: {
-                                  "body": Style(
-                                      fontFamily: 'Kipling_Regular'
-                                  ),
-                                },
-                              ),
-                            )),
+                          style: {
+                            "body": Style(
+                                fontFamily: 'Kipling_Regular',
+                                textAlign: TextAlign.center),
+                          },
+                        ),
+                        // Flexible(
+                        //     child: Align(
+                        //       alignment: Alignment.center,
+                        //       child: Html(
+                        //         data: """
+                        //       $condition
+                        //       """,
+                        //         style: {
+                        //           "body": Style(
+                        //               fontFamily: 'Kipling_Regular'
+                        //           ),
+                        //         },
+                        //       ),
+                        //     )),
                         SizedBox(height: displayWidth(context) * 0.005),
                         Text(
                           points,
@@ -158,6 +176,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                         ),
                         SizedBox(height: displayWidth(context) * 0.005),
                         RaisedButton(
+                          padding: EdgeInsets.symmetric(vertical: displayWidth(context) * 0.03),
                           color: Color(0xff2c2d2e),
                           onPressed: () {
                             Navigator.pop(context);
