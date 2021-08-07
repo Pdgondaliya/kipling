@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/text_field.dart';
 import 'package:kipling/main.dart';
+import 'package:kipling/module/fusion_auth_register_model.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/ui/badge_screen.dart';
 import 'package:kipling/ui/login_screen.dart';
@@ -55,6 +56,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   var items = [];
 
   String genderValue = 'Male';
+  String countryValue = 'Afghanistan';
+  String languageValue = 'Hindi';
 
   Future<String?> uploadImage(int id) async {
     try {
@@ -393,45 +396,58 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     fontFamily: 'Kipling_Regular'),
                               ),
                             ),
-                            Platform.isAndroid ? Container(
-                              padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.02),
-                              alignment: Alignment.center,
-                              height: displayHeight(context) * 0.054,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      width: 1.0)),
-                              child: DropdownButton(
-                                isExpanded: true,
-                                isDense: true,
-                                value: genderValue,
-                                underline: Container(),
-                                items: [
-                                  DropdownMenuItem(
-                                    child: Text('Male'),
-                                    value: 'Male',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Female"),
-                                    value: 'Female',
-                                  )
-                                ],
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    genderValue = value!;
-                                  });
-                                },
-                                hint: Text(
-                                  ld!.value[index].genderText,
-                                  style: TextStyle(
-                                      fontFamily: 'Kipling_Regular',
-                                      color: Color(0xff9f9e9f),
-                                      fontSize: displayWidth(context) * 0.035),
-                                ),
-                              ),
-                            ) :
+                            Platform.isAndroid
+                                ? Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            displayWidth(context) * 0.02),
+                                    alignment: Alignment.center,
+                                    height: displayHeight(context) * 0.054,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            width: 1.0)),
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      isDense: true,
+                                      value: genderValue,
+                                      underline: Container(),
+                                      items: [
+                                        DropdownMenuItem(
+                                          child: Text('Male'),
+                                          value: 'Male',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Female"),
+                                          value: 'Female',
+                                        )
+                                      ],
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          genderValue = value!;
+                                        });
+                                      },
+                                      hint: Container(                     //and here
+                                        child: Text(
+                                          ld!.value[index].genderText,
+                                          style: TextStyle(fontFamily: 'Kipling_Regular',
+                                              color: Color(0xff9f9e9f),
+                                              fontSize:
+                                              displayWidth(context) * 0.035),
+                                        ),
+                                      ),
 
-                            buildtextfields(
+                                      // Text(
+                                      //   ld!.value[index].genderText,
+                                      //   style: TextStyle(
+                                      //       fontFamily: 'Kipling_Regular',
+                                      //       color: Color(0xff9f9e9f),
+                                      //       fontSize:
+                                      //           displayWidth(context) * 0.035),
+                                      // ),
+                                    ),
+                                  )
+                                : buildtextfields(
                                     enable: false,
                                     onTap: () {
                                       showCupertinoModalPopup(
@@ -564,7 +580,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     controller: genderController,
                                     context: context,
                                     suffix: true,
-                                    suffixIcon: Icon(Icons.arrow_drop_down_sharp)),
+                                    suffixIcon:
+                                        Icon(Icons.arrow_drop_down_sharp)),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.02,
@@ -599,190 +616,162 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     fontFamily: 'Kipling_Regular'),
                               ),
                             ),
-                            Platform.isAndroid ? Container(
-                              padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.02),
-                              alignment: Alignment.center,
-                              height: displayHeight(context) * 0.054,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      width: 1.0)),
-                              child: DropdownButton(
-                                isExpanded: true,
-                                isDense: true,
-                                value: genderValue,
-                                underline: Container(),
-                                items: [
-                                  DropdownMenuItem(
-                                    child: Text('Male'),
-                                    value: 'Male',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Female"),
-                                    value: 'Female',
+                            Platform.isAndroid
+                                ? Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            displayWidth(context) * 0.02),
+                                    alignment: Alignment.center,
+                                    height: displayHeight(context) * 0.054,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            width: 1.0)),
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      isDense: true,
+                                      value: countryValue,
+                                      underline: Container(),
+                                      items: countryList!.map((e) {
+                                        return new DropdownMenuItem(
+                                          child: new Text(e.name),
+                                          value: e.name.toString(),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          countryValue = value!;
+                                        });
+                                      },
+                                      hint: Text(
+                                        ld!.value[index].countryText,
+                                        style: TextStyle(
+                                            fontFamily: 'Kipling_Regular',
+                                            color: Color(0xff9f9e9f),
+                                            fontSize:
+                                                displayWidth(context) * 0.035),
+                                      ),
+                                    ),
                                   )
-                                ],
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    genderValue = value!;
-                                  });
-                                },
-                                hint: Text(
-                                  ld!.value[index].genderText,
-                                  style: TextStyle(
-                                      fontFamily: 'Kipling_Regular',
-                                      color: Color(0xff9f9e9f),
-                                      fontSize: displayWidth(context) * 0.035),
-                                ),
-                              ),
-                            ) :
+                                :
                             buildtextfields(
-                                hint: ld!.value[index].countryText,
-                                controller: countryController,
-                                enable: false,
-                                context: context,
-                                suffix: true,
-                                suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                                onTap: () {
-                                  showCupertinoModalPopup(
+                                    hint: ld!.value[index].countryText,
+                                    controller: countryController,
+                                    enable: false,
                                     context: context,
-                                    builder: (context) {
-                                      return StatefulBuilder(builder:
-                                          (BuildContext context,
-                                              StateSetter setState) {
-                                        return Material(
-                                          color: Colors.transparent,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffffffff),
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                      color: Color(0xff999999),
-                                                      width: 0.0,
+                                    suffix: true,
+                                    suffixIcon:
+                                        Icon(Icons.arrow_drop_down_sharp),
+                                    onTap: () {
+                                      showCupertinoModalPopup(
+                                        context: context,
+                                        builder: (context) {
+                                          return StatefulBuilder(builder:
+                                              (BuildContext context,
+                                                  StateSetter setState) {
+                                            return Material(
+                                              color: Colors.transparent,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xffffffff),
+                                                      border: Border(
+                                                        bottom: BorderSide(
+                                                          color:
+                                                              Color(0xff999999),
+                                                          width: 0.0,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: <Widget>[
+                                                        Expanded(
+                                                          child:
+                                                              CupertinoButton(
+                                                            child: Text(''),
+                                                            onPressed: () {},
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 16.0,
+                                                              vertical: 5.0,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Center(
+                                                            child: Text(
+                                                              'Select Country',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      displayWidth(
+                                                                              context) *
+                                                                          0.035),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child:
+                                                              CupertinoButton(
+                                                            child:
+                                                                Text('Confirm'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 16.0,
+                                                              vertical: 5.0,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      child: CupertinoButton(
-                                                        child: Text(''),
-                                                        onPressed: () {},
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 16.0,
-                                                          vertical: 5.0,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Center(
-                                                        child: Text(
-                                                          'Select Country',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize:
-                                                                  displayWidth(
-                                                                          context) *
-                                                                      0.035),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: CupertinoButton(
-                                                        child: Text('Confirm'),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 16.0,
-                                                          vertical: 5.0,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                height:
-                                                    displayWidth(context) * 0.5,
-                                                color: Color(0xfff7f7f7),
-                                                child: CupertinoPicker(
-                                                    itemExtent:
+                                                  Container(
+                                                    height:
                                                         displayWidth(context) *
-                                                            0.08,
-                                                    onSelectedItemChanged:
-                                                        (value) {
-                                                      setState(() {
-                                                        print(
-                                                            'Value::  $value');
-                                                      });
-                                                    },
-                                                    children:
-                                                        countryList!.map((e) {
-                                                      return Text(
-                                                        e.name,
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black),
-                                                      );
-                                                    }).toList()
-                                                    /*[
-                                                    Text(
-                                                      'India',
-                                                      style: TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                    Text('Bhutan',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('Pakistan',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('Poland',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('New Zealand',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('Canada',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('UK',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('USA',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                  ],*/
-                                                    ),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      });
-                                    },
-                                  );
-                                }),
+                                                            0.5,
+                                                    color: Color(0xfff7f7f7),
+                                                    child: CupertinoPicker(
+                                                        itemExtent:
+                                                            displayWidth(
+                                                                    context) *
+                                                                0.08,
+                                                        onSelectedItemChanged:
+                                                            (value) {
+                                                          setState(() {
+                                                            print(
+                                                                'Value::  $value');
+                                                          });
+                                                        },
+                                                        children: countryList!
+                                                            .map((e) {
+                                                          return Text(
+                                                            e.name,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          );
+                                                        }).toList()),
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                        },
+                                      );
+                                    }),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.02,
@@ -795,6 +784,76 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     fontFamily: 'Kipling_Regular'),
                               ),
                             ),
+                            Platform.isAndroid
+                                ? Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                  displayWidth(context) * 0.02),
+                              alignment: Alignment.center,
+                              height: displayHeight(context) * 0.054,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      width: 1.0)),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                isDense: true,
+                                value: languageValue,
+                                underline: Container(),
+                                items: [
+                                  DropdownMenuItem(
+                                    child: Text('Hindi'),
+                                    value: 'Hindi',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Gujarati"),
+                                    value: 'Gujarati',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("English"),
+                                    value: 'English',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Marathi"),
+                                    value: 'Marathi',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Bengali"),
+                                    value: 'Bengali',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Punjabi"),
+                                    value: 'Punjabi',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Spanish"),
+                                    value: 'Spanish',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Haryani"),
+                                    value: 'Haryani',
+                                  ),DropdownMenuItem(
+                                    child: Text("Telugu"),
+                                    value: 'Telugu',
+                                  ),
+
+                                ],
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    languageValue = value!;
+                                  });
+                                },
+                                hint: Text(
+                                  ld!.value[index].languageText,
+                                  style: TextStyle(
+                                      fontFamily: 'Kipling_Regular',
+                                      color: Color(0xff9f9e9f),
+                                      fontSize:
+                                      displayWidth(context) * 0.035),
+                                ),
+                              ),
+                            )
+                                :
                             buildtextfields(
                                 hint: ld!.value[index].languageText,
                                 controller: languageController,
@@ -1198,6 +1257,44 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     fontFamily: 'Kipling_Regular'),
                               ),
                             ),
+                            Platform.isAndroid
+                                ? Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                  displayWidth(context) * 0.02),
+                              alignment: Alignment.center,
+                              height: displayHeight(context) * 0.054,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      width: 1.0)),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                isDense: true,
+                                value: countryValue,
+                                underline: Container(),
+                                items: countryList!.map((e) {
+                                  return new DropdownMenuItem(
+                                    child: new Text(e.name),
+                                    value: e.name.toString(),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    countryValue = value!;
+                                  });
+                                },
+                                hint: Text(
+                                  ld!.value[index].countryText,
+                                  style: TextStyle(
+                                      fontFamily: 'Kipling_Regular',
+                                      color: Color(0xff9f9e9f),
+                                      fontSize:
+                                      displayWidth(context) * 0.035),
+                                ),
+                              ),
+                            )
+                                :
                             buildtextfields(
                                 hint: ld!.value[index].countryText,
                                 controller: countryController,

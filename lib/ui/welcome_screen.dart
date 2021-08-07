@@ -30,9 +30,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         children: [
           Stack(
             children: [
-
               Container(
-                height: displayHeight(context) * 0.2,
+                height: displayHeight(context) * 0.25,
                 width: displayWidth(context),
                 // decoration: BoxDecoration(
                 //     image: DecorationImage(
@@ -62,7 +61,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     }).toList(),
                     onChanged: (String? newValue) {
                       setState(() {
-
                         setState(() {
                           dropdownvalue = newValue!;
                           if (dropdownvalue == 'EN') {
@@ -72,7 +70,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           } else if (dropdownvalue == 'NL') {
                             index = 1;
                             print('Index1: $index');
-
                           }
                         });
                       });
@@ -94,9 +91,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ],
           ),
-
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.08),
+            padding:
+                EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.08),
             child: Column(
               children: [
                 Text(
@@ -116,7 +113,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                          image: NetworkImage(ld!.value!.profileImagePlaceholderUrl.toString()),
+                          image: NetworkImage(
+                              ld!.value!.profileImagePlaceholderUrl.toString()),
                           fit: BoxFit.cover)),
                 ),
                 SizedBox(height: displayHeight(context) * 0.02),
@@ -125,7 +123,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: TextStyle(
                       fontFamily: 'Kipling_Bold',
                       color: Colors.black,
-                    fontSize: displayWidth(context) * 0.06),
+                      fontSize: displayWidth(context) * 0.06),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: displayHeight(context) * 0.02),
@@ -133,7 +131,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   index == 0
                       ? ld!.value!.descriptionTextEn.toString()
                       : ld!.value!.descriptionTextNl.toString(),
-                  style: TextStyle(color: Colors.black, fontSize: displayWidth(context) * 0.04, fontFamily: 'Kipling_Regular',),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: displayWidth(context) * 0.05,
+                    fontFamily: 'Kipling_Regular',
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: displayHeight(context) * 0.025),
@@ -149,13 +151,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      bottom: displayWidth(context) * 0.03,),
+                    bottom: displayWidth(context) * 0.03,
+                  ),
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       width: double.infinity,
                       height: displayHeight(context) * 0.07,
-                      margin: EdgeInsets.only(top: displayHeight(context) * 0.03),
+                      margin:
+                          EdgeInsets.only(top: displayHeight(context) * 0.03),
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(

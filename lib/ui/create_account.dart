@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/custom_widget/text_field.dart';
+import 'package:kipling/module/fusion_auth_register_model.dart';
 import 'package:kipling/module/register_user_model.dart';
 import 'package:kipling/ui/login_screen.dart';
 
@@ -80,10 +81,11 @@ class _CreateAccountState extends State<CreateAccount> {
         },
       );
       isLoader = false;
-      Fluttertoast.showToast(
-          msg: 'Registered Successfully',
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.black);
+      // Fluttertoast.showToast(
+      //     msg: 'Registered Successfully',
+      //     gravity: ToastGravity.BOTTOM,
+      //     backgroundColor: Colors.black);
+
       return RegisterUserModel.fromJson(response.data);
     } on DioError catch (e) {
       isLoader = false;
@@ -94,6 +96,37 @@ class _CreateAccountState extends State<CreateAccount> {
       } else {
         isLoader = false;
         throw SocketException("");
+      }
+    }
+  }
+
+  Future<FusionAuthRegisterModel> fusionAuthRegister(
+      String emailAddress, String password) async {
+    var headerMap = {
+      "Authorization":
+          'YmA9D5ju96N_rrBJsGDfKSS3nPuqYxXZp_2qUeYwWinD1eDC4TtriBTS'
+    };
+    var options = BaseOptions(
+        baseUrl: 'https://auth-mobile-app-staging.loyalty-cloud.com/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response =
+          await _dio.get("api/user?email=sfan0727@m-wise.nl&password=1qaz@WSX");
+      Fluttertoast.showToast(
+          msg: 'Account Created Successfully',
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.black);
+      Navigator.pop(context);
+      return FusionAuthRegisterModel.fromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
+      } else {
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
       }
     }
   }
@@ -551,30 +584,30 @@ class _CreateAccountState extends State<CreateAccount> {
                           ],
                         ),
                       ),
-                      snUpNews == false
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  // horizontal: displayWidth(context) * 0.04,
-                                  ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.check_box_outlined,
-                                    color: Colors.transparent,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'Please select our terms & conditions',
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontFamily: 'Kipling_Regular'),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(),
+                      // snUpNews == false
+                      //     ? Padding(
+                      //         padding: EdgeInsets.symmetric(
+                      //             // horizontal: displayWidth(context) * 0.04,
+                      //             ),
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.start,
+                      //           crossAxisAlignment: CrossAxisAlignment.center,
+                      //           children: [
+                      //             Icon(
+                      //               Icons.check_box_outlined,
+                      //               color: Colors.transparent,
+                      //             ),
+                      //             SizedBox(width: 10),
+                      //             Text(
+                      //               'Please select our terms & conditions',
+                      //               style: TextStyle(
+                      //                   color: Colors.red,
+                      //                   fontFamily: 'Kipling_Regular'),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       )
+                      //     : Container(),
                       Padding(
                         padding: EdgeInsets.only(
                             // horizontal: displayWidth(context) * 0.04,
@@ -611,7 +644,27 @@ class _CreateAccountState extends State<CreateAccount> {
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
                                   fontFamily: 'Kipling_Regular'),
-                            )
+                            ),
+                            privacyPolicy == false
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.check_box_outlined,
+                                        color: Colors.transparent,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        'Please select our Privacy Policy',
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: 'Kipling_Regular'),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),
@@ -621,18 +674,22 @@ class _CreateAccountState extends State<CreateAccount> {
                         margin:
                             EdgeInsets.only(top: displayHeight(context) * 0.03),
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_fromKey.currentState!.validate()) {
                               createAccountAPI(
-                                  dob: finalDate,
-                                  emailAddress: emailController.text,
-                                  emailPrimary: true,
-                                  isGeneral: privacyPolicy,
-                                  isOption: snUpNews,
-                                  languageCode: languageCode,
-                                  lName: lNameController.text,
-                                  mName: mNameController.text,
-                                  name: fNameController.text);
+                                      dob: finalDate,
+                                      emailAddress: emailController.text,
+                                      emailPrimary: true,
+                                      isGeneral: privacyPolicy,
+                                      isOption: snUpNews,
+                                      languageCode: languageCode,
+                                      lName: lNameController.text,
+                                      mName: mNameController.text,
+                                      name: fNameController.text)
+                                  .then((value) {
+                                fusionAuthRegister(emailController.text,
+                                    passwordController.text);
+                              });
                             }
                           },
                           style: ElevatedButton.styleFrom(
