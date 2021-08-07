@@ -1179,7 +1179,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(width: 10),
+                                  SizedBox(width: 20),
                                   Flexible(
                                     flex: 1,
                                     child: Column(

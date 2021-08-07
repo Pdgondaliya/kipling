@@ -243,6 +243,7 @@ class _AllBadgesState extends State<AllBadges> {
                         icon: Icon(
                           Icons.close,
                           color: Colors.black,
+                          size: 15,
                         ),
                       ),
                     ),

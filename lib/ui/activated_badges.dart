@@ -91,6 +91,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
                             icon: Icon(
                               Icons.close,
                               color: Colors.black,
+                              size: 20,
                             ),
                           ),
                         ),
