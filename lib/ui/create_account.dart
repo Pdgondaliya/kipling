@@ -33,6 +33,14 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController cnfPasswordController = TextEditingController();
 
+  String firstNameError = '';
+  String lastNameError = '';
+  String MiddleNameError = '';
+  String dobError = '';
+  String emailError = '';
+  String passwordError = '';
+  String cnfPasswordError = '';
+
   bool snUpNews = true;
   bool privacyPolicy = true;
   bool isLoader = false;
@@ -308,13 +316,28 @@ class _CreateAccountState extends State<CreateAccount> {
                                 hint: index == 0
                                     ? ld!.value.fields.name.placeholderTextEn
                                     : ld!.value.fields.name.placeholderTextNl,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter First name';
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    setState(() {
+                                      firstNameError = '';
+                                    });
                                   }
-                                  return null;
                                 },
+                                // validator: (value) {
+                                //   if (value == null || value.isEmpty) {
+                                //     return 'Please enter First name';
+                                //   }
+                                //   return null;
+                                // },
                                 keyboard: TextInputType.text),
+                            firstNameError == ''
+                                ? Container()
+                                : Container(
+                                    child: Text(firstNameError,
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: 'Kipling_Regular')),
+                                  )
                           ],
                         ),
                       ),
@@ -345,13 +368,28 @@ class _CreateAccountState extends State<CreateAccount> {
                                         .value.fields.lastName.placeholderTextEn
                                     : ld!.value.fields.lastName
                                         .placeholderTextNl,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter Last name';
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    setState(() {
+                                      lastNameError = '';
+                                    });
                                   }
-                                  return null;
                                 },
-                                keyboard: TextInputType.text)
+                                // validator: (value) {
+                                //   if (value == null || value.isEmpty) {
+                                //     return 'Please enter Last name';
+                                //   }
+                                //   return null;
+                                // },
+                                keyboard: TextInputType.text),
+                            lastNameError == ''
+                                ? Container()
+                                : Container(
+                              child: Text(lastNameError,
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Kipling_Regular')),
+                            )
                           ],
                         ),
                       ),
@@ -418,13 +456,28 @@ class _CreateAccountState extends State<CreateAccount> {
                                             .placeholderTextEn
                                         : ld!.value.fields.birthDate
                                             .placeholderTextNl,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please select Birth date';
+                                    onChanged: (value) {
+                                      if (value != '') {
+                                        setState(() {
+                                          dobError = '';
+                                        });
                                       }
-                                      return null;
                                     },
-                                    keyboard: TextInputType.text))
+                                    // validator: (value) {
+                                    //   if (value == null || value.isEmpty) {
+                                    //     return 'Please select Birth date';
+                                    //   }
+                                    //   return null;
+                                    // },
+                                    keyboard: TextInputType.text)),
+                            dobError == ''
+                                ? Container()
+                                : Container(
+                              child: Text(dobError,
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Kipling_Regular')),
+                            )
                           ],
                         ),
                       ),
@@ -455,13 +508,28 @@ class _CreateAccountState extends State<CreateAccount> {
                                         .placeholderTextEn
                                     : ld!.value.fields.emailAddress
                                         .placeholderTextNl,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter Email address';
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    setState(() {
+                                      emailError = '';
+                                    });
                                   }
-                                  return null;
                                 },
-                                keyboard: TextInputType.emailAddress)
+                                // validator: (value) {
+                                //   if (value == null || value.isEmpty) {
+                                //     return 'Please enter Email address';
+                                //   }
+                                //   return null;
+                                // },
+                                keyboard: TextInputType.emailAddress),
+                            emailError == ''
+                                ? Container()
+                                : Container(
+                              child: Text(emailError,
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Kipling_Regular')),
+                            )
                           ],
                         ),
                       ),
@@ -493,13 +561,28 @@ class _CreateAccountState extends State<CreateAccount> {
                                         .value.fields.password.placeholderTextEn
                                     : ld!.value.fields.password
                                         .placeholderTextNl,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter Password';
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    setState(() {
+                                      passwordError = '';
+                                    });
                                   }
-                                  return null;
                                 },
-                                keyboard: TextInputType.text)
+                                // validator: (value) {
+                                //   if (value == null || value.isEmpty) {
+                                //     return 'Please enter Password';
+                                //   }
+                                //   return null;
+                                // },
+                                keyboard: TextInputType.text),
+                            passwordError == ''
+                                ? Container()
+                                : Container(
+                              child: Text(passwordError,
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Kipling_Regular')),
+                            )
                           ],
                         ),
                       ),
@@ -532,16 +615,31 @@ class _CreateAccountState extends State<CreateAccount> {
                                         .placeholderTextEn
                                     : ld!.value.fields.confirmPassword
                                         .placeholderTextNl,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter confirm password';
-                                  } else if (cnfPasswordController.text !=
-                                      passwordController.text) {
-                                    return 'Password and Confirm Password must be same';
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    setState(() {
+                                      cnfPasswordError = '';
+                                    });
                                   }
-                                  return null;
                                 },
-                                keyboard: TextInputType.text)
+                                // validator: (value) {
+                                //   if (value == null || value.isEmpty) {
+                                //     return 'Please enter confirm password';
+                                //   } else if (cnfPasswordController.text !=
+                                //       passwordController.text) {
+                                //     return 'Password and Confirm Password must be same';
+                                //   }
+                                //   return null;
+                                // },
+                                keyboard: TextInputType.text),
+                            cnfPasswordError == ''
+                                ? Container()
+                                : Container(
+                              child: Text(cnfPasswordError,
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Kipling_Regular')),
+                            )
                           ],
                         ),
                       ),
@@ -645,29 +743,28 @@ class _CreateAccountState extends State<CreateAccount> {
                                   fontSize: displayWidth(context) * 0.05,
                                   fontFamily: 'Kipling_Regular'),
                             ),
-                            privacyPolicy == false
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.check_box_outlined,
-                                        color: Colors.transparent,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        'Please select our Privacy Policy',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontFamily: 'Kipling_Regular'),
-                                      ),
-                                    ],
-                                  )
-                                : Container(),
                           ],
                         ),
                       ),
+                      privacyPolicy == false
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.check_box_outlined,
+                                  color: Colors.transparent,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Please select our Privacy Policy',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Kipling_Regular'),
+                                ),
+                              ],
+                            )
+                          : Container(),
                       Container(
                         width: double.infinity,
                         height: displayHeight(context) * 0.07,
@@ -675,21 +772,107 @@ class _CreateAccountState extends State<CreateAccount> {
                             EdgeInsets.only(top: displayHeight(context) * 0.03),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_fromKey.currentState!.validate()) {
-                              createAccountAPI(
-                                      dob: finalDate,
-                                      emailAddress: emailController.text,
-                                      emailPrimary: true,
-                                      isGeneral: privacyPolicy,
-                                      isOption: snUpNews,
-                                      languageCode: languageCode,
-                                      lName: lNameController.text,
-                                      mName: mNameController.text,
-                                      name: fNameController.text)
-                                  .then((value) {
-                                fusionAuthRegister(emailController.text,
-                                    passwordController.text);
+                            // if (_fromKey.currentState!.validate()) {
+                            //   createAccountAPI(
+                            //           dob: finalDate,
+                            //           emailAddress: emailController.text,
+                            //           emailPrimary: true,
+                            //           isGeneral: privacyPolicy,
+                            //           isOption: snUpNews,
+                            //           languageCode: languageCode,
+                            //           lName: lNameController.text,
+                            //           mName: mNameController.text,
+                            //           name: fNameController.text)
+                            //       .then((value) {
+                            //     fusionAuthRegister(emailController.text,
+                            //         passwordController.text);
+                            //   });
+                            // }
+
+                            if (fNameController.text == '') {
+                              setState(() {
+                                firstNameError = 'Please enter first name';
                               });
+                            }
+                            /*else if (fNameController.text != '') {
+                              setState(() {
+                                firstNameError = '';
+                              });
+                            }*/
+                            else if (lNameController.text == '') {
+                              setState(() {
+                                lastNameError = 'Please enter last name';
+                              });
+                            }
+                            /*else if (lNameController.text != '') {
+                              setState(() {
+                                lastNameError = '';
+                              });
+                            }*/
+                            else if (dateController.text == '') {
+                              setState(() {
+                                dobError = 'Please select birth date';
+                              });
+                            }
+                            /*else if (dateController.text != '') {
+                              setState(() {
+                                dobError = '';
+                              });
+                            }*/
+                            else if (emailController.text == '') {
+                              setState(() {
+                                emailError = 'Please enter email address';
+                              });
+                            }
+                            /*else if (emailController.text != '') {
+                              setState(() {
+                                emailError = '';
+                              });
+                            }*/
+                            else if (passwordController.text == '') {
+                              setState(() {
+                                passwordError = 'Please enter password';
+                              });
+                            }
+                            /*else if (passwordController.text != '') {
+                              setState(() {
+                                passwordError = '';
+                              });
+                            }*/
+                            else if (cnfPasswordController.text == '') {
+                              setState(() {
+                                cnfPasswordError =
+                                    'Please enter confirm password';
+                              });
+                            } else if (passwordController.text !=
+                                cnfPasswordController.text) {
+                              setState(() {
+                                cnfPasswordError =
+                                    'Password and Confirm Password must be same';
+                              });
+                            }
+                            /*else if (cnfPasswordController.text != '') {
+                              setState(() {
+                                cnfPasswordError = '';
+                              });
+                            }*/
+                            else {
+                              if (_fromKey.currentState!.validate()) {
+                                createAccountAPI(
+                                        dob: finalDate,
+                                        emailAddress: emailController.text,
+                                        emailPrimary: true,
+                                        isGeneral: privacyPolicy,
+                                        isOption: snUpNews,
+                                        languageCode: languageCode,
+                                        lName: lNameController.text,
+                                        mName: mNameController.text,
+                                        name: fNameController.text)
+                                    .then((value) {
+                                  fusionAuthRegister(emailController.text,
+                                      passwordController.text);
+                                });
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
