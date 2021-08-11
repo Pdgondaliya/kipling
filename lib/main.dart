@@ -47,6 +47,7 @@ class MyHomePage extends StatefulWidget {
 
 Future<b.BadgeData>? badgeData;
 Future<c.CountryPickerModel>? futureCountryPickerDataAlbum;
+late Future<PersonalDetailData> futurePersonDataAlbum;
 Future<WelComeScreenModel>? futureWelComeScreenAlbum;
 Future<ForgotPasswordModel>? futureForgotPasswordAlbum;
 Future<ForgotPasswordConfirmationModel>? futureForgotPassworConfirmationAlbum;
@@ -57,11 +58,14 @@ List<WelComeScreenModel>? welComeScreenList;
 List<ForgotPasswordModel>? forgotPasswordList;
 List<ForgotPasswordConfirmationModel>? forgotPasswordConfirmationList;
 
+PersonalDetailData? personalDetailData;
 WelComeScreenModel? welcomeData;
 ForgotPasswordModel? forgotPasswordData;
 ForgotPasswordConfirmationModel? forgotPasswordConfirmationData;
 
 List<b.Content>? contents;
+List<Todo> personalDataList = [];
+List<PersonalDetailData> personalList = [];
 List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
 List<b.FinalBadgeModel> finalBadgeModel = [];
 List<WelComeScreenModel> welcomeModel = [];
@@ -70,17 +74,13 @@ List<ForgotPasswordConfirmationModel> forgotPasswordConfirmationModel = [];
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<Splashdata> futureAlbum;
-  late Future<PersonalDetailData> futurePersonDataAlbum;
   late Future<ca.CreateAccountModel> futureCretaeAccountAlbum;
 
   Logindata? logindata;
-  PersonalDetailData? personalDetailData;
   c.CountryPickerModel? countryPickerData;
   ca.CreateAccountModel? createAccountData;
   List<Todo> taskList = [];
-  List<Todo> personalDataList = [];
   List<Logindata> profileList = [];
-  List<PersonalDetailData> personalList = [];
   List<ca.CreateAccountModel> createAccountList = [];
 
 

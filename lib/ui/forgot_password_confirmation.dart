@@ -78,11 +78,13 @@ class _ForgotPasswordConfirmationState
         ],
       ),
       body: Container(
-          padding:
-              EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.08),
+          padding: EdgeInsets.only(
+              right: displayWidth(context) * 0.08,
+              left: displayWidth(context) * 0.08,
+              top: displayWidth(context) * 0.4),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   index == 0
@@ -91,8 +93,8 @@ class _ForgotPasswordConfirmationState
                   style: TextStyle(
                       fontFamily: 'Kipling_Bold',
                       color: Colors.black,
-                      fontSize: displayWidth(context) * 0.06),
-                  // textAlign: TextAlign.center,
+                      fontSize: displayWidth(context) * 0.08),
+                  textAlign: TextAlign.start,
                 ),
                 SizedBox(height: displayWidth(context) * 0.05),
                 Text(
@@ -107,7 +109,7 @@ class _ForgotPasswordConfirmationState
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: displayWidth(context) * 0.05),
+                      vertical: displayWidth(context) * 0.09),
                   child: Row(
                     children: [
                       Icon(Icons.check_circle, color: Colors.greenAccent),
@@ -126,7 +128,7 @@ class _ForgotPasswordConfirmationState
                 Container(
                   width: double.infinity,
                   height: displayHeight(context) * 0.07,
-                  margin: EdgeInsets.only(top: displayHeight(context) * 0.02),
+                  margin: EdgeInsets.only(top: displayHeight(context) * 0.01),
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
