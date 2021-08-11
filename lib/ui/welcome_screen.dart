@@ -11,6 +11,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   WelComeScreenModel? ld;
+
   // String dropdownvalue = 'EN';
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -161,7 +162,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       margin:
                           EdgeInsets.only(top: displayHeight(context) * 0.03),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => login_screen()));
+                        },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,
                           shape: RoundedRectangleBorder(

@@ -7,16 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/main.dart';
 import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/custom_widget/text_field.dart';
 import 'package:kipling/module/fusion_auth_register_model.dart';
 import 'package:kipling/module/register_user_model.dart';
 import 'package:kipling/ui/login_screen.dart';
+import 'package:kipling/ui/welcome_screen.dart';
 
 class CreateAccount extends StatefulWidget {
-  CreateAccount({this.createAccountModel});
+  // CreateAccount({this.createAccountModel});
 
-  CreateAccountModel? createAccountModel;
+  // CreateAccountModel? createAccountModel;
 
   @override
   _CreateAccountState createState() => _CreateAccountState();
@@ -100,7 +102,7 @@ class _CreateAccountState extends State<CreateAccount> {
           msg: 'Account Created Successfully',
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.black);
-      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
       return RegisterUserModel.fromJson(response.data);
     } on DioError catch (e) {
       isLoader = false;
@@ -148,7 +150,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   @override
   void initState() {
-    ld = widget.createAccountModel;
+    ld = createAccountData;
   }
 
   DateTime currentDate = DateTime.now();

@@ -14,13 +14,13 @@ import 'package:kipling/ui/personal_details.dart';
 import 'package:kipling/ui/welcome_screen.dart';
 
 class login_screen extends StatefulWidget {
-  const login_screen(
-      {required this.ld, this.personalDetailData, this.createAccountModel});
+  // const login_screen(
+  //     {required this.ld, this.personalDetailData, this.createAccountModel});
 
   // final List<Logindata> profileList;
-  final Logindata? ld;
-  final PersonalDetailData? personalDetailData;
-  final CreateAccountModel? createAccountModel;
+  // final Logindata? ld;
+  // final PersonalDetailData? personalDetailData;
+  // final CreateAccountModel? createAccountModel;
 
   @override
   _login_screenState createState() => _login_screenState();
@@ -41,9 +41,9 @@ class _login_screenState extends State<login_screen> {
 
   @override
   void initState() {
-    print('pppppppppp  --- > ${widget.personalDetailData}');
-    print(widget.ld?.name);
-    ld = widget.ld!;
+    print('pppppppppp  --- > ${personalDetailData}');
+    // print(ld?.name);
+    ld = logindata!;
     for (var i in ld.value) {
       print(i.languageCode.toString().toUpperCase());
       // items.clear();
@@ -175,7 +175,6 @@ class _login_screenState extends State<login_screen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => PersonalDetails(
-                                            ld: widget.personalDetailData,
                                           )));
                             },
                             style: ElevatedButton.styleFrom(
@@ -262,8 +261,7 @@ class _login_screenState extends State<login_screen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => CreateAccount(
-                                                createAccountModel: widget
-                                                    .createAccountModel))),
+                                                ))),
                                     child: Text(
                                       ld.value[index].registerLinkText,
                                       style: TextStyle(

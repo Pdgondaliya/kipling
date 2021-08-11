@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/module/badge_model.dart' as b;
@@ -19,6 +20,9 @@ import 'Database/db_data.dart';
 import 'Database/db_helper.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
@@ -51,6 +55,8 @@ late Future<PersonalDetailData> futurePersonDataAlbum;
 Future<WelComeScreenModel>? futureWelComeScreenAlbum;
 Future<ForgotPasswordModel>? futureForgotPasswordAlbum;
 Future<ForgotPasswordConfirmationModel>? futureForgotPassworConfirmationAlbum;
+late Future<Splashdata> futureAlbum;
+late Future<ca.CreateAccountModel> futureCretaeAccountAlbum;
 
 List<b.BadgeData>? badgeDetailsData;
 List<c.Value>? countryList;
@@ -71,19 +77,14 @@ List<b.FinalBadgeModel> finalBadgeModel = [];
 List<WelComeScreenModel> welcomeModel = [];
 List<ForgotPasswordModel> forgotPasswordModel = [];
 List<ForgotPasswordConfirmationModel> forgotPasswordConfirmationModel = [];
+Logindata? logindata;
+c.CountryPickerModel? countryPickerData;
+ca.CreateAccountModel? createAccountData;
+List<Todo> taskList = [];
+List<Logindata> profileList = [];
+List<ca.CreateAccountModel> createAccountList = [];
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<Splashdata> futureAlbum;
-  late Future<ca.CreateAccountModel> futureCretaeAccountAlbum;
-
-  Logindata? logindata;
-  c.CountryPickerModel? countryPickerData;
-  ca.CreateAccountModel? createAccountData;
-  List<Todo> taskList = [];
-  List<Logindata> profileList = [];
-  List<ca.CreateAccountModel> createAccountList = [];
-
-
   late Timer _timer;
 
   // List<b.BadgeData>? badgeData1;
@@ -147,9 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
               context,
               MaterialPageRoute(
                   builder: (context) => login_screen(
-                        ld: logindata,
-                        personalDetailData: personalDetailData,
-                        createAccountModel: createAccountData,
+                        // ld: logindata,
+                        // personalDetailData: personalDetailData,
+                        // createAccountModel: createAccountData,
                       )));
           _timer.cancel();
         }

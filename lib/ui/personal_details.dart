@@ -14,9 +14,9 @@ import 'package:kipling/ui/login_screen.dart';
 import 'package:dio/dio.dart' as d;
 
 class PersonalDetails extends StatefulWidget {
-  const PersonalDetails({this.ld});
+  // const PersonalDetails({this.ld});
 
-  final PersonalDetailData? ld;
+  // final PersonalDetailData? ld;
 
   @override
   _PersonalDetailsState createState() => _PersonalDetailsState();
@@ -105,7 +105,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   @override
   void initState() {
     print('Value List: ${countryList.toString()}');
-    ld = widget.ld;
+    ld = personalDetailData;
     for (var i in ld!.value) {
       print(i.languageCode.toString().toUpperCase());
       // items.clear();
