@@ -1,10 +1,12 @@
+// To parse this JSON data, do
+//
+//     final registerUserModel = registerUserModelFromJson(jsonString);
+
 import 'dart:convert';
 
-RegisterUserModel registerUserModelFromJson(String str) =>
-    RegisterUserModel.fromJson(json.decode(str));
+RegisterUserModel registerUserModelFromJson(String str) => RegisterUserModel.fromJson(json.decode(str));
 
-String registerUserModelToJson(RegisterUserModel data) =>
-    json.encode(data.toJson());
+String registerUserModelToJson(RegisterUserModel data) => json.encode(data.toJson());
 
 class RegisterUserModel {
   RegisterUserModel({
@@ -64,7 +66,7 @@ class RegisterUserModel {
   List<dynamic>? subscriptions;
   String? avatarUrl;
   List<dynamic>? externalIdentifiers;
-  List<dynamic>? programIdentifiers;
+  List<ProgramIdentifier>? programIdentifiers;
   List<dynamic>? tags;
   List<dynamic>? integerCustomFields;
   List<dynamic>? stringCustomFields;
@@ -74,140 +76,80 @@ class RegisterUserModel {
   DateTime? createdAt;
   DateTime? updatedAt;
   bool? isDeleted;
-  dynamic deletedAt;
+  dynamic? deletedAt;
   int? transactionCount;
 
-  factory RegisterUserModel.fromJson(Map<String, dynamic> json) =>
-      RegisterUserModel(
-        id: json["id"] == null ? null : json["id"],
-        title: json["title"] == null ? null : json["title"],
-        initials: json["initials"] == null ? null : json["initials"],
-        name: json["name"] == null ? null : json["name"],
-        middleName: json["middle_name"] == null ? null : json["middle_name"],
-        lastName: json["last_name"] == null ? null : json["last_name"],
-        gender: json["gender"] == null ? null : json["gender"],
-        birthDate: json["birth_date"] == null
-            ? null
-            : DateTime.parse(json["birth_date"]),
-        birthPlace: json["birth_place"] == null ? null : json["birth_place"],
-        countryCode: json["country_code"] == null ? null : json["country_code"],
-        languageCode:
-            json["language_code"] == null ? null : json["language_code"],
-        tier: json["tier"] == null ? null : json["tier"],
-        optin: json["optin"] == null ? null : json["optin"],
-        generalPermission: json["general_permission"] == null
-            ? null
-            : json["general_permission"],
-        balance:
-            json["balance"] == null ? null : Balance.fromJson(json["balance"]),
-        emails: json["emails"] == null
-            ? null
-            : List<Email>.from(json["emails"].map((x) => Email.fromJson(x))),
-        phoneNumbers: json["phone_numbers"] == null
-            ? null
-            : List<dynamic>.from(json["phone_numbers"].map((x) => x)),
-        addresses: json["addresses"] == null
-            ? null
-            : List<dynamic>.from(json["addresses"].map((x) => x)),
-        subscriptions: json["subscriptions"] == null
-            ? null
-            : List<dynamic>.from(json["subscriptions"].map((x) => x)),
-        avatarUrl: json["avatar_url"] == null ? null : json["avatar_url"],
-        externalIdentifiers: json["external_identifiers"] == null
-            ? null
-            : List<dynamic>.from(json["external_identifiers"].map((x) => x)),
-        programIdentifiers: json["program_identifiers"] == null
-            ? null
-            : List<dynamic>.from(json["program_identifiers"].map((x) => x)),
-        tags: json["tags"] == null
-            ? null
-            : List<dynamic>.from(json["tags"].map((x) => x)),
-        integerCustomFields: json["integer_custom_fields"] == null
-            ? null
-            : List<dynamic>.from(json["integer_custom_fields"].map((x) => x)),
-        stringCustomFields: json["string_custom_fields"] == null
-            ? null
-            : List<dynamic>.from(json["string_custom_fields"].map((x) => x)),
-        booleanCustomFields: json["boolean_custom_fields"] == null
-            ? null
-            : List<dynamic>.from(json["boolean_custom_fields"].map((x) => x)),
-        dateTimeCustomFields: json["date_time_custom_fields"] == null
-            ? null
-            : List<dynamic>.from(json["date_time_custom_fields"].map((x) => x)),
-        floatCustomFields: json["float_custom_fields"] == null
-            ? null
-            : List<dynamic>.from(json["float_custom_fields"].map((x) => x)),
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        isDeleted: json["is_deleted"] == null ? null : json["is_deleted"],
-        deletedAt: json["deleted_at"],
-        transactionCount: json["transaction_count"] == null
-            ? null
-            : json["transaction_count"],
-      );
+  factory RegisterUserModel.fromJson(Map<String, dynamic> json) => RegisterUserModel(
+    id: json["id"],
+    title: json["title"],
+    initials: json["initials"],
+    name: json["name"],
+    middleName: json["middle_name"],
+    lastName: json["last_name"],
+    gender: json["gender"],
+    birthDate: DateTime.parse(json["birth_date"]),
+    birthPlace: json["birth_place"],
+    countryCode: json["country_code"],
+    languageCode: json["language_code"],
+    tier: json["tier"],
+    optin: json["optin"],
+    generalPermission: json["general_permission"],
+    balance: Balance.fromJson(json["balance"]),
+    emails: List<Email>.from(json["emails"].map((x) => Email.fromJson(x))),
+    phoneNumbers: List<dynamic>.from(json["phone_numbers"].map((x) => x)),
+    addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
+    subscriptions: List<dynamic>.from(json["subscriptions"].map((x) => x)),
+    avatarUrl: json["avatar_url"],
+    externalIdentifiers: List<dynamic>.from(json["external_identifiers"].map((x) => x)),
+    programIdentifiers: List<ProgramIdentifier>.from(json["program_identifiers"].map((x) => ProgramIdentifier.fromJson(x))),
+    tags: List<dynamic>.from(json["tags"].map((x) => x)),
+    integerCustomFields: List<dynamic>.from(json["integer_custom_fields"].map((x) => x)),
+    stringCustomFields: List<dynamic>.from(json["string_custom_fields"].map((x) => x)),
+    booleanCustomFields: List<dynamic>.from(json["boolean_custom_fields"].map((x) => x)),
+    dateTimeCustomFields: List<dynamic>.from(json["date_time_custom_fields"].map((x) => x)),
+    floatCustomFields: List<dynamic>.from(json["float_custom_fields"].map((x) => x)),
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+    isDeleted: json["is_deleted"],
+    deletedAt: json["deleted_at"],
+    transactionCount: json["transaction_count"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "title": title == null ? null : title,
-        "initials": initials == null ? null : initials,
-        "name": name == null ? null : name,
-        "middle_name": middleName == null ? null : middleName,
-        "last_name": lastName == null ? null : lastName,
-        "gender": gender == null ? null : gender,
-        "birth_date": birthDate == null ? null : birthDate!.toIso8601String(),
-        "birth_place": birthPlace == null ? null : birthPlace,
-        "country_code": countryCode == null ? null : countryCode,
-        "language_code": languageCode == null ? null : languageCode,
-        "tier": tier == null ? null : tier,
-        "optin": optin == null ? null : optin,
-        "general_permission":
-            generalPermission == null ? null : generalPermission,
-        "balance": balance == null ? null : balance!.toJson(),
-        "emails": emails == null
-            ? null
-            : List<dynamic>.from(emails!.map((x) => x.toJson())),
-        "phone_numbers": phoneNumbers == null
-            ? null
-            : List<dynamic>.from(phoneNumbers!.map((x) => x)),
-        "addresses": addresses == null
-            ? null
-            : List<dynamic>.from(addresses!.map((x) => x)),
-        "subscriptions": subscriptions == null
-            ? null
-            : List<dynamic>.from(subscriptions!.map((x) => x)),
-        "avatar_url": avatarUrl == null ? null : avatarUrl,
-        "external_identifiers": externalIdentifiers == null
-            ? null
-            : List<dynamic>.from(externalIdentifiers!.map((x) => x)),
-        "program_identifiers": programIdentifiers == null
-            ? null
-            : List<dynamic>.from(programIdentifiers!.map((x) => x)),
-        "tags": tags == null ? null : List<dynamic>.from(tags!.map((x) => x)),
-        "integer_custom_fields": integerCustomFields == null
-            ? null
-            : List<dynamic>.from(integerCustomFields!.map((x) => x)),
-        "string_custom_fields": stringCustomFields == null
-            ? null
-            : List<dynamic>.from(stringCustomFields!.map((x) => x)),
-        "boolean_custom_fields": booleanCustomFields == null
-            ? null
-            : List<dynamic>.from(booleanCustomFields!.map((x) => x)),
-        "date_time_custom_fields": dateTimeCustomFields == null
-            ? null
-            : List<dynamic>.from(dateTimeCustomFields!.map((x) => x)),
-        "float_custom_fields": floatCustomFields == null
-            ? null
-            : List<dynamic>.from(floatCustomFields!.map((x) => x)),
-        "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
-        "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
-        "is_deleted": isDeleted == null ? null : isDeleted,
-        "deleted_at": deletedAt,
-        "transaction_count": transactionCount == null ? null : transactionCount,
-      };
+    "id": id,
+    "title": title,
+    "initials": initials,
+    "name": name,
+    "middle_name": middleName,
+    "last_name": lastName,
+    "gender": gender,
+    "birth_date": birthDate!.toIso8601String(),
+    "birth_place": birthPlace,
+    "country_code": countryCode,
+    "language_code": languageCode,
+    "tier": tier,
+    "optin": optin,
+    "general_permission": generalPermission,
+    "balance": balance!.toJson(),
+    "emails": List<dynamic>.from(emails!.map((x) => x.toJson())),
+    "phone_numbers": List<dynamic>.from(phoneNumbers!.map((x) => x)),
+    "addresses": List<dynamic>.from(addresses!.map((x) => x)),
+    "subscriptions": List<dynamic>.from(subscriptions!.map((x) => x)),
+    "avatar_url": avatarUrl,
+    "external_identifiers": List<dynamic>.from(externalIdentifiers!.map((x) => x)),
+    "program_identifiers": List<dynamic>.from(programIdentifiers!.map((x) => x.toJson())),
+    "tags": List<dynamic>.from(tags!.map((x) => x)),
+    "integer_custom_fields": List<dynamic>.from(integerCustomFields!.map((x) => x)),
+    "string_custom_fields": List<dynamic>.from(stringCustomFields!.map((x) => x)),
+    "boolean_custom_fields": List<dynamic>.from(booleanCustomFields!.map((x) => x)),
+    "date_time_custom_fields": List<dynamic>.from(dateTimeCustomFields!.map((x) => x)),
+    "float_custom_fields": List<dynamic>.from(floatCustomFields!.map((x) => x)),
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
+    "is_deleted": isDeleted,
+    "deleted_at": deletedAt,
+    "transaction_count": transactionCount,
+  };
 }
 
 class Balance {
@@ -244,73 +186,38 @@ class Balance {
   List<dynamic>? balanceUpdates;
 
   factory Balance.fromJson(Map<String, dynamic> json) => Balance(
-        id: json["id"] == null ? null : json["id"],
-        customerId: json["customer_id"] == null ? null : json["customer_id"],
-        points: json["points"] == null ? null : json["points"],
-        previousPoints:
-            json["previous_points"] == null ? null : json["previous_points"],
-        totalPositivePoints: json["total_positive_points"] == null
-            ? null
-            : json["total_positive_points"],
-        totalNegativePoints: json["total_negative_points"] == null
-            ? null
-            : json["total_negative_points"],
-        totalEventPositivePoints: json["total_event_positive_points"] == null
-            ? null
-            : json["total_event_positive_points"],
-        totalEventNegativePoints: json["total_event_negative_points"] == null
-            ? null
-            : json["total_event_negative_points"],
-        totalManualPositivePoints: json["total_manual_positive_points"] == null
-            ? null
-            : json["total_manual_positive_points"],
-        totalManualNegativePoints: json["total_manual_negative_points"] == null
-            ? null
-            : json["total_manual_negative_points"],
-        totalRewardPositivePoints: json["total_reward_positive_points"] == null
-            ? null
-            : json["total_reward_positive_points"],
-        totalRewardNegativePoints: json["total_reward_negative_points"] == null
-            ? null
-            : json["total_reward_negative_points"],
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        balanceUpdates: json["balance_updates"] == null
-            ? null
-            : List<dynamic>.from(json["balance_updates"].map((x) => x)),
-      );
+    id: json["id"],
+    customerId: json["customer_id"],
+    points: json["points"],
+    previousPoints: json["previous_points"],
+    totalPositivePoints: json["total_positive_points"],
+    totalNegativePoints: json["total_negative_points"],
+    totalEventPositivePoints: json["total_event_positive_points"],
+    totalEventNegativePoints: json["total_event_negative_points"],
+    totalManualPositivePoints: json["total_manual_positive_points"],
+    totalManualNegativePoints: json["total_manual_negative_points"],
+    totalRewardPositivePoints: json["total_reward_positive_points"],
+    totalRewardNegativePoints: json["total_reward_negative_points"],
+    updatedAt: DateTime.parse(json["updated_at"]),
+    balanceUpdates: List<dynamic>.from(json["balance_updates"].map((x) => x)),
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "customer_id": customerId == null ? null : customerId,
-        "points": points == null ? null : points,
-        "previous_points": previousPoints == null ? null : previousPoints,
-        "total_positive_points":
-            totalPositivePoints == null ? null : totalPositivePoints,
-        "total_negative_points":
-            totalNegativePoints == null ? null : totalNegativePoints,
-        "total_event_positive_points":
-            totalEventPositivePoints == null ? null : totalEventPositivePoints,
-        "total_event_negative_points":
-            totalEventNegativePoints == null ? null : totalEventNegativePoints,
-        "total_manual_positive_points": totalManualPositivePoints == null
-            ? null
-            : totalManualPositivePoints,
-        "total_manual_negative_points": totalManualNegativePoints == null
-            ? null
-            : totalManualNegativePoints,
-        "total_reward_positive_points": totalRewardPositivePoints == null
-            ? null
-            : totalRewardPositivePoints,
-        "total_reward_negative_points": totalRewardNegativePoints == null
-            ? null
-            : totalRewardNegativePoints,
-        "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
-        "balance_updates": balanceUpdates == null
-            ? null
-            : List<dynamic>.from(balanceUpdates!.map((x) => x)),
-      };
+    "id": id,
+    "customer_id": customerId,
+    "points": points,
+    "previous_points": previousPoints,
+    "total_positive_points": totalPositivePoints,
+    "total_negative_points": totalNegativePoints,
+    "total_event_positive_points": totalEventPositivePoints,
+    "total_event_negative_points": totalEventNegativePoints,
+    "total_manual_positive_points": totalManualPositivePoints,
+    "total_manual_negative_points": totalManualNegativePoints,
+    "total_reward_positive_points": totalRewardPositivePoints,
+    "total_reward_negative_points": totalRewardNegativePoints,
+    "updated_at": updatedAt!.toIso8601String(),
+    "balance_updates": List<dynamic>.from(balanceUpdates!.map((x) => x)),
+  };
 }
 
 class Email {
@@ -333,27 +240,66 @@ class Email {
   DateTime? updatedAt;
 
   factory Email.fromJson(Map<String, dynamic> json) => Email(
-        id: json["id"] == null ? null : json["id"],
-        type: json["type"] == null ? null : json["type"],
-        emailAddress:
-            json["email_address"] == null ? null : json["email_address"],
-        verified: json["verified"] == null ? null : json["verified"],
-        primary: json["primary"] == null ? null : json["primary"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-      );
+    id: json["id"],
+    type: json["type"],
+    emailAddress: json["email_address"],
+    verified: json["verified"],
+    primary: json["primary"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "type": type == null ? null : type,
-        "email_address": emailAddress == null ? null : emailAddress,
-        "verified": verified == null ? null : verified,
-        "primary": primary == null ? null : primary,
-        "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
-        "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
-      };
+    "id": id,
+    "type": type,
+    "email_address": emailAddress,
+    "verified": verified,
+    "primary": primary,
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
+  };
+}
+
+class ProgramIdentifier {
+  ProgramIdentifier({
+    this.id,
+    this.type,
+    this.identifier,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.isDeleted,
+    this.deletedAt,
+  });
+
+  String? id;
+  String? type;
+  String? identifier;
+  String? status;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  bool? isDeleted;
+  dynamic? deletedAt;
+
+  factory ProgramIdentifier.fromJson(Map<String, dynamic> json) => ProgramIdentifier(
+    id: json["id"],
+    type: json["type"],
+    identifier: json["identifier"],
+    status: json["status"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+    isDeleted: json["is_deleted"],
+    deletedAt: json["deleted_at"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "type": type,
+    "identifier": identifier,
+    "status": status,
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
+    "is_deleted": isDeleted,
+    "deleted_at": deletedAt,
+  };
 }

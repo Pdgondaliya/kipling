@@ -112,16 +112,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           )
         ],
       ),
-      body: Container(
-          padding: EdgeInsets.only(
-              right: displayWidth(context) * 0.08,
-              left: displayWidth(context) * 0.08,
-              top: displayWidth(context) * 0.4),
-          child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Container(
+            padding: EdgeInsets.only(
+                right: displayWidth(context) * 0.08,
+                left: displayWidth(context) * 0.08),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Container(
+                  height: displayWidth(context) * 0.4,
+                ),
                 Text(
                   index == 0
                       ? ld!.value!.titleTextEn.toString()
@@ -243,8 +245,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
               ],
             ),
-          )
-          ),
+        ),
+      )
     );
   }
 }
