@@ -55,18 +55,17 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Dio _dio = Dio();
 
-  Future<RegisterUserModel> createAccountAPI({
-    String? name,
-    String? mName,
-    String? lName,
-    String? dob,
-    String? languageCode,
-    String? emailAddress,
-    bool? emailPrimary,
-    bool? isOption,
-    bool? isGeneral,
-    String? identifier
-  }) async {
+  Future<RegisterUserModel> createAccountAPI(
+      {String? name,
+      String? mName,
+      String? lName,
+      String? dob,
+      String? languageCode,
+      String? emailAddress,
+      bool? emailPrimary,
+      bool? isOption,
+      bool? isGeneral,
+      String? identifier}) async {
     isLoader = true;
     var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
     var options = BaseOptions(
@@ -75,26 +74,22 @@ class _CreateAccountState extends State<CreateAccount> {
     _dio.options = options;
     try {
       Response response = await _dio.post(
-        "customers-service/customers",
-        data: {
-          "name": name,
-          "middle_name": mName,
-          "last_name": lName,
-          "birth_date": dob, //"1988-01-21T00:00:00Z"
-          "language_code": languageCode,
-          "emails": [
-            {"email_address": emailAddress, "primary": emailPrimary}
-          ],
-          "optin": isOption,
-          "general_permission": isGeneral,
-          "program_identifiers": [
-            {
-              "type": "Auth",
-              "identifier": identifier,
-              "status": "Active"
-            }
-          ]
-        },
+        "customers-service/customers?name=$name&middle_name=$mName&last_name=$lName&birth_date=$dob&language_code=$languageCode&email_address=$emailAddress&primary=$emailPrimary&optin=$isOption&general_permission=$isGeneral&type=AUTH&identifier=$identifier&status=Active",
+        // data: {
+        //   "name": name,
+        //   "middle_name": mName,
+        //   "last_name": lName,
+        //   "birth_date": dob, //"1988-01-21T00:00:00Z"
+        //   "language_code": languageCode,
+        //   "emails": [
+        //     {"email_address": emailAddress, "primary": emailPrimary}
+        //   ],
+        //   "optin": isOption,
+        //   "general_permission": isGeneral,
+        //   "program_identifiers": [
+        //     {"type": "Auth", "identifier": identifier, "status": "Active"}
+        //   ]
+        // },
       );
       isLoader = false;
       // Fluttertoast.showToast(
@@ -120,11 +115,11 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
-  Future<FusionAuthRegisterModel> fusionAuthRegister(String emailAddress,
-      String password) async {
+  Future<FusionAuthRegisterModel> fusionAuthRegister(
+      String emailAddress, String password) async {
     var headerMap = {
       "Authorization":
-      'YmA9D5ju96N_rrBJsGDfKSS3nPuqYxXZp_2qUeYwWinD1eDC4TtriBTS'
+          'YmA9D5ju96N_rrBJsGDfKSS3nPuqYxXZp_2qUeYwWinD1eDC4TtriBTS'
     };
     var options = BaseOptions(
         baseUrl: 'https://auth-mobile-app-staging.loyalty-cloud.com/',
@@ -132,7 +127,7 @@ class _CreateAccountState extends State<CreateAccount> {
     _dio.options = options;
     try {
       Response response =
-      await _dio.get("api/user?email=sfan0727@m-wise.nl&password=1qaz@WSX");
+          await _dio.get("api/user?email=sfan0727@m-wise.nl&password=1qaz@WSX");
       // Fluttertoast.showToast(
       //     msg: 'Account Created Successfully',
       //     gravity: ToastGravity.BOTTOM,
@@ -186,8 +181,7 @@ class _CreateAccountState extends State<CreateAccount> {
     // showCupertinoModalPopup is a built-in function of the cupertino library
     showCupertinoModalPopup(
         context: ctx,
-        builder: (_) =>
-            Container(
+        builder: (_) => Container(
               height: displayHeight(context) * 0.5,
               color: Color.fromARGB(255, 255, 255, 255),
               child: Column(
@@ -202,7 +196,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             currentDate = val;
 
                             final DateFormat formatter =
-                            DateFormat('dd-MM-yyyy');
+                                DateFormat('dd-MM-yyyy');
                             dateController.text = formatter.format(currentDate);
                           });
                         }),
@@ -287,9 +281,9 @@ class _CreateAccountState extends State<CreateAccount> {
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(
-                          // horizontal: displayWidth(context) * 0.04,
-                          //   vertical: displayWidth(context) * 0.01
-                        ),
+                            // horizontal: displayWidth(context) * 0.04,
+                            //   vertical: displayWidth(context) * 0.01
+                            ),
                         child: FittedBox(
                             fit: BoxFit.contain,
                             child: Text(
@@ -346,11 +340,11 @@ class _CreateAccountState extends State<CreateAccount> {
                             firstNameError == ''
                                 ? Container()
                                 : Container(
-                              child: Text(firstNameError,
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontFamily: 'Kipling_Regular')),
-                            )
+                                    child: Text(firstNameError,
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: 'Kipling_Regular')),
+                                  )
                           ],
                         ),
                       ),
@@ -378,9 +372,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                 controller: lNameController,
                                 hint: index == 0
                                     ? ld!
-                                    .value.fields.lastName.placeholderTextEn
+                                        .value.fields.lastName.placeholderTextEn
                                     : ld!.value.fields.lastName
-                                    .placeholderTextNl,
+                                        .placeholderTextNl,
                                 onChanged: (value) {
                                   if (value != '') {
                                     setState(() {
@@ -398,11 +392,11 @@ class _CreateAccountState extends State<CreateAccount> {
                             lastNameError == ''
                                 ? Container()
                                 : Container(
-                              child: Text(lastNameError,
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontFamily: 'Kipling_Regular')),
-                            )
+                                    child: Text(lastNameError,
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: 'Kipling_Regular')),
+                                  )
                           ],
                         ),
                       ),
@@ -430,9 +424,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                 controller: mNameController,
                                 hint: index == 0
                                     ? ld!.value.fields.middleName
-                                    .placeholderTextEn
+                                        .placeholderTextEn
                                     : ld!.value.fields.middleName
-                                    .placeholderTextNl,
+                                        .placeholderTextNl,
                                 keyboard: TextInputType.text)
                           ],
                         ),
@@ -457,8 +451,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             ),
                             SizedBox(height: 5),
                             GestureDetector(
-                                onTap: () =>
-                                Platform.isAndroid
+                                onTap: () => Platform.isAndroid
                                     ? _selectDateAndroid(context)
                                     : _selectDateiOS(context),
                                 child: buildtextfields(
@@ -467,9 +460,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                     controller: dateController,
                                     hint: index == 0
                                         ? ld!.value.fields.birthDate
-                                        .placeholderTextEn
+                                            .placeholderTextEn
                                         : ld!.value.fields.birthDate
-                                        .placeholderTextNl,
+                                            .placeholderTextNl,
                                     onChanged: (value) {
                                       if (value != '') {
                                         setState(() {
@@ -487,11 +480,11 @@ class _CreateAccountState extends State<CreateAccount> {
                             dobError == ''
                                 ? Container()
                                 : Container(
-                              child: Text(dobError,
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontFamily: 'Kipling_Regular')),
-                            )
+                                    child: Text(dobError,
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: 'Kipling_Regular')),
+                                  )
                           ],
                         ),
                       ),
@@ -519,9 +512,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                 controller: emailController,
                                 hint: index == 0
                                     ? ld!.value.fields.emailAddress
-                                    .placeholderTextEn
+                                        .placeholderTextEn
                                     : ld!.value.fields.emailAddress
-                                    .placeholderTextNl,
+                                        .placeholderTextNl,
                                 onChanged: (value) {
                                   if (value != '') {
                                     setState(() {
@@ -539,11 +532,11 @@ class _CreateAccountState extends State<CreateAccount> {
                             emailError == ''
                                 ? Container()
                                 : Container(
-                              child: Text(emailError,
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontFamily: 'Kipling_Regular')),
-                            )
+                                    child: Text(emailError,
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: 'Kipling_Regular')),
+                                  )
                           ],
                         ),
                       ),
@@ -572,9 +565,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                 controller: passwordController,
                                 hint: index == 0
                                     ? ld!
-                                    .value.fields.password.placeholderTextEn
+                                        .value.fields.password.placeholderTextEn
                                     : ld!.value.fields.password
-                                    .placeholderTextNl,
+                                        .placeholderTextNl,
                                 onChanged: (value) {
                                   if (value != '') {
                                     setState(() {
@@ -592,11 +585,11 @@ class _CreateAccountState extends State<CreateAccount> {
                             passwordError == ''
                                 ? Container()
                                 : Container(
-                              child: Text(passwordError,
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontFamily: 'Kipling_Regular')),
-                            )
+                                    child: Text(passwordError,
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: 'Kipling_Regular')),
+                                  )
                           ],
                         ),
                       ),
@@ -613,7 +606,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               index == 0
                                   ? ld!.value.fields.confirmPassword.titleTextEn
                                   : ld!
-                                  .value.fields.confirmPassword.titleTextNl,
+                                      .value.fields.confirmPassword.titleTextNl,
                               style: TextStyle(
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
@@ -626,9 +619,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                 controller: cnfPasswordController,
                                 hint: index == 0
                                     ? ld!.value.fields.confirmPassword
-                                    .placeholderTextEn
+                                        .placeholderTextEn
                                     : ld!.value.fields.confirmPassword
-                                    .placeholderTextNl,
+                                        .placeholderTextNl,
                                 onChanged: (value) {
                                   if (value != '') {
                                     setState(() {
@@ -649,11 +642,11 @@ class _CreateAccountState extends State<CreateAccount> {
                             cnfPasswordError == ''
                                 ? Container()
                                 : Container(
-                              child: Text(cnfPasswordError,
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontFamily: 'Kipling_Regular')),
-                            )
+                                    child: Text(cnfPasswordError,
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: 'Kipling_Regular')),
+                                  )
                           ],
                         ),
                       ),
@@ -662,8 +655,8 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          // horizontal: displayWidth(context) * 0.04,
-                        ),
+                            // horizontal: displayWidth(context) * 0.04,
+                            ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -676,13 +669,13 @@ class _CreateAccountState extends State<CreateAccount> {
                               },
                               child: snUpNews == false
                                   ? Icon(
-                                Icons.check_box_outlined,
-                                color: Colors.black,
-                              )
+                                      Icons.check_box_outlined,
+                                      color: Colors.black,
+                                    )
                                   : Icon(
-                                Icons.check_box,
-                                color: Color(0xff89b14b),
-                              ),
+                                      Icons.check_box,
+                                      color: Color(0xff89b14b),
+                                    ),
                             ),
                             SizedBox(width: 10),
                             Text(
@@ -722,7 +715,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       //     : Container(),
                       Padding(
                         padding: EdgeInsets.only(
-                          // horizontal: displayWidth(context) * 0.04,
+                            // horizontal: displayWidth(context) * 0.04,
                             top: displayWidth(context) * 0.04,
                             bottom: displayWidth(context) * 0.02),
                         child: Row(
@@ -737,21 +730,21 @@ class _CreateAccountState extends State<CreateAccount> {
                               },
                               child: privacyPolicy == false
                                   ? Icon(
-                                Icons.check_box_outlined,
-                                color: Colors.black,
-                              )
+                                      Icons.check_box_outlined,
+                                      color: Colors.black,
+                                    )
                                   : Icon(
-                                Icons.check_box,
-                                color: Color(0xff89b14b),
-                              ),
+                                      Icons.check_box,
+                                      color: Color(0xff89b14b),
+                                    ),
                             ),
                             SizedBox(width: 10),
                             Text(
                               index == 0
                                   ? ld!.value.fields.generalPermission
-                                  .titleTextEn
+                                      .titleTextEn
                                   : ld!.value.fields.generalPermission
-                                  .titleTextNl,
+                                      .titleTextNl,
                               style: TextStyle(
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
@@ -762,28 +755,28 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       privacyPolicy == false
                           ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.check_box_outlined,
-                            color: Colors.transparent,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Please select our Privacy Policy',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontFamily: 'Kipling_Regular'),
-                          ),
-                        ],
-                      )
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.check_box_outlined,
+                                  color: Colors.transparent,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Please select our Privacy Policy',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Kipling_Regular'),
+                                ),
+                              ],
+                            )
                           : Container(),
                       Container(
                         width: double.infinity,
                         height: displayHeight(context) * 0.07,
                         margin:
-                        EdgeInsets.only(top: displayHeight(context) * 0.03),
+                            EdgeInsets.only(top: displayHeight(context) * 0.03),
                         child: ElevatedButton(
                           onPressed: () async {
                             // if (_fromKey.currentState!.validate()) {
@@ -856,13 +849,13 @@ class _CreateAccountState extends State<CreateAccount> {
                             else if (cnfPasswordController.text == '') {
                               setState(() {
                                 cnfPasswordError =
-                                'Please enter confirm password';
+                                    'Please enter confirm password';
                               });
                             } else if (passwordController.text !=
                                 cnfPasswordController.text) {
                               setState(() {
                                 cnfPasswordError =
-                                'Password and Confirm Password must be same';
+                                    'Password and Confirm Password must be same';
                               });
                             }
                             /*else if (cnfPasswordController.text != '') {
@@ -873,8 +866,9 @@ class _CreateAccountState extends State<CreateAccount> {
                             else {
                               // if (_fromKey.currentState!.validate()) {
                               fusionAuthRegister(emailController.text,
-                                  passwordController.text).then((value) {
-                                    print('id: ${value.user!.id.toString()}');
+                                      passwordController.text)
+                                  .then((value) {
+                                print('id: ${value.user!.id.toString()}');
                                 createAccountAPI(
                                     dob: finalDate,
                                     emailAddress: emailController.text,
