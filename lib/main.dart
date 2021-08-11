@@ -7,6 +7,8 @@ import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/module/badge_model.dart' as b;
 import 'package:kipling/module/country_model.dart' as c;
 import 'package:kipling/module/create_account_model.dart' as ca;
+import 'package:kipling/module/forgot_password_confirmation_model.dart';
+import 'package:kipling/module/forgot_password_model.dart';
 import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/splash_data.dart';
@@ -46,17 +48,25 @@ class MyHomePage extends StatefulWidget {
 Future<b.BadgeData>? badgeData;
 Future<c.CountryPickerModel>? futureCountryPickerDataAlbum;
 Future<WelComeScreenModel>? futureWelComeScreenAlbum;
+Future<ForgotPasswordModel>? futureForgotPasswordAlbum;
+Future<ForgotPasswordConfirmationModel>? futureForgotPassworConfirmationAlbum;
 
 List<b.BadgeData>? badgeDetailsData;
 List<c.Value>? countryList;
 List<WelComeScreenModel>? welComeScreenList;
+List<ForgotPasswordModel>? forgotPasswordList;
+List<ForgotPasswordConfirmationModel>? forgotPasswordConfirmationList;
 
 WelComeScreenModel? welcomeData;
+ForgotPasswordModel? forgotPasswordData;
+ForgotPasswordConfirmationModel? forgotPasswordConfirmationData;
 
 List<b.Content>? contents;
 List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
 List<b.FinalBadgeModel> finalBadgeModel = [];
 List<WelComeScreenModel> welcomeModel = [];
+List<ForgotPasswordModel> forgotPasswordModel = [];
+List<ForgotPasswordConfirmationModel> forgotPasswordConfirmationModel = [];
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<Splashdata> futureAlbum;
@@ -85,6 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
     futurePersonDataAlbum = fetchPersonData();
     futureCretaeAccountAlbum = fetchCreateAccountData();
     futureCountryPickerDataAlbum = fetchCountryListData();
+    futureForgotPasswordAlbum = fetchForgotPasswordData();
+    futureForgotPassworConfirmationAlbum = fetchForgotPasswordConfirmationData();
     futureWelComeScreenAlbum = fetchWelComeData();
     badgeData = fetchBadgeData();
     print("initState");
@@ -169,6 +181,51 @@ class _MyHomePageState extends State<MyHomePage> {
       throw Exception('Failed to load album');
     }
   }
+
+  //ForgotPassword API
+  Future<ForgotPasswordModel> fetchForgotPasswordData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=forgot_password'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("forgotPassword:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {
+        forgotPasswordData = ForgotPasswordModel.fromJson(responseJson[0]);
+      });
+
+      return ForgotPasswordModel.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  //ForgotPasswordConfirmation API
+  Future<ForgotPasswordConfirmationModel> fetchForgotPasswordConfirmationData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=forgot_password_confirmation'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("forgotPasswordConfirmation:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {
+        forgotPasswordConfirmationData = ForgotPasswordConfirmationModel.fromJson(responseJson[0]);
+      });
+
+      return ForgotPasswordConfirmationModel.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
 
   //Welcome API
   Future<WelComeScreenModel> fetchWelComeData() async {

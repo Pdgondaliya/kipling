@@ -11,7 +11,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   WelComeScreenModel? ld;
-  String dropdownvalue = 'EN';
+  // String dropdownvalue = 'EN';
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

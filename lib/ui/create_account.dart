@@ -23,7 +23,7 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  String dropdownvalue = 'EN';
+  // String dropdownvalue = 'EN';
 
   TextEditingController fNameController = TextEditingController();
   TextEditingController lNameController = TextEditingController();
@@ -857,7 +857,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               });
                             }*/
                             else {
-                              if (_fromKey.currentState!.validate()) {
+                              // if (_fromKey.currentState!.validate()) {
                                 createAccountAPI(
                                         dob: finalDate,
                                         emailAddress: emailController.text,
@@ -872,7 +872,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                   fusionAuthRegister(emailController.text,
                                       passwordController.text);
                                 });
-                              }
+                              // }
                             }
                           },
                           style: ElevatedButton.styleFrom(

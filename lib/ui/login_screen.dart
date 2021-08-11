@@ -9,6 +9,7 @@ import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/ui/create_account.dart';
+import 'package:kipling/ui/forgot_password.dart';
 import 'package:kipling/ui/personal_details.dart';
 import 'package:kipling/ui/welcome_screen.dart';
 
@@ -27,6 +28,7 @@ class login_screen extends StatefulWidget {
 
 var index = 0;
 var items = [];
+String dropdownvalue = 'EN';
 
 class _login_screenState extends State<login_screen> {
   // final Color color = HexColor.fromHex('#aabbcc');
@@ -35,8 +37,7 @@ class _login_screenState extends State<login_screen> {
   Color bgColor = Colors.white;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  String dropdownvalue = 'EN';
-
+  // String dropdownvalue = 'EN';
 
   @override
   void initState() {
@@ -207,7 +208,7 @@ class _login_screenState extends State<login_screen> {
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => WelcomeScreen())),
+                                      builder: (context) => ForgotPassword())),
                             )),
                         const SizedBox(
                           height: 20,
@@ -240,7 +241,6 @@ class _login_screenState extends State<login_screen> {
                             )),
                           ]),
                         ),
-
                         SizedBox(
                           height: displayHeight(context) * 0.28,
                         ),
