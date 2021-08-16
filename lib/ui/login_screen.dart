@@ -1,17 +1,26 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dart_ipify/dart_ipify.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/custom_widget/text_field.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/create_account_model.dart';
+import 'package:kipling/module/login_check_model.dart';
 import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/ui/create_account.dart';
 import 'package:kipling/ui/forgot_password.dart';
 import 'package:kipling/ui/personal_details.dart';
 import 'package:kipling/ui/welcome_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class login_screen extends StatefulWidget {
   // const login_screen(
@@ -37,17 +46,74 @@ class _login_screenState extends State<login_screen> {
   Color bgColor = Colors.white;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  String? ipAddress;
+  String? applicationId;
+
+  getIP() async {
+    ipAddress = await Ipify.ipv4();
+    print('IPAddress: $ipAddress');
+
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    applicationId = pref.getString('fusionAuthId');
+    print('Application Id: $applicationId');
+  }
+
   // String dropdownvalue = 'EN';
+
+  Dio _dio = Dio();
+
+  Future<LoginModel> loginAPI(String loginId, String password,
+      String applicationId, String ipAddress) async {
+    showLoader();
+    var headerMap = {
+      "Authorization":
+          'YmA9D5ju96N_rrBJsGDfKSS3nPuqYxXZp_2qUeYwWinD1eDC4TtriBTS'
+    };
+    var options = BaseOptions(
+        baseUrl: 'https://auth-mobile-app-staging.loyalty-cloud.com/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.post("api/login", data: {
+        "loginId": loginId,
+        "password": password,
+        "applicationId": applicationId,
+        "ipAddress": ipAddress
+      });
+      Fluttertoast.showToast(
+          msg: 'Login SuccessFully',
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.black);
+      hideLoader();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => PersonalDetails()));
+      return LoginModel.fromJson(response.data);
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
+      } else {
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
+      }
+    }
+  }
 
   @override
   void initState() {
     print('pppppppppp  --- > ${personalDetailData}');
     // print(ld?.name);
+    getIP();
     ld = logindata!;
-    for (var i in ld.value) {
+    items.clear();
+    for (var i in ld.value!) {
       print(i.languageCode.toString().toUpperCase());
-      // items.clear();
-      items.add(i.languageCode.toUpperCase());
+      items.add(i.languageCode!.toUpperCase().toString());
+      print('Items: ${items.toString()}');
     }
   }
 
@@ -63,7 +129,7 @@ class _login_screenState extends State<login_screen> {
               ),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(ld.value[index].bgImageUrl),
+                  image: NetworkImage(ld.value![index].bgImageUrl.toString()),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -87,13 +153,19 @@ class _login_screenState extends State<login_screen> {
                           setState(() {
                             dropdownvalue = newValue.toString();
                             if (newValue.toString().toLowerCase() ==
-                                ld.value[0].languageCode) {
-                              index = 0;
+                                ld.value![0].languageCode) {
+                              setState(() {
+                                index = 0;
+                              });
                             } else if (newValue.toString().toLowerCase() ==
-                                ld.value[1].languageCode) {
-                              index = 1;
+                                ld.value![1].languageCode) {
+                              setState(() {
+                                index = 1;
+                              });
                             } else {
-                              index = 0;
+                              setState(() {
+                                index = 0;
+                              });
                             }
                           });
                         },
@@ -106,7 +178,7 @@ class _login_screenState extends State<login_screen> {
                         top: displayHeight(context) * 0.01,
                         bottom: displayHeight(context) * 0.03),
                     child: CachedNetworkImage(
-                      imageUrl: ld.value[index].logoImageUrl,
+                      imageUrl: ld.value![index].logoImageUrl.toString(),
                       placeholder: (context, url) =>
                           centerProgressBar(radius: 20, dotRadius: 6),
                       fit: BoxFit.fill,
@@ -130,7 +202,7 @@ class _login_screenState extends State<login_screen> {
                                     top: displayHeight(context) * 0.005,
                                     bottom: displayHeight(context) * 0.01),
                                 child: Text(
-                                  ld.value[index].emailText,
+                                  ld.value![index].emailText.toString(),
                                   style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -139,7 +211,8 @@ class _login_screenState extends State<login_screen> {
                                 ),
                               ),
                               buildtextfields(
-                                  hint: ld.value[index].emailPlaceholderText,
+                                  hint: ld.value![index].emailPlaceholderText
+                                      .toString(),
                                   controller: emailController,
                                   context: context),
                               Padding(
@@ -149,7 +222,7 @@ class _login_screenState extends State<login_screen> {
                                     0,
                                     displayHeight(context) * 0.01),
                                 child: Text(
-                                  ld.value[index].passwordText,
+                                  ld.value![index].passwordText.toString(),
                                   style: TextStyle(
                                       color: Color(0xff010001),
                                       fontSize: displayWidth(context) * 0.05,
@@ -157,7 +230,8 @@ class _login_screenState extends State<login_screen> {
                                 ),
                               ),
                               buildtextfields(
-                                  hint: ld.value[index].passwordPlaceholderText,
+                                  hint: ld.value![index].passwordPlaceholderText
+                                      .toString(),
                                   controller: passwordController,
                                   isPassword: true,
                                   context: context)
@@ -171,11 +245,11 @@ class _login_screenState extends State<login_screen> {
                               top: displayHeight(context) * 0.03),
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PersonalDetails(
-                                          )));
+                              loginAPI(
+                                  emailController.text,
+                                  passwordController.text,
+                                  applicationId!,
+                                  ipAddress!);
                             },
                             style: ElevatedButton.styleFrom(
                               primary: const Color(0xFF2d2c2e),
@@ -183,7 +257,7 @@ class _login_screenState extends State<login_screen> {
                                   borderRadius: BorderRadius.circular(0.0)),
                             ),
                             child: Text(
-                              ld.value[index].logInButtonText,
+                              ld.value![index].logInButtonText.toString(),
                               style: TextStyle(
                                 fontSize: displayWidth(context) * 0.05,
                                 fontFamily: 'Kipling_Regular',
@@ -197,7 +271,7 @@ class _login_screenState extends State<login_screen> {
                                 top: displayHeight(context) * 0.04),
                             child: GestureDetector(
                               child: Text(
-                                ld.value[index].forgotPasswordText,
+                                ld.value![index].forgotPasswordText.toString(),
                                 style: TextStyle(
                                   fontSize: displayWidth(context) * 0.05,
                                   color: Color(0xff91b557),
@@ -247,7 +321,7 @@ class _login_screenState extends State<login_screen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                ld.value[index].registerText,
+                                ld.value![index].registerText.toString(),
                                 style: TextStyle(
                                     fontSize: displayWidth(context) * 0.045,
                                     color: Color(0xff0f0e0e),
@@ -260,10 +334,11 @@ class _login_screenState extends State<login_screen> {
                                     onTap: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => CreateAccount(
-                                                ))),
+                                            builder: (context) =>
+                                                CreateAccount())),
                                     child: Text(
-                                      ld.value[index].registerLinkText,
+                                      ld.value![index].registerLinkText
+                                          .toString(),
                                       style: TextStyle(
                                           fontSize:
                                               displayWidth(context) * 0.045,

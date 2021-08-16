@@ -1,17 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/custom_widget/text_field.dart';
 import 'package:kipling/main.dart';
-import 'package:kipling/module/fusion_auth_register_model.dart';
+import 'package:kipling/module/get_user_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
+import 'package:kipling/module/update_user_details_model.dart';
 import 'package:kipling/ui/badge_screen.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:dio/dio.dart' as d;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PersonalDetails extends StatefulWidget {
   // const PersonalDetails({this.ld});
@@ -45,6 +50,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
 
   bool isChecked = false;
 
+  String? countryCode;
+  String? currentDate;
+  String? dob;
+  String? id;
+
   PersonalDetailData? ld;
 
   File? imageFile = File('');
@@ -59,58 +69,234 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   String countryValue = 'Afghanistan';
   String languageValue = 'Hindi';
 
-  Future<String?> uploadImage(int id) async {
+  String? birthdate;
+
+  Dio _dio = Dio();
+
+  GetUserDataModel? getUserDataModel;
+
+  Future<GetUserDataModel> getUserDataAPI(String id) async {
+    showLoader();
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl:
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+        headers: headerMap);
+    _dio.options = options;
     try {
-      d.Response response;
-
-      d.FormData formData = new d.FormData.fromMap({'id': id});
-      formData.files.add(
-        MapEntry("avatar_url", await d.MultipartFile.fromFile(imageFile!.path)),
-      );
-
-      response = await dio.post(
-          'https://cms-mobile-app-staging.loyalty-cloud.com/upload?avatar_url=${imageFile!.path}&id=$id',
-          options: d.Options(headers: {"content-type": 'application/json'}),
-          data: formData);
-      print('response --------> ${response.toString()}');
-      if (response == null) {
-        print('response ---null-----> ${response.statusMessage.toString()}');
-        return null;
-      } else if (response.statusCode == 200) {
-        print(
-            'response.statusMessage --------> ${response.statusMessage.toString()}');
-        print("Response is---> ${response.data}");
-        if (response.data['status'] == false) {
-          print(" In status falseResponse is---> ${response.data}");
-// return LoginResponse.fromJson(response.data);
-        } else {
-          print(
-              'response. true response data --------> ${response.data.toString()}');
-// SharedPreferences prefs=await SharedPreferences.getInstance();
-// prefs.setString('UserId',response.data['data']['user_id'].toString() );
-          return response.data['data']['user_id'].toString();
-        }
+      Response response = await _dio.get("customers/$id");
+      print('afdsfgdsgdfsgfgfgfg: ${response.data}');
+      hideLoader();
+      return GetUserDataModel.fromJson(response.data);
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
       } else {
-        print('12345555556 ------>${response.statusMessage.toString()}');
-        print('22222222 ------>${response.statusCode.toString()}');
-        throw new Exception(response.data);
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
       }
-    } on d.DioError catch (e) {
-      print('12345555556');
-      print(e);
-// throw handleError(e);
     }
   }
+
+  Future<UpdateUserDataModel> updateUserDataAPI(
+      {String? id,
+      String? name,
+      String? middleName,
+      String? lastName,
+      String? gender,
+      String? birthdate,
+      String? countryCode,
+      bool? option,
+      bool? generalPermission,
+      String? languageCode,
+      String? currentDate,
+      String? email}) async {
+    showLoader();
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl:
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.put("customers/$id", data: {
+        "id": id,
+        "title": "",
+        "initials": "",
+        "name": name,
+        "middle_name": middleName,
+        "last_name": lastName,
+        "gender": gender,
+        "birth_date": birthdate,
+        "birth_place": "",
+        "country_code": countryCode,
+        "language_code": languageCode,
+        "tier": "",
+        "optin": option,
+        "general_permission": generalPermission,
+        "balance": {
+          "id": "f72739ab-d8d0-4474-b972-5a9639f6757e",
+          "customer_id": "fc83716b-5768-48f4-b80a-25c64b844014",
+          "points": 0,
+          "previous_points": 0,
+          "total_positive_points": 0,
+          "total_negative_points": 0,
+          "total_event_positive_points": 0,
+          "total_event_negative_points": 0,
+          "total_manual_positive_points": 0,
+          "total_manual_negative_points": 0,
+          "total_reward_positive_points": 0,
+          "total_reward_negative_points": 0,
+          "updated_at": currentDate,
+          "balance_updates": []
+        },
+        "emails": [
+          {
+            "id": "6493e5d9-de3c-4335-8d87-e975aea055b6",
+            "type": "",
+            "email_address": email,
+            "verified": false,
+            "primary": true,
+            "created_at": currentDate,
+            "updated_at": currentDate //2021-08-12T14:24:29Z
+          }
+        ],
+        "phone_numbers": [],
+        "addresses": [],
+        "subscriptions": [],
+        "avatar_url": "",
+        "external_identifiers": [],
+        "program_identifiers": [
+          {
+            "id": "869d4b58-8da6-4709-83f8-c86538f8bbad",
+            "type": "Auth",
+            "identifier": "840e587e-973f-4850-aa10-ee7ec8b00728",
+            "status": "Active",
+            "created_at": currentDate,
+            "updated_at": currentDate,
+            "is_deleted": false,
+            "deleted_at": null
+          }
+        ],
+        "tags": [],
+        "integer_custom_fields": [],
+        "string_custom_fields": [],
+        "boolean_custom_fields": [],
+        "date_time_custom_fields": [],
+        "float_custom_fields": [],
+        "created_at": currentDate,
+        "updated_at": currentDate,
+        "is_deleted": false,
+        "deleted_at": null,
+        "transaction_count": 0
+      });
+      hideLoader();
+      print('hkjsdfkjhfkjdshfkjhfkd: ${response.data}');
+      return UpdateUserDataModel.fromJson(response.data);
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
+      } else {
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
+      }
+    }
+  }
+
+  Future getData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    print('id: ${preferences.getString('id')}');
+
+    DateTime today = DateTime.now();
+
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    String date = formatter.format(today);
+
+    DateFormat time = DateFormat('hh:mm:ss');
+    String timeFormat = time.format(today);
+
+    print('Date =============> ${date}T${timeFormat}Z');
+
+    currentDate = '${date}T${timeFormat}Z';
+    // id = preferences.getString('id');
+    return preferences.getString('id');
+  }
+
+//   Future<String?> uploadImage(int id) async {
+//     try {
+//       d.Response response;
+//
+//       d.FormData formData = new d.FormData.fromMap({'id': id});
+//       formData.files.add(
+//         MapEntry("avatar_url", await d.MultipartFile.fromFile(imageFile!.path)),
+//       );
+//
+//       response = await dio.post(
+//           'https://cms-mobile-app-staging.loyalty-cloud.com/upload?avatar_url=${imageFile!.path}&id=$id',
+//           options: d.Options(headers: {"content-type": 'application/json'}),
+//           data: formData);
+//       print('response --------> ${response.toString()}');
+//       if (response == null) {
+//         print('response ---null-----> ${response.statusMessage.toString()}');
+//         return null;
+//       } else if (response.statusCode == 200) {
+//         print(
+//             'response.statusMessage --------> ${response.statusMessage.toString()}');
+//         print("Response is---> ${response.data}");
+//         if (response.data['status'] == false) {
+//           print(" In status falseResponse is---> ${response.data}");
+// // return LoginResponse.fromJson(response.data);
+//         } else {
+//           print(
+//               'response. true response data --------> ${response.data.toString()}');
+// // SharedPreferences prefs=await SharedPreferences.getInstance();
+// // prefs.setString('UserId',response.data['data']['user_id'].toString() );
+//           return response.data['data']['user_id'].toString();
+//         }
+//       } else {
+//         print('12345555556 ------>${response.statusMessage.toString()}');
+//         print('22222222 ------>${response.statusCode.toString()}');
+//         throw new Exception(response.data);
+//       }
+//     } on d.DioError catch (e) {
+//       print('12345555556');
+//       print(e);
+// // throw handleError(e);
+//     }
+//   }
 
   @override
   void initState() {
     print('Value List: ${countryList.toString()}');
     ld = personalDetailData;
-    for (var i in ld!.value) {
-      print(i.languageCode.toString().toUpperCase());
-      // items.clear();
-      items.add(i.languageCode.toUpperCase());
-    }
+    getData().then((value) {
+      getUserDataAPI(value).then((value) {
+        setState(() {
+          firstNameController.text = value.name.toString();
+          middleNameController.text = value.middleName.toString();
+          lastNameController.text = value.lastName.toString();
+          birthDayController.text =
+              value.birthDate.toString().substring(0, 11).trim().toString() !=
+                      'null'
+                  ? value.birthDate.toString().substring(0, 11)
+                  : '';
+          emailController.text = value.emails!.first.emailAddress.toString();
+
+          // DateTime dateOfBirth = DateTime.parse(birthDayController.text);
+          //
+          // DateFormat dobFormat = DateFormat('yyyy-MM-dd');
+          // birthdate = dobFormat.format(dateOfBirth) + 'T00:00:00Z';
+        });
+      });
+    });
   }
 
   Future<void> _selectDateAndroid(BuildContext context) async {
@@ -125,6 +311,15 @@ class _PersonalDetailsState extends State<PersonalDetails> {
 
         final DateFormat formatter = DateFormat('dd-MM-yyyy');
         birthDayController.text = formatter.format(_chosenDateTime);
+
+        final DateFormat date = DateFormat('yyyy-MM-dd');
+        dob = date.format(_chosenDateTime);
+        DateFormat time = DateFormat('hh:mm:ss');
+        String timeFormat = time.format(_chosenDateTime);
+
+        print('Date =============> ${dob}T${timeFormat}Z');
+
+        birthdate = '${dob}T${timeFormat}Z';
       });
   }
 
@@ -150,6 +345,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 DateFormat('dd-MM-yyyy');
                             birthDayController.text =
                                 formatter.format(_chosenDateTime);
+                            final DateFormat date = DateFormat('yyyy-MM-dd');
+                            dob = date.format(_chosenDateTime);
+                            DateFormat time = DateFormat('hh:mm:ss');
+                            String timeFormat = time.format(_chosenDateTime);
+
+                            print('Date =============> ${dob}T${timeFormat}Z');
+
+                            birthdate = '${dob}T${timeFormat}Z';
                           });
                         }),
                   ),
@@ -249,7 +452,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          ld!.value[index].titleText,
+          index == 0
+              ? ld!.value!.titleTextEn.toString()
+              : ld!.value!.titleTextNl.toString(),
           style:
               TextStyle(color: Color(0xff0f0e0e), fontFamily: 'Kipling_Bold'),
         ),
@@ -292,8 +497,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               image: FileImage(imageFile!))
                                           : DecorationImage(
                                               image: NetworkImage(
-                                              ld!.value[index]
-                                                  .profilePicturePlaceholderUrl,
+                                              index == 0
+                                                  ? ld!.value!
+                                                      .profilePicturePlaceholderUrlEn
+                                                      .toString()
+                                                  : ld!.value!
+                                                      .profilePicturePlaceholderUrlNl
+                                                      .toString(),
                                             ))),
                                   child: GestureDetector(onTap: () {
                                     showCupertinoModalPopup<void>(
@@ -330,7 +540,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                             SizedBox(
                               height: displayHeight(context) * 0.02,
                             ),
-                            Text(ld!.value[index].personalInfoTitleText,
+                            Text(
+                                index == 0
+                                    ? ld!.value!.personalInfoTitleTextEn
+                                        .toString()
+                                    : ld!.value!.personalInfoTitleTextNl
+                                        .toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.06,
@@ -340,7 +555,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].firstNameText,
+                                index == 0
+                                    ? ld!.value!.firstNameTextEn.toString()
+                                    : ld!.value!.firstNameTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -348,7 +565,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].firstNameText,
+                                hint: index == 0
+                                    ? ld!.value!.firstNameTextEn.toString()
+                                    : ld!.value!.firstNameTextNl.toString(),
                                 controller: firstNameController,
                                 context: context),
                             Padding(
@@ -356,7 +575,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].middleNameText,
+                                index == 0
+                                    ? ld!.value!.middleNameTextEn.toString()
+                                    : ld!.value!.middleNameTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -364,7 +585,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].middleNameText,
+                                hint: index == 0
+                                    ? ld!.value!.middleNameTextEn.toString()
+                                    : ld!.value!.middleNameTextNl.toString(),
                                 controller: middleNameController,
                                 context: context),
                             Padding(
@@ -372,7 +595,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].lastNameText,
+                                index == 0
+                                    ? ld!.value!.lastNameTextEn.toString()
+                                    : ld!.value!.lastNameTextNl.toString(),
                                 style: TextStyle(
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
@@ -381,7 +606,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].lastNameText,
+                                hint: index == 0
+                                    ? ld!.value!.lastNameTextEn.toString()
+                                    : ld!.value!.lastNameTextNl.toString(),
                                 controller: lastNameController,
                                 context: context),
                             Padding(
@@ -389,7 +616,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].genderText,
+                                index == 0
+                                    ? ld!.value!.genderTextEn.toString()
+                                    : ld!.value!.genderTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -427,13 +656,19 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                           genderValue = value!;
                                         });
                                       },
-                                      hint: Container(                     //and here
+                                      hint: Container(
+                                        //and here
                                         child: Text(
-                                          ld!.value[index].genderText,
-                                          style: TextStyle(fontFamily: 'Kipling_Regular',
+                                          index == 0
+                                              ? ld!.value!.genderTextEn
+                                                  .toString()
+                                              : ld!.value!.genderTextNl
+                                                  .toString(),
+                                          style: TextStyle(
+                                              fontFamily: 'Kipling_Regular',
                                               color: Color(0xff9f9e9f),
-                                              fontSize:
-                                              displayWidth(context) * 0.035),
+                                              fontSize: displayWidth(context) *
+                                                  0.035),
                                         ),
                                       ),
 
@@ -576,7 +811,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                         },
                                       );
                                     },
-                                    hint: ld!.value[index].genderText,
+                                    hint: index == 0
+                                        ? ld!.value!.genderTextEn.toString()
+                                        : ld!.value!.genderTextNl.toString(),
                                     controller: genderController,
                                     context: context,
                                     suffix: true,
@@ -587,7 +824,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].birthdayText,
+                                index == 0
+                                    ? ld!.value!.birthdayTextEn.toString()
+                                    : ld!.value!.birthdayTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -599,7 +838,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 onTap: () => Platform.isAndroid
                                     ? _selectDateAndroid(context)
                                     : _selectDateiOS(context),
-                                hint: ld!.value[index].birthdayText,
+                                hint: index == 0
+                                    ? ld!.value!.birthdayTextEn.toString()
+                                    : ld!.value!.birthdayTextNl.toString(),
                                 controller: birthDayController,
                                 context: context,
                                 suffix: true,
@@ -609,7 +850,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].countryText,
+                                index == 0
+                                    ? ld!.value!.countryTextEn.toString()
+                                    : ld!.value!.countryTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -644,7 +887,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                         });
                                       },
                                       hint: Text(
-                                        ld!.value[index].countryText,
+                                        index == 0
+                                            ? ld!.value!.countryTextEn
+                                                .toString()
+                                            : ld!.value!.countryTextNl
+                                                .toString(),
                                         style: TextStyle(
                                             fontFamily: 'Kipling_Regular',
                                             color: Color(0xff9f9e9f),
@@ -653,9 +900,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       ),
                                     ),
                                   )
-                                :
-                            buildtextfields(
-                                    hint: ld!.value[index].countryText,
+                                : buildtextfields(
+                                    hint: index == 0
+                                        ? ld!.value!.countryTextEn.toString()
+                                        : ld!.value!.countryTextNl.toString(),
                                     controller: countryController,
                                     enable: false,
                                     context: context,
@@ -777,7 +1025,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].languageText,
+                                index == 0
+                                    ? ld!.value!.languageTextEn.toString()
+                                    : ld!.value!.languageTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -786,203 +1036,216 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                             ),
                             Platform.isAndroid
                                 ? Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                  displayWidth(context) * 0.02),
-                              alignment: Alignment.center,
-                              height: displayHeight(context) * 0.054,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      width: 1.0)),
-                              child: DropdownButton(
-                                isExpanded: true,
-                                isDense: true,
-                                value: languageValue,
-                                underline: Container(),
-                                items: [
-                                  DropdownMenuItem(
-                                    child: Text('Hindi'),
-                                    value: 'Hindi',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Gujarati"),
-                                    value: 'Gujarati',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("English"),
-                                    value: 'English',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Marathi"),
-                                    value: 'Marathi',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Bengali"),
-                                    value: 'Bengali',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Punjabi"),
-                                    value: 'Punjabi',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Spanish"),
-                                    value: 'Spanish',
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Haryani"),
-                                    value: 'Haryani',
-                                  ),DropdownMenuItem(
-                                    child: Text("Telugu"),
-                                    value: 'Telugu',
-                                  ),
-
-                                ],
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    languageValue = value!;
-                                  });
-                                },
-                                hint: Text(
-                                  ld!.value[index].languageText,
-                                  style: TextStyle(
-                                      fontFamily: 'Kipling_Regular',
-                                      color: Color(0xff9f9e9f),
-                                      fontSize:
-                                      displayWidth(context) * 0.035),
-                                ),
-                              ),
-                            )
-                                :
-                            buildtextfields(
-                                hint: ld!.value[index].languageText,
-                                controller: languageController,
-                                enable: false,
-                                context: context,
-                                suffix: true,
-                                suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                                onTap: () {
-                                  showCupertinoModalPopup(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            displayWidth(context) * 0.02),
+                                    alignment: Alignment.center,
+                                    height: displayHeight(context) * 0.054,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            width: 1.0)),
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      isDense: true,
+                                      value: languageValue,
+                                      underline: Container(),
+                                      items: [
+                                        DropdownMenuItem(
+                                          child: Text('Hindi'),
+                                          value: 'Hindi',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Gujarati"),
+                                          value: 'Gujarati',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("English"),
+                                          value: 'English',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Marathi"),
+                                          value: 'Marathi',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Bengali"),
+                                          value: 'Bengali',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Punjabi"),
+                                          value: 'Punjabi',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Spanish"),
+                                          value: 'Spanish',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Haryani"),
+                                          value: 'Haryani',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Telugu"),
+                                          value: 'Telugu',
+                                        ),
+                                      ],
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          languageValue = value!;
+                                        });
+                                      },
+                                      hint: Text(
+                                        index == 0
+                                            ? ld!.value!.languageTextEn
+                                                .toString()
+                                            : ld!.value!.languageTextNl
+                                                .toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Kipling_Regular',
+                                            color: Color(0xff9f9e9f),
+                                            fontSize:
+                                                displayWidth(context) * 0.035),
+                                      ),
+                                    ),
+                                  )
+                                : buildtextfields(
+                                    hint: index == 0
+                                        ? ld!.value!.languageTextEn.toString()
+                                        : ld!.value!.languageTextNl.toString(),
+                                    controller: languageController,
+                                    enable: false,
                                     context: context,
-                                    builder: (context) {
-                                      return StatefulBuilder(builder:
-                                          (BuildContext context,
-                                              StateSetter setState) {
-                                        return Material(
-                                          color: Colors.transparent,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffffffff),
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                      color: Color(0xff999999),
-                                                      width: 0.0,
+                                    suffix: true,
+                                    suffixIcon:
+                                        Icon(Icons.arrow_drop_down_sharp),
+                                    onTap: () {
+                                      showCupertinoModalPopup(
+                                        context: context,
+                                        builder: (context) {
+                                          return StatefulBuilder(builder:
+                                              (BuildContext context,
+                                                  StateSetter setState) {
+                                            return Material(
+                                              color: Colors.transparent,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xffffffff),
+                                                      border: Border(
+                                                        bottom: BorderSide(
+                                                          color:
+                                                              Color(0xff999999),
+                                                          width: 0.0,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: <Widget>[
+                                                        Expanded(
+                                                          child:
+                                                              CupertinoButton(
+                                                            child: Text(''),
+                                                            onPressed: () {},
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 16.0,
+                                                              vertical: 5.0,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Center(
+                                                            child: Text(
+                                                              'Select Language',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      displayWidth(
+                                                                              context) *
+                                                                          0.035),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child:
+                                                              CupertinoButton(
+                                                            child:
+                                                                Text('Confirm'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 16.0,
+                                                              vertical: 5.0,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      child: CupertinoButton(
-                                                        child: Text(''),
-                                                        onPressed: () {},
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 16.0,
-                                                          vertical: 5.0,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Center(
-                                                        child: Text(
-                                                          'Select Language',
+                                                  Container(
+                                                    height:
+                                                        displayWidth(context) *
+                                                            0.5,
+                                                    color: Color(0xfff7f7f7),
+                                                    child: CupertinoPicker(
+                                                      itemExtent: displayWidth(
+                                                              context) *
+                                                          0.08,
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        setState(() {
+                                                          print(
+                                                              'Value::  $value');
+                                                        });
+                                                      },
+                                                      children: [
+                                                        Text(
+                                                          'Hindi',
                                                           style: TextStyle(
                                                               color:
-                                                                  Colors.black,
-                                                              fontSize:
-                                                                  displayWidth(
-                                                                          context) *
-                                                                      0.035),
+                                                                  Colors.black),
                                                         ),
-                                                      ),
+                                                        Text('Gujarati',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black)),
+                                                        Text('English',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black)),
+                                                        Text('Marathi',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black)),
+                                                        Text('Bengali',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black)),
+                                                        Text('Punjabi',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black)),
+                                                      ],
                                                     ),
-                                                    Expanded(
-                                                      child: CupertinoButton(
-                                                        child: Text('Confirm'),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 16.0,
-                                                          vertical: 5.0,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                                  )
+                                                ],
                                               ),
-                                              Container(
-                                                height:
-                                                    displayWidth(context) * 0.5,
-                                                color: Color(0xfff7f7f7),
-                                                child: CupertinoPicker(
-                                                  itemExtent:
-                                                      displayWidth(context) *
-                                                          0.08,
-                                                  onSelectedItemChanged:
-                                                      (value) {
-                                                    setState(() {
-                                                      print('Value::  $value');
-                                                    });
-                                                  },
-                                                  children: [
-                                                    Text(
-                                                      'Hindi',
-                                                      style: TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                    Text('Gujarati',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('English',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('Marathi',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('Bengali',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Text('Punjabi',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      });
-                                    },
-                                  );
-                                }),
+                                            );
+                                          });
+                                        },
+                                      );
+                                    }),
                           ],
                         ),
                       ),
@@ -1003,7 +1266,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(ld!.value[index].contactInfoTitleText,
+                            Text(
+                                index == 0
+                                    ? ld!.value!.contactInfoTitleTextEn
+                                        .toString()
+                                    : ld!.value!.contactInfoTitleTextNl
+                                        .toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.06,
@@ -1013,7 +1281,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.03,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].phoneNumberText,
+                                index == 0
+                                    ? ld!.value!.phoneNumberTextEn.toString()
+                                    : ld!.value!.phoneNumberTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -1021,7 +1291,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].phoneNumberText,
+                                hint: index == 0
+                                    ? ld!.value!.phoneNumberTextEn.toString()
+                                    : ld!.value!.phoneNumberTextNl.toString(),
                                 controller: phoneNumberController,
                                 context: context,
                                 keyboard: TextInputType.number),
@@ -1030,7 +1302,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].emailAddressText,
+                                index == 0
+                                    ? ld!.value!.emailAddressTextEn.toString()
+                                    : ld!.value!.emailAddressTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -1038,10 +1312,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].emailAddressText,
+                                hint: index == 0
+                                    ? ld!.value!.emailAddressTextEn.toString()
+                                    : ld!.value!.emailAddressTextNl.toString(),
                                 controller: emailController,
                                 context: context,
-                                keyboard: TextInputType.number),
+                                keyboard: TextInputType.emailAddress),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.03,
@@ -1078,7 +1354,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(ld!.value[index].optinText,
+                                        Text(
+                                            index == 0
+                                                ? ld!.value!.optinTextEn
+                                                    .toString()
+                                                : ld!.value!.optinTextNl
+                                                    .toString(),
                                             style: TextStyle(
                                                 color: Color(0xff010001),
                                                 fontSize:
@@ -1086,7 +1367,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                         0.05,
                                                 fontWeight: FontWeight.bold)),
                                         Text(
-                                          ld!.value[index].optinDescText,
+                                          index == 0
+                                              ? ld!.value!.optinDescTextEn
+                                                  .toString()
+                                              : ld!.value!.optinDescTextNl
+                                                  .toString(),
                                           style: TextStyle(
                                               height: 1.50,
                                               color: Color(0xff010001),
@@ -1119,7 +1404,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(ld!.value[index].addressTitleText,
+                            Text(
+                                index == 0
+                                    ? ld!.value!.addressTitleTextEn.toString()
+                                    : ld!.value!.addressTitleTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.06,
@@ -1129,7 +1417,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].addressLine1Text,
+                                index == 0
+                                    ? ld!.value!.addressLine1TextEn.toString()
+                                    : ld!.value!.addressLine1TextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -1137,7 +1427,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].addressLine1Text,
+                                hint: index == 0
+                                    ? ld!.value!.addressLine1TextEn.toString()
+                                    : ld!.value!.addressLine1TextNl.toString(),
                                 controller: streetNameController,
                                 context: context,
                                 keyboard: TextInputType.number),
@@ -1158,8 +1450,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          ld!.value[index]
-                                              .addressHouseNumberText,
+                                          index == 0
+                                              ? ld!.value!
+                                                  .addressHouseNumberTextEn
+                                                  .toString()
+                                              : ld!.value!
+                                                  .addressHouseNumberTextNl
+                                                  .toString(),
                                           style: TextStyle(
                                               color: Color(0xff010001),
                                               fontSize:
@@ -1171,8 +1468,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 displayHeight(context) * 0.01),
                                         buildtextfields(
                                             width: displayWidth(context) * 0.4,
-                                            hint: ld!.value[index]
-                                                .addressHouseNumberText,
+                                            hint: index == 0
+                                                ? ld!.value!
+                                                    .addressHouseNumberTextEn
+                                                    .toString()
+                                                : ld!.value!
+                                                    .addressHouseNumberTextNl
+                                                    .toString(),
                                             controller: houseNumberController,
                                             context: context,
                                             keyboard: TextInputType.number),
@@ -1189,8 +1491,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          ld!.value[index]
-                                              .addressHouseNumberSuffixText,
+                                          index == 0
+                                              ? ld!.value!
+                                                  .addressHouseNumberSuffixTextEn
+                                                  .toString()
+                                              : ld!.value!
+                                                  .addressHouseNumberSuffixTextNl
+                                                  .toString(),
                                           style: TextStyle(
                                               color: Color(0xff010001),
                                               fontSize:
@@ -1202,8 +1509,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                 displayHeight(context) * 0.01),
                                         buildtextfields(
                                             // width: displayWidth(context) * 0.4,
-                                            hint: ld!.value[index]
-                                                .addressHouseNumberSuffixText,
+                                            hint: index == 0
+                                                ? ld!.value!
+                                                    .addressHouseNumberSuffixTextEn
+                                                    .toString()
+                                                : ld!.value!
+                                                    .addressHouseNumberSuffixTextNl
+                                                    .toString(),
                                             controller: additionController,
                                             context: context,
                                             keyboard: TextInputType.number),
@@ -1218,7 +1530,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.01,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].addressCityText,
+                                index == 0
+                                    ? ld!.value!.addressCityTextEn.toString()
+                                    : ld!.value!.addressCityTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -1226,7 +1540,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].addressCityText,
+                                hint: index == 0
+                                    ? ld!.value!.addressCityTextEn.toString()
+                                    : ld!.value!.addressCityTextNl.toString(),
                                 controller: cityController,
                                 context: context),
                             Padding(
@@ -1234,7 +1550,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].addressStateText,
+                                index == 0
+                                    ? ld!.value!.addressStateTextEn.toString()
+                                    : ld!.value!.addressStateTextNl.toString(),
                                 style: TextStyle(
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
@@ -1243,7 +1561,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].addressStateText,
+                                hint: index == 0
+                                    ? ld!.value!.addressStateTextEn.toString()
+                                    : ld!.value!.addressStateTextNl.toString(),
                                 controller: regionController,
                                 context: context),
                             Padding(
@@ -1251,7 +1571,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].countryText,
+                                index == 0
+                                    ? ld!.value!.countryTextEn.toString()
+                                    : ld!.value!.countryTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -1260,159 +1582,175 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                             ),
                             Platform.isAndroid
                                 ? Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                  displayWidth(context) * 0.02),
-                              alignment: Alignment.center,
-                              height: displayHeight(context) * 0.054,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      width: 1.0)),
-                              child: DropdownButton(
-                                isExpanded: true,
-                                isDense: true,
-                                value: countryValue,
-                                underline: Container(),
-                                items: countryList!.map((e) {
-                                  return new DropdownMenuItem(
-                                    child: new Text(e.name),
-                                    value: e.name.toString(),
-                                  );
-                                }).toList(),
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    countryValue = value!;
-                                  });
-                                },
-                                hint: Text(
-                                  ld!.value[index].countryText,
-                                  style: TextStyle(
-                                      fontFamily: 'Kipling_Regular',
-                                      color: Color(0xff9f9e9f),
-                                      fontSize:
-                                      displayWidth(context) * 0.035),
-                                ),
-                              ),
-                            )
-                                :
-                            buildtextfields(
-                                hint: ld!.value[index].countryText,
-                                controller: countryController,
-                                context: context,
-                                suffix: true,
-                                suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-                                enable: false,
-                                onTap: () {
-                                  showCupertinoModalPopup(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            displayWidth(context) * 0.02),
+                                    alignment: Alignment.center,
+                                    height: displayHeight(context) * 0.054,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            width: 1.0)),
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      isDense: true,
+                                      value: countryValue,
+                                      underline: Container(),
+                                      items: countryList!.map((e) {
+                                        return new DropdownMenuItem(
+                                          child: new Text(e.name),
+                                          value: e.name.toString(),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          countryValue = value!;
+                                        });
+                                      },
+                                      hint: Text(
+                                        index == 0
+                                            ? ld!.value!.countryTextEn
+                                                .toString()
+                                            : ld!.value!.countryTextNl
+                                                .toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Kipling_Regular',
+                                            color: Color(0xff9f9e9f),
+                                            fontSize:
+                                                displayWidth(context) * 0.035),
+                                      ),
+                                    ),
+                                  )
+                                : buildtextfields(
+                                    hint: index == 0
+                                        ? ld!.value!.countryTextEn.toString()
+                                        : ld!.value!.countryTextNl.toString(),
+                                    controller: countryController,
                                     context: context,
-                                    builder: (context) {
-                                      return StatefulBuilder(builder:
-                                          (BuildContext context,
-                                              StateSetter setState) {
-                                        return Material(
-                                          color: Colors.transparent,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffffffff),
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                      color: Color(0xff999999),
-                                                      width: 0.0,
+                                    suffix: true,
+                                    suffixIcon:
+                                        Icon(Icons.arrow_drop_down_sharp),
+                                    enable: false,
+                                    onTap: () {
+                                      showCupertinoModalPopup(
+                                        context: context,
+                                        builder: (context) {
+                                          return StatefulBuilder(builder:
+                                              (BuildContext context,
+                                                  StateSetter setState) {
+                                            return Material(
+                                              color: Colors.transparent,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xffffffff),
+                                                      border: Border(
+                                                        bottom: BorderSide(
+                                                          color:
+                                                              Color(0xff999999),
+                                                          width: 0.0,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: <Widget>[
+                                                        Expanded(
+                                                          child:
+                                                              CupertinoButton(
+                                                            child: Text(''),
+                                                            onPressed: () {},
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 16.0,
+                                                              vertical: 5.0,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Center(
+                                                            child: Text(
+                                                              'Select Country',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      displayWidth(
+                                                                              context) *
+                                                                          0.035),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child:
+                                                              CupertinoButton(
+                                                            child:
+                                                                Text('Confirm'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 16.0,
+                                                              vertical: 5.0,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      child: CupertinoButton(
-                                                        child: Text(''),
-                                                        onPressed: () {},
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 16.0,
-                                                          vertical: 5.0,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Center(
-                                                        child: Text(
-                                                          'Select Country',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize:
-                                                                  displayWidth(
-                                                                          context) *
-                                                                      0.035),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: CupertinoButton(
-                                                        child: Text('Confirm'),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          horizontal: 16.0,
-                                                          vertical: 5.0,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                height:
-                                                    displayWidth(context) * 0.5,
-                                                color: Color(0xfff7f7f7),
-                                                child: CupertinoPicker(
-                                                    itemExtent:
+                                                  Container(
+                                                    height:
                                                         displayWidth(context) *
-                                                            0.08,
-                                                    onSelectedItemChanged:
-                                                        (value) {
-                                                      setState(() {
-                                                        print(
-                                                            'Value::  $value');
-                                                      });
-                                                    },
-                                                    children:
-                                                        countryList!.map((e) {
-                                                      return Text(
-                                                        e.name,
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black),
-                                                      );
-                                                    }).toList()),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      });
-                                    },
-                                  );
-                                }),
+                                                            0.5,
+                                                    color: Color(0xfff7f7f7),
+                                                    child: CupertinoPicker(
+                                                        itemExtent:
+                                                            displayWidth(
+                                                                    context) *
+                                                                0.08,
+                                                        onSelectedItemChanged:
+                                                            (value) {
+                                                          setState(() {
+                                                            print(
+                                                                'Value::  $value');
+                                                          });
+                                                        },
+                                                        children: countryList!
+                                                            .map((e) {
+                                                          return Text(
+                                                            e.name,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          );
+                                                        }).toList()),
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                        },
+                                      );
+                                    }),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].addressPostalCodeText,
+                                index == 0
+                                    ? ld!.value!.addressPostalCodeTextEn
+                                        .toString()
+                                    : ld!.value!.addressPostalCodeTextNl
+                                        .toString(),
                                 style: TextStyle(
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
@@ -1421,7 +1759,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               ),
                             ),
                             buildtextfields(
-                                hint: ld!.value[index].addressPostalCodeText,
+                                hint: index == 0
+                                    ? ld!.value!.addressPostalCodeTextEn
+                                        .toString()
+                                    : ld!.value!.addressPostalCodeTextNl
+                                        .toString(),
                                 controller: postalCodeController,
                                 context: context),
                             Padding(
@@ -1429,7 +1771,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   top: displayHeight(context) * 0.02,
                                   bottom: displayHeight(context) * 0.01),
                               child: Text(
-                                ld!.value[index].addressTypeText,
+                                index == 0
+                                    ? ld!.value!.addressTypeTextEn.toString()
+                                    : ld!.value!.addressTypeTextNl.toString(),
                                 style: TextStyle(
                                     color: Color(0xff010001),
                                     fontSize: displayWidth(context) * 0.05,
@@ -1440,7 +1784,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               padding: EdgeInsets.only(
                                   bottom: displayWidth(context) * 0.13),
                               child: buildtextfields(
-                                  hint: ld!.value[index].addressTypeText,
+                                  hint: index == 0
+                                      ? ld!.value!.addressTypeTextEn.toString()
+                                      : ld!.value!.addressTypeTextNl.toString(),
                                   controller: companyOptionalController,
                                   context: context),
                             ),
@@ -1465,10 +1811,28 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   margin: EdgeInsets.only(top: displayHeight(context) * 0.03),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BadgeScreen()));
+                      print('sdvgds');
+                      getData().then((value) {
+                        updateUserDataAPI(
+                                email: emailController.text,
+                                name: firstNameController.text,
+                                birthdate: birthdate,
+                                countryCode: 'in',
+                                currentDate: currentDate,
+                                gender: genderController.text,
+                                generalPermission: true,
+                                id: value,
+                                languageCode: 'en',
+                                lastName: lastNameController.text,
+                                middleName: middleNameController.text,
+                                option: true)
+                            .then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BadgeScreen()));
+                        });
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xFF88b14a),
@@ -1476,7 +1840,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                           borderRadius: BorderRadius.circular(0.0)),
                     ),
                     child: Text(
-                      ld!.value[index].saveButtonText,
+                      index == 0
+                          ? ld!.value!.saveButtonTextEn.toString()
+                          : ld!.value!.saveButtonTextNl.toString(),
                       style: TextStyle(
                           fontSize: displayWidth(context) * 0.05,
                           color: Color(0xfffcfdfd),

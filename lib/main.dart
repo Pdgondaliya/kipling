@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,8 +15,11 @@ import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/splash_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/module/welcome_model.dart';
 import 'package:kipling/ui/login_screen.dart';
+import 'package:kipling/ui/voucher_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Database/db_data.dart';
 import 'Database/db_helper.dart';
 
@@ -31,6 +35,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Kipling',
+      builder: BotToastInit(),
+      navigatorObservers: [BotToastNavigatorObserver()],
+
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -52,6 +59,7 @@ class MyHomePage extends StatefulWidget {
 Future<b.BadgeData>? badgeData;
 Future<c.CountryPickerModel>? futureCountryPickerDataAlbum;
 late Future<PersonalDetailData> futurePersonDataAlbum;
+late Future<VoucherModel> futureVoucherDataAlbum;
 Future<WelComeScreenModel>? futureWelComeScreenAlbum;
 Future<ForgotPasswordModel>? futureForgotPasswordAlbum;
 Future<ForgotPasswordConfirmationModel>? futureForgotPassworConfirmationAlbum;
@@ -63,14 +71,17 @@ List<c.Value>? countryList;
 List<WelComeScreenModel>? welComeScreenList;
 List<ForgotPasswordModel>? forgotPasswordList;
 List<ForgotPasswordConfirmationModel>? forgotPasswordConfirmationList;
+List<VoucherModel>? voucherModellist;
 
 PersonalDetailData? personalDetailData;
 WelComeScreenModel? welcomeData;
 ForgotPasswordModel? forgotPasswordData;
 ForgotPasswordConfirmationModel? forgotPasswordConfirmationData;
+VoucherModel? voucherData;
 
 List<b.Content>? contents;
 List<Todo> personalDataList = [];
+List<VoucherModel> voucherDataList = [];
 List<PersonalDetailData> personalList = [];
 List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
 List<b.FinalBadgeModel> finalBadgeModel = [];
@@ -97,7 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
     futureCretaeAccountAlbum = fetchCreateAccountData();
     futureCountryPickerDataAlbum = fetchCountryListData();
     futureForgotPasswordAlbum = fetchForgotPasswordData();
-    futureForgotPassworConfirmationAlbum = fetchForgotPasswordConfirmationData();
+    futureVoucherDataAlbum = fetchVoucherData();
+    futureForgotPassworConfirmationAlbum =
+        fetchForgotPasswordConfirmationData();
     futureWelComeScreenAlbum = fetchWelComeData();
     badgeData = fetchBadgeData();
     print("initState");
@@ -142,15 +155,17 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Login Data --->" + logindata.toString());
         print("Personal Data --->" + personalDetailData.toString());
         if (logindata != null &&
-            personalDetailData != null /*&&
-            createAccountData != null*/) {
+                personalDetailData !=
+                    null /*&&
+            createAccountData != null*/
+            ) {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => login_screen(
-                        // ld: logindata,
-                        // personalDetailData: personalDetailData,
-                        // createAccountModel: createAccountData,
+                      // ld: logindata,
+                      // personalDetailData: personalDetailData,
+                      // createAccountModel: createAccountData,
                       )));
           _timer.cancel();
         }
@@ -206,7 +221,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //ForgotPasswordConfirmation API
-  Future<ForgotPasswordConfirmationModel> fetchForgotPasswordConfirmationData() async {
+  Future<ForgotPasswordConfirmationModel>
+      fetchForgotPasswordConfirmationData() async {
     var response = await http.get(
       Uri.parse(
           'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=forgot_password_confirmation'),
@@ -218,7 +234,8 @@ class _MyHomePageState extends State<MyHomePage> {
     print(responseJson);
     if (response.statusCode == 200) {
       setState(() {
-        forgotPasswordConfirmationData = ForgotPasswordConfirmationModel.fromJson(responseJson[0]);
+        forgotPasswordConfirmationData =
+            ForgotPasswordConfirmationModel.fromJson(responseJson[0]);
       });
 
       return ForgotPasswordConfirmationModel.fromJson(responseJson[0]);
@@ -227,6 +244,29 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  //VoucherData API
+  Future<VoucherModel>
+  fetchVoucherData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=voucher'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("voucherData:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {
+        voucherData =
+            VoucherModel.fromJson(responseJson[0]);
+      });
+
+      return VoucherModel.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
 
   //Welcome API
   Future<WelComeScreenModel> fetchWelComeData() async {
@@ -243,7 +283,6 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         welcomeData = WelComeScreenModel.fromJson(responseJson[0]);
       });
-
 
       return WelComeScreenModel.fromJson(responseJson[0]);
     } else {
@@ -369,65 +408,64 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          Stack(
-        children: [
-          Image.asset(
-            'assets/images/splash_background.jpg',
-            fit: BoxFit.cover,
-            width: displayWidth(context),
-            height: displayHeight(context),
+        body: Stack(
+      children: [
+        Image.asset(
+          'assets/images/splash_background.jpg',
+          fit: BoxFit.cover,
+          width: displayWidth(context),
+          height: displayHeight(context),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: displayHeight(context) * 0.05,
           ),
-          Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: displayHeight(context) * 0.05,
+          child: Center(
+            child: Image.asset(
+              'assets/images/logo_white.png',
+              fit: BoxFit.cover,
             ),
-            child: Center(
-              child: Image.asset(
-                'assets/images/logo_white.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-          )
-        ],
-      )
-      //
-      //     FutureBuilder<Splashdata>(
-      //   future: futureAlbum,
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasData) {
-      //       return _buildPosts(snapshot.data!.value.bgImageUrl,
-      //           snapshot.data!.value.logoImageUrl);
-      //     } else if (snapshot.hasError) {
-      //       return SnackBar(
-      //         margin: EdgeInsets.only(bottom: displayHeight(context) * 0.02),
-      //         duration: Duration(seconds: 2),
-      //         content: const Text('Something went wrong'),
-      //       );
-      //     }
-      //     // By default, show a loading spinner.
-      //     // return centerProgressBar(radius: 40, dotRadius: 12);
-      //     return Center(
-      //       child: Container(
-      //         margin: EdgeInsets.symmetric(
-      //           horizontal: displayHeight(context) * 0.05,
-      //         ),
-      //         child: Image.asset(
-      //           'assets/images/splash_logo.png',
-      //           color: Colors.black,
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // ),
-    );
+          ),
+        )
+      ],
+    )
+        //
+        //     FutureBuilder<Splashdata>(
+        //   future: futureAlbum,
+        //   builder: (context, snapshot) {
+        //     if (snapshot.hasData) {
+        //       return _buildPosts(snapshot.data!.value.bgImageUrl,
+        //           snapshot.data!.value.logoImageUrl);
+        //     } else if (snapshot.hasError) {
+        //       return SnackBar(
+        //         margin: EdgeInsets.only(bottom: displayHeight(context) * 0.02),
+        //         duration: Duration(seconds: 2),
+        //         content: const Text('Something went wrong'),
+        //       );
+        //     }
+        //     // By default, show a loading spinner.
+        //     // return centerProgressBar(radius: 40, dotRadius: 12);
+        //     return Center(
+        //       child: Container(
+        //         margin: EdgeInsets.symmetric(
+        //           horizontal: displayHeight(context) * 0.05,
+        //         ),
+        //         child: Image.asset(
+        //           'assets/images/splash_logo.png',
+        //           color: Colors.black,
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // ),
+        );
   }
 
   void updatedata() {
     print("updatedata");
     DatabaseHelper.instance.queryAllRows().then((value) {
       setState(() {
-        value.forEach((element) {
+        value.forEach((element) async {
           taskList
               .add(Todo(id: element['id'], jsonString: element["jsonString"]));
           personalDataList
@@ -448,6 +486,11 @@ class _MyHomePageState extends State<MyHomePage> {
             if (responseJson[i]['name'] == 'login') {
               print("${responseJson[i]['value']}");
               logindata = Logindata.fromJson(responseJson[i]);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString('fusionAuthId',
+                  logindata!.value![0].fusionauthApplicationId.toString());
+              print(
+                  'Login Fusion Auth Id: ${logindata!.value![0].fusionauthApplicationId}');
               print("Login:${logindata!.name}");
             }
           }

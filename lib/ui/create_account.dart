@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/custom_widget/text_field.dart';
@@ -14,6 +15,7 @@ import 'package:kipling/module/fusion_auth_register_model.dart';
 import 'package:kipling/module/register_user_model.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:kipling/ui/welcome_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateAccount extends StatefulWidget {
   // CreateAccount({this.createAccountModel});
@@ -68,7 +70,7 @@ class _CreateAccountState extends State<CreateAccount> {
       bool? isOption,
       bool? isGeneral,
       String? identifier}) async {
-    isLoader = true;
+    showLoader();
     var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
     var options = BaseOptions(
         baseUrl: 'https://api-mobile-app-staging.loyalty-cloud.com/v1/',
@@ -76,42 +78,39 @@ class _CreateAccountState extends State<CreateAccount> {
     _dio.options = options;
     try {
       Response response = await _dio.post(
-        "customers-service/customers?name=$name&middle_name=$mName&last_name=$lName&birth_date=$dob&language_code=$languageCode&email_address=$emailAddress&primary=$emailPrimary&optin=$isOption&general_permission=$isGeneral&type=AUTH&identifier=$identifier&status=Active",
-        // data: {
-        //   "name": name,
-        //   "middle_name": mName,
-        //   "last_name": lName,
-        //   "birth_date": dob, //"1988-01-21T00:00:00Z"
-        //   "language_code": languageCode,
-        //   "emails": [
-        //     {"email_address": emailAddress, "primary": emailPrimary}
-        //   ],
-        //   "optin": isOption,
-        //   "general_permission": isGeneral,
-        //   "program_identifiers": [
-        //     {"type": "Auth", "identifier": identifier, "status": "Active"}
-        //   ]
-        // },
+        "customers-service/customers",
+        data: {
+          "name": name,
+          "middle_name": mName,
+          "last_name": lName,
+          "birth_date": dob, //"1988-01-21T00:00:00Z"
+          "language_code": languageCode,
+          "emails": [
+            {"email_address": emailAddress, "primary": emailPrimary}
+          ],
+          "optin": isOption,
+          "general_permission": isGeneral,
+          "program_identifiers": [
+            {"type": "Auth", "identifier": identifier, "status": "Active"}
+          ]
+        },
       );
-      isLoader = false;
-      // Fluttertoast.showToast(
-      //     msg: 'Registered Successfully',
-      //     gravity: ToastGravity.BOTTOM,
-      //     backgroundColor: Colors.black);
       Fluttertoast.showToast(
           msg: 'Account Created Successfully',
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.black);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
+      hideLoader();
       return RegisterUserModel.fromJson(response.data);
     } on DioError catch (e) {
-      isLoader = false;
+      hideLoader();
       if (e.response != null) {
         var errorData = jsonDecode(e.response.toString());
         var errorMessage = errorData["message"];
         throw Exception(errorMessage);
       } else {
-        isLoader = false;
+        hideLoader();
         throw SocketException("");
       }
     }
@@ -119,6 +118,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Future<FusionAuthRegisterModel> fusionAuthRegister(
       String emailAddress, String password) async {
+    showLoader();
     var headerMap = {
       "Authorization":
           'YmA9D5ju96N_rrBJsGDfKSS3nPuqYxXZp_2qUeYwWinD1eDC4TtriBTS'
@@ -128,20 +128,24 @@ class _CreateAccountState extends State<CreateAccount> {
         headers: headerMap);
     _dio.options = options;
     try {
-      Response response =
-          await _dio.get("api/user?email=sfan0727@m-wise.nl&password=1qaz@WSX");
+      Response response = await _dio.post("api/user", data: {
+        "user": {"email": emailAddress, "password": password}
+      });
       // Fluttertoast.showToast(
       //     msg: 'Account Created Successfully',
       //     gravity: ToastGravity.BOTTOM,
       //     backgroundColor: Colors.black);
       // Navigator.pop(context);
+      hideLoader();
       return FusionAuthRegisterModel.fromJson(response.data);
     } on DioError catch (e) {
+      hideLoader();
       if (e.response != null) {
         var errorData = jsonDecode(e.response.toString());
         // var errorMessage = errorData["message"];
         throw Exception(errorData);
       } else {
+        hideLoader();
         var errorData = jsonDecode(e.response.toString());
         throw SocketException(errorData);
       }
@@ -872,16 +876,22 @@ class _CreateAccountState extends State<CreateAccount> {
                                   .then((value) {
                                 print('id: ${value.user!.id.toString()}');
                                 createAccountAPI(
-                                    dob: finalDate,
-                                    emailAddress: emailController.text,
-                                    emailPrimary: true,
-                                    isGeneral: privacyPolicy,
-                                    isOption: snUpNews,
-                                    languageCode: languageCode,
-                                    lName: lNameController.text,
-                                    mName: mNameController.text,
-                                    name: fNameController.text,
-                                    identifier: value.user!.id.toString());
+                                        dob: finalDate,
+                                        emailAddress: emailController.text,
+                                        emailPrimary: true,
+                                        isGeneral: privacyPolicy,
+                                        isOption: snUpNews,
+                                        languageCode: languageCode,
+                                        lName: lNameController.text,
+                                        mName: mNameController.text,
+                                        name: fNameController.text,
+                                        identifier: value.user!.id.toString())
+                                    .then((value) async {
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  prefs.setString('id', value!.id.toString());
+                                  print('id:::: ${prefs.getString('id')}');
+                                });
                               });
                               // createAccountAPI(
                               //         dob: finalDate,

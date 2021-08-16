@@ -1,258 +1,357 @@
+// To parse this JSON data, do
+//
+//     final personalDetailData = personalDetailDataFromJson(jsonString);
+
 import 'dart:convert';
 
-List<PersonalDetailData> personalDetailDataFromJson(String str) =>
-    List<PersonalDetailData>.from(
-        json.decode(str).map((x) => PersonalDetailData.fromJson(x)));
+List<PersonalDetailData> personalDetailDataFromJson(String str) => List<PersonalDetailData>.from(json.decode(str).map((x) => PersonalDetailData.fromJson(x)));
 
-String personalDetailDataToJson(List<PersonalDetailData> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String personalDetailDataToJson(List<PersonalDetailData> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class PersonalDetailData {
-  int id;
-  String name;
-  List<Value> value;
-  AtedBy createdBy;
-  AtedBy updatedBy;
-  String createdAt;
-  String updatedAt;
+  PersonalDetailData({
+    this.id,
+    this.name,
+    this.value,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-  PersonalDetailData({required this.id,
-    required this.name,
-    required this.value,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.createdAt,
-    required this.updatedAt});
+  int? id;
+  String? name;
+  Value? value;
+  AtedBy? createdBy;
+  AtedBy? updatedBy;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
-  factory PersonalDetailData.fromJson(Map<String, dynamic> json) =>
-      PersonalDetailData(
-        id: json["id"],
-        name: json["name"],
-        value: List<Value>.from(json["value"].map((x) => Value.fromJson(x))),
-        createdBy: AtedBy.fromJson(json["created_by"]),
-        updatedBy: AtedBy.fromJson(json["updated_by"]),
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
+  factory PersonalDetailData.fromJson(Map<String, dynamic> json) => PersonalDetailData(
+    id: json["id"],
+    name: json["name"],
+    value: Value.fromJson(json["value"]),
+    createdBy: AtedBy.fromJson(json["created_by"]),
+    updatedBy: AtedBy.fromJson(json["updated_by"]),
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
 
-  Map<String, dynamic> toJson() =>
-      {
-        "id": id,
-        "name": name,
-        "value": List<dynamic>.from(value.map((x) => x.toJson())),
-        "created_by": createdBy.toJson(),
-        "updated_by": updatedBy.toJson(),
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-      };
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "value": value!.toJson(),
+    "created_by": createdBy!.toJson(),
+    "updated_by": updatedBy!.toJson(),
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
+  };
 }
 
 class AtedBy {
   AtedBy({
-    required this.id,
-    required this.firstname,
-    required this.lastname,
-    required this.username,
+    this.id,
+    this.firstname,
+    this.lastname,
+    this.username,
   });
 
-  int id;
-  String firstname;
-  String lastname;
-  dynamic username;
+  int? id;
+  String? firstname;
+  String? lastname;
+  dynamic? username;
 
-  factory AtedBy.fromJson(Map<String, dynamic> json) =>
-      AtedBy(
-        id: json["id"],
-        firstname: json["firstname"],
-        lastname: json["lastname"],
-        username: json["username"],
-      );
+  factory AtedBy.fromJson(Map<String, dynamic> json) => AtedBy(
+    id: json["id"],
+    firstname: json["firstname"],
+    lastname: json["lastname"],
+    username: json["username"],
+  );
 
-  Map<String, dynamic> toJson() =>
-      {
-        "id": id,
-        "firstname": firstname,
-        "lastname": lastname,
-        "username": username,
-      };
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "firstname": firstname,
+    "lastname": lastname,
+    "username": username,
+  };
 }
 
 class Value {
-  String optinText;
-  String titleText;
-  String genderText;
-  String countryText;
-  String birthdayText;
-  String languageCode;
-  String languageText;
-  bool optinEnabled;
-  bool genderEnabled;
-  String lastNameText;
-  bool addressEnabled;
-  bool countryEnabled;
-  String firstNameText;
-  String optinDescText;
-  bool languageEnabled;
-  String middleNameText;
-  String saveButtonText;
-  String addressCityText;
-  String addressTypeText;
-  String phoneNumberText;
-  String addressStateText;
-  String addressTitleText;
-  String emailAddressText;
-  String addressLine1Text;
-  bool middleNameEnabled;
-  bool addressCityEnabled;
-  String addressCountryText;
-  bool addressTypeEnabled;
-  String deleteCustomerText;
-  bool phoneNumberEnabled;
-  bool addressStateEnabled;
-  bool addressLine1Enabled;
-  bool addressCountryEnabled;
-  String contactInfoTitleText;
-  String addressPostalCodeText;
-  String personalInfoTitleText;
-  String addressHouseNumberText;
-  bool addressPostalCodeEnabled;
-  bool addressHouseNumberEnabled;
-  String profilePicturePlaceholderUrl;
-  String addressHouseNumberSuffixText;
-  bool addressHouseNumberSuffixEnabled;
+  Value({
+    this.optinEnabled,
+    this.optinTextEn,
+    this.optinTextNl,
+    this.titleTextEn,
+    this.titleTextNl,
+    this.genderEnabled,
+    this.genderTextEn,
+    this.genderTextNl,
+    this.addressEnabled,
+    this.countryEnabled,
+    this.countryTextEn,
+    this.countryTextNl,
+    this.birthdayTextEn,
+    this.birthdayTextNl,
+    this.languageEnabled,
+    this.languageTextEn,
+    this.languageTextNl,
+    this.lastNameTextEn,
+    this.lastNameTextNl,
+    this.firstNameTextEn,
+    this.firstNameTextNl,
+    this.optinDescTextEn,
+    this.optinDescTextNl,
+    this.middleNameEnabled,
+    this.middleNameTextEn,
+    this.middleNameTextNl,
+    this.saveButtonTextEn,
+    this.saveButtonTextNl,
+    this.addressCityEnabled,
+    this.addressCityTextEn,
+    this.addressCityTextNl,
+    this.addressTypeEnabled,
+    this.addressTypeTextEn,
+    this.addressTypeTextNl,
+    this.phoneNumberEnabled,
+    this.phoneNumberTextEn,
+    this.phoneNumberTextNl,
+    this.addressStateEnabled,
+    this.addressStateTextEn,
+    this.addressStateTextNl,
+    this.addressTitleTextEn,
+    this.addressTitleTextNl,
+    this.emailAddressTextEn,
+    this.emailAddressTextNl,
+    this.addressLine1Enabled,
+    this.addressLine1TextEn,
+    this.addressLine1TextNl,
+    this.addressCountryEnabled,
+    this.addressCountryTextEn,
+    this.addressCountryTextNl,
+    this.deleteCustomerTextEn,
+    this.deleteCustomerTextNl,
+    this.contactInfoTitleTextEn,
+    this.contactInfoTitleTextNl,
+    this.addressPostalCodeEnabled,
+    this.addressPostalCodeTextEn,
+    this.addressPostalCodeTextNl,
+    this.personalInfoTitleTextEn,
+    this.personalInfoTitleTextNl,
+    this.addressHouseNumberEnabled,
+    this.addressHouseNumberTextEn,
+    this.addressHouseNumberTextNl,
+    this.profilePicturePlaceholderUrlEn,
+    this.profilePicturePlaceholderUrlNl,
+    this.addressHouseNumberSuffixEnabled,
+    this.addressHouseNumberSuffixTextEn,
+    this.addressHouseNumberSuffixTextNl,
+  });
 
-  Value({required this.addressCityEnabled,
-    required this.addressCityText,
-    required this.addressCountryEnabled,
-    required this.addressCountryText,
-    required this.addressEnabled,
-    required this.addressHouseNumberEnabled,
-    required this.addressHouseNumberSuffixEnabled,
-    required this.addressHouseNumberSuffixText,
-    required this.addressHouseNumberText,
-    required this.addressLine1Enabled,
-    required this.addressLine1Text,
-    required this.addressPostalCodeEnabled,
-    required this.addressPostalCodeText,
-    required this.addressStateEnabled,
-    required this.addressStateText,
-    required this.addressTitleText,
-    required this.addressTypeEnabled,
-    required this.addressTypeText,
-    required this.birthdayText,
-    required this.contactInfoTitleText,
-    required this.countryEnabled,
-    required this.countryText,
-    required this.deleteCustomerText,
-    required this.emailAddressText,
-    required this.firstNameText,
-    required this.genderEnabled,
-    required this.genderText,
-    required this.languageCode,
-    required this.languageEnabled,
-    required this.languageText,
-    required this.lastNameText,
-    required this.middleNameEnabled,
-    required this.middleNameText,
-    required this.optinDescText,
-    required this.optinEnabled,
-    required this.optinText,
-    required this.personalInfoTitleText,
-    required this.phoneNumberEnabled,
-    required this.phoneNumberText,
-    required this.profilePicturePlaceholderUrl,
-    required this.saveButtonText,
-    required this.titleText});
+  bool? optinEnabled;
+  String? optinTextEn;
+  String? optinTextNl;
+  String? titleTextEn;
+  String? titleTextNl;
+  bool? genderEnabled;
+  String? genderTextEn;
+  String? genderTextNl;
+  bool? addressEnabled;
+  bool? countryEnabled;
+  String? countryTextEn;
+  String? countryTextNl;
+  String? birthdayTextEn;
+  String? birthdayTextNl;
+  bool? languageEnabled;
+  String? languageTextEn;
+  String? languageTextNl;
+  String? lastNameTextEn;
+  String? lastNameTextNl;
+  String? firstNameTextEn;
+  String? firstNameTextNl;
+  String? optinDescTextEn;
+  String? optinDescTextNl;
+  bool? middleNameEnabled;
+  String? middleNameTextEn;
+  String? middleNameTextNl;
+  String? saveButtonTextEn;
+  String? saveButtonTextNl;
+  bool? addressCityEnabled;
+  String? addressCityTextEn;
+  String? addressCityTextNl;
+  bool? addressTypeEnabled;
+  String? addressTypeTextEn;
+  String? addressTypeTextNl;
+  bool? phoneNumberEnabled;
+  String? phoneNumberTextEn;
+  String? phoneNumberTextNl;
+  bool? addressStateEnabled;
+  String? addressStateTextEn;
+  String? addressStateTextNl;
+  String? addressTitleTextEn;
+  String? addressTitleTextNl;
+  String? emailAddressTextEn;
+  String? emailAddressTextNl;
+  bool? addressLine1Enabled;
+  String? addressLine1TextEn;
+  String? addressLine1TextNl;
+  bool? addressCountryEnabled;
+  String? addressCountryTextEn;
+  String? addressCountryTextNl;
+  String? deleteCustomerTextEn;
+  String? deleteCustomerTextNl;
+  String? contactInfoTitleTextEn;
+  String? contactInfoTitleTextNl;
+  bool? addressPostalCodeEnabled;
+  String? addressPostalCodeTextEn;
+  String? addressPostalCodeTextNl;
+  String? personalInfoTitleTextEn;
+  String? personalInfoTitleTextNl;
+  bool? addressHouseNumberEnabled;
+  String? addressHouseNumberTextEn;
+  String? addressHouseNumberTextNl;
+  String? profilePicturePlaceholderUrlEn;
+  String? profilePicturePlaceholderUrlNl;
+  bool? addressHouseNumberSuffixEnabled;
+  String? addressHouseNumberSuffixTextEn;
+  String? addressHouseNumberSuffixTextNl;
 
-  factory Value.fromJson(Map<String, dynamic> json) =>
-      Value(
-          addressCityEnabled: json['address_city_enabled'],
-          addressCityText: json['address_city_text'],
-          addressCountryEnabled: json['address_country_enabled'],
-          addressCountryText: json['address_country_text'],
-          addressEnabled: json['address_enabled'],
-          addressHouseNumberEnabled: json['address_house_number_enabled'],
-          addressHouseNumberSuffixEnabled:
-          json['address_house_number_suffix_enabled'],
-          addressHouseNumberSuffixText: json['address_house_number_suffix_text'],
-          addressHouseNumberText: json['address_house_number_text'],
-          addressLine1Enabled: json['address_line_1_enabled'],
-          addressLine1Text: json['address_line_1_text'],
-          addressPostalCodeEnabled: json['address_postal_code_enabled'],
-          addressPostalCodeText: json['address_postal_code_text'],
-          addressStateEnabled: json['address_state_enabled'],
-          addressStateText: json['address_state_text'],
-          addressTitleText: json['address_title_text'],
-          addressTypeEnabled: json['address_type_enabled'],
-          addressTypeText: json['address_type_text'],
-          birthdayText: json['birthday_text'],
-          contactInfoTitleText: json['contact_info_title_text'],
-          countryEnabled: json['country_enabled'],
-          countryText: json['country_text'],
-          deleteCustomerText: json['delete_customer_text'],
-          emailAddressText: json['email_address_text'],
-          firstNameText: json['first_name_text'],
-          genderEnabled: json['gender_enabled'],
-          genderText: json['gender_text'],
-          languageCode: json['language_code'],
-          languageEnabled: json['language_enabled'],
-          languageText: json['language_text'],
-          lastNameText: json['last_name_text'],
-          middleNameEnabled: json['middle_name_enabled'],
-          middleNameText: json['middle_name_text'],
-          optinDescText: json['optin_desc_text'],
-          optinEnabled: json['optin_enabled'],
-          optinText: json['optin_text'],
-          personalInfoTitleText: json['personal_info_title_text'],
-          phoneNumberEnabled: json['phone_number_enabled'],
-          phoneNumberText: json['phone_number_text'],
-          profilePicturePlaceholderUrl: json['profile_picture_placeholder_url'],
-          saveButtonText: json['save_button_text'],
-          titleText: json['title_text']);
+  factory Value.fromJson(Map<String, dynamic> json) => Value(
+    optinEnabled: json["optin_enabled"],
+    optinTextEn: json["optin_text_en"],
+    optinTextNl: json["optin_text_nl"],
+    titleTextEn: json["title_text_en"],
+    titleTextNl: json["title_text_nl"],
+    genderEnabled: json["gender_enabled"],
+    genderTextEn: json["gender_text_en"],
+    genderTextNl: json["gender_text_nl"],
+    addressEnabled: json["address_enabled"],
+    countryEnabled: json["country_enabled"],
+    countryTextEn: json["country_text_en"],
+    countryTextNl: json["country_text_nl"],
+    birthdayTextEn: json["birthday_text_en"],
+    birthdayTextNl: json["birthday_text_nl"],
+    languageEnabled: json["language_enabled"],
+    languageTextEn: json["language_text_en"],
+    languageTextNl: json["language_text_nl"],
+    lastNameTextEn: json["last_name_text_en"],
+    lastNameTextNl: json["last_name_text_nl"],
+    firstNameTextEn: json["first_name_text_en"],
+    firstNameTextNl: json["first_name_text_nl"],
+    optinDescTextEn: json["optin_desc_text_en"],
+    optinDescTextNl: json["optin_desc_text_nl"],
+    middleNameEnabled: json["middle_name_enabled"],
+    middleNameTextEn: json["middle_name_text_en"],
+    middleNameTextNl: json["middle_name_text_nl"],
+    saveButtonTextEn: json["save_button_text_en"],
+    saveButtonTextNl: json["save_button_text_nl"],
+    addressCityEnabled: json["address_city_enabled"],
+    addressCityTextEn: json["address_city_text_en"],
+    addressCityTextNl: json["address_city_text_nl"],
+    addressTypeEnabled: json["address_type_enabled"],
+    addressTypeTextEn: json["address_type_text_en"],
+    addressTypeTextNl: json["address_type_text_nl"],
+    phoneNumberEnabled: json["phone_number_enabled"],
+    phoneNumberTextEn: json["phone_number_text_en"],
+    phoneNumberTextNl: json["phone_number_text_nl"],
+    addressStateEnabled: json["address_state_enabled"],
+    addressStateTextEn: json["address_state_text_en"],
+    addressStateTextNl: json["address_state_text_nl"],
+    addressTitleTextEn: json["address_title_text_en"],
+    addressTitleTextNl: json["address_title_text_nl"],
+    emailAddressTextEn: json["email_address_text_en"],
+    emailAddressTextNl: json["email_address_text_nl"],
+    addressLine1Enabled: json["address_line_1_enabled"],
+    addressLine1TextEn: json["address_line_1_text_en"],
+    addressLine1TextNl: json["address_line_1_text_nl"],
+    addressCountryEnabled: json["address_country_enabled"],
+    addressCountryTextEn: json["address_country_text_en"],
+    addressCountryTextNl: json["address_country_text_nl"],
+    deleteCustomerTextEn: json["delete_customer_text_en"],
+    deleteCustomerTextNl: json["delete_customer_text_nl"],
+    contactInfoTitleTextEn: json["contact_info_title_text_en"],
+    contactInfoTitleTextNl: json["contact_info_title_text_nl"],
+    addressPostalCodeEnabled: json["address_postal_code_enabled"],
+    addressPostalCodeTextEn: json["address_postal_code_text_en"],
+    addressPostalCodeTextNl: json["address_postal_code_text_nl"],
+    personalInfoTitleTextEn: json["personal_info_title_text_en"],
+    personalInfoTitleTextNl: json["personal_info_title_text_nl"],
+    addressHouseNumberEnabled: json["address_house_number_enabled"],
+    addressHouseNumberTextEn: json["address_house_number_text_en"],
+    addressHouseNumberTextNl: json["address_house_number_text_nl"],
+    profilePicturePlaceholderUrlEn: json["profile_picture_placeholder_url_en"],
+    profilePicturePlaceholderUrlNl: json["profile_picture_placeholder_url_nl"],
+    addressHouseNumberSuffixEnabled: json["address_house_number_suffix_enabled"],
+    addressHouseNumberSuffixTextEn: json["address_house_number_suffix_text_en"],
+    addressHouseNumberSuffixTextNl: json["address_house_number_suffix_text_nl"],
+  );
 
-  Map<String, dynamic> toJson() =>
-      {
-        'address_city_enabled': addressCityEnabled,
-        'address_city_text': addressCityText,
-        'address_country_enabled': addressCountryEnabled,
-        'address_country_text': addressCountryText,
-        'address_enabled': addressEnabled,
-        'address_house_number_enabled': addressHouseNumberEnabled,
-        'address_house_number_suffix_enabled': addressHouseNumberSuffixEnabled,
-        'address_house_number_suffix_text': addressHouseNumberSuffixText,
-        'address_house_number_text': addressHouseNumberText,
-        'address_line_1_enabled': addressLine1Enabled,
-        'address_line_1_text': addressLine1Text,
-        'address_postal_code_enabled': addressPostalCodeEnabled,
-        'address_postal_code_text': addressPostalCodeText,
-        'address_state_enabled': addressStateEnabled,
-        'address_state_text': addressStateText,
-        'address_title_text': addressTitleText,
-        'address_type_enabled': addressTypeEnabled,
-        'address_type_text': addressTypeText,
-        'birthday_text': birthdayText,
-        'contact_info_title_text': contactInfoTitleText,
-        'country_enabled': countryEnabled,
-        'country_text': countryText,
-        'delete_customer_text': deleteCustomerText,
-        'email_address_text': emailAddressText,
-        'first_name_text': firstNameText,
-        'gender_enabled': genderEnabled,
-        'gender_text': genderText,
-        'language_code': languageCode,
-        'language_enabled': languageEnabled,
-        'language_text': languageText,
-        'last_name_text': lastNameText,
-        'middle_name_enabled': middleNameEnabled,
-        'middle_name_text': middleNameText,
-        'optin_desc_text': optinDescText,
-        'optin_enabled': optinEnabled,
-        'optin_text': optinText,
-        'personal_info_title_text': personalInfoTitleText,
-        'phone_number_enabled': phoneNumberEnabled,
-        'phone_number_text': phoneNumberText,
-        'profile_picture_placeholder_url': profilePicturePlaceholderUrl,
-        'save_button_text': saveButtonText,
-        'title_text': titleText
-      };
+  Map<String, dynamic> toJson() => {
+    "optin_enabled": optinEnabled,
+    "optin_text_en": optinTextEn,
+    "optin_text_nl": optinTextNl,
+    "title_text_en": titleTextEn,
+    "title_text_nl": titleTextNl,
+    "gender_enabled": genderEnabled,
+    "gender_text_en": genderTextEn,
+    "gender_text_nl": genderTextNl,
+    "address_enabled": addressEnabled,
+    "country_enabled": countryEnabled,
+    "country_text_en": countryTextEn,
+    "country_text_nl": countryTextNl,
+    "birthday_text_en": birthdayTextEn,
+    "birthday_text_nl": birthdayTextNl,
+    "language_enabled": languageEnabled,
+    "language_text_en": languageTextEn,
+    "language_text_nl": languageTextNl,
+    "last_name_text_en": lastNameTextEn,
+    "last_name_text_nl": lastNameTextNl,
+    "first_name_text_en": firstNameTextEn,
+    "first_name_text_nl": firstNameTextNl,
+    "optin_desc_text_en": optinDescTextEn,
+    "optin_desc_text_nl": optinDescTextNl,
+    "middle_name_enabled": middleNameEnabled,
+    "middle_name_text_en": middleNameTextEn,
+    "middle_name_text_nl": middleNameTextNl,
+    "save_button_text_en": saveButtonTextEn,
+    "save_button_text_nl": saveButtonTextNl,
+    "address_city_enabled": addressCityEnabled,
+    "address_city_text_en": addressCityTextEn,
+    "address_city_text_nl": addressCityTextNl,
+    "address_type_enabled": addressTypeEnabled,
+    "address_type_text_en": addressTypeTextEn,
+    "address_type_text_nl": addressTypeTextNl,
+    "phone_number_enabled": phoneNumberEnabled,
+    "phone_number_text_en": phoneNumberTextEn,
+    "phone_number_text_nl": phoneNumberTextNl,
+    "address_state_enabled": addressStateEnabled,
+    "address_state_text_en": addressStateTextEn,
+    "address_state_text_nl": addressStateTextNl,
+    "address_title_text_en": addressTitleTextEn,
+    "address_title_text_nl": addressTitleTextNl,
+    "email_address_text_en": emailAddressTextEn,
+    "email_address_text_nl": emailAddressTextNl,
+    "address_line_1_enabled": addressLine1Enabled,
+    "address_line_1_text_en": addressLine1TextEn,
+    "address_line_1_text_nl": addressLine1TextNl,
+    "address_country_enabled": addressCountryEnabled,
+    "address_country_text_en": addressCountryTextEn,
+    "address_country_text_nl": addressCountryTextNl,
+    "delete_customer_text_en": deleteCustomerTextEn,
+    "delete_customer_text_nl": deleteCustomerTextNl,
+    "contact_info_title_text_en": contactInfoTitleTextEn,
+    "contact_info_title_text_nl": contactInfoTitleTextNl,
+    "address_postal_code_enabled": addressPostalCodeEnabled,
+    "address_postal_code_text_en": addressPostalCodeTextEn,
+    "address_postal_code_text_nl": addressPostalCodeTextNl,
+    "personal_info_title_text_en": personalInfoTitleTextEn,
+    "personal_info_title_text_nl": personalInfoTitleTextNl,
+    "address_house_number_enabled": addressHouseNumberEnabled,
+    "address_house_number_text_en": addressHouseNumberTextEn,
+    "address_house_number_text_nl": addressHouseNumberTextNl,
+    "profile_picture_placeholder_url_en": profilePicturePlaceholderUrlEn,
+    "profile_picture_placeholder_url_nl": profilePicturePlaceholderUrlNl,
+    "address_house_number_suffix_enabled": addressHouseNumberSuffixEnabled,
+    "address_house_number_suffix_text_en": addressHouseNumberSuffixTextEn,
+    "address_house_number_suffix_text_nl": addressHouseNumberSuffixTextNl,
+  };
 }
