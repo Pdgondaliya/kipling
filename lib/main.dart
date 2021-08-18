@@ -162,11 +162,11 @@ class _MyHomePageState extends State<MyHomePage> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => login_screen(
+                  builder: (context) => Voucher()/*login_screen(
                       // ld: logindata,
                       // personalDetailData: personalDetailData,
                       // createAccountModel: createAccountData,
-                      )));
+                      )*/));
           _timer.cancel();
         }
       });

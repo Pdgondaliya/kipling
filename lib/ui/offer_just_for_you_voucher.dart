@@ -8,6 +8,7 @@ import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/module/all_voucher_details_model.dart';
 import 'package:kipling/module/particular_voucher_details.dart';
 import 'package:kipling/module/voucher_model.dart';
+import 'package:kipling/ui/voucher_details.dart';
 
 class OfferJustForYouVoucherScreen extends StatefulWidget {
   @override
@@ -83,7 +84,9 @@ class _OfferJustForYouVoucherScreenState
                 image: value1.images![0].formats!.small!.url.toString(),
                 title: value.items![i].name.toString(),
                 subTitle: value.items![i].validityEndDate.toString(),
-                point: value.items![i].pointsNeeded.toString()));
+                point: value.items![i].pointsNeeded.toString(),
+                conditions: value1.conditions.toString(),
+                description: value1.description.toString()));
             print('customList: ${customVoucherModelList!.length}');
             print('sdgsdf ${customVoucherModelList![0].image}');
           });
@@ -104,38 +107,79 @@ class _OfferJustForYouVoucherScreenState
                 ? ListView.builder(
                     itemCount: customVoucherModelList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: [
-                          Container(
-                            height: displayWidth(context) * 0.6,
-                            width: displayWidth(context),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        customVoucherModelList[index]
-                                            .image
-                                            .toString()),
-                                    fit: BoxFit.cover)),
-                          ),
-                          Text(
-                            customVoucherModelList[index].title.toString() != 'null'
-                                ? customVoucherModelList[index].title.toString()
-                                : '',
-                            style: TextStyle(
-                                fontFamily: 'Kipling_Bold',
-                                fontSize: displayWidth(context) * 0.05,
-                                color: Colors.black),
-                          ),
-                          Text(
-                            customVoucherModelList[index].subTitle!.trim().toString() != 'null'
-                                ?customVoucherModelList[index].subTitle.toString() : '',
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: displayWidth(context) * 0.04,
-                                fontFamily: 'Kipling_Regular'),
-                          )
-                        ],
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VoucherDetails(
+                                      title: customVoucherModelList[index]
+                                          .title
+                                          .toString(),
+                                      image: customVoucherModelList[index]
+                                          .image
+                                          .toString(),
+                                      point: customVoucherModelList[index]
+                                          .point
+                                          .toString(),
+                                      conditions: customVoucherModelList[index]
+                                          .conditions
+                                          .toString(),
+                                      description: customVoucherModelList[index]
+                                          .description
+                                          .toString(),
+                                      validity: customVoucherModelList[index]
+                                                  .subTitle!
+                                                  .trim()
+                                                  .toString() !=
+                                              'null'
+                                          ? customVoucherModelList[index]
+                                              .subTitle
+                                              .toString()
+                                          : '',
+                                    ))),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: displayWidth(context) * 0.6,
+                              width: displayWidth(context),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          customVoucherModelList[index]
+                                              .image
+                                              .toString()),
+                                      fit: BoxFit.cover)),
+                            ),
+                            Text(
+                              customVoucherModelList[index].title.toString() !=
+                                      'null'
+                                  ? customVoucherModelList[index]
+                                      .title
+                                      .toString()
+                                  : '',
+                              style: TextStyle(
+                                  fontFamily: 'Kipling_Bold',
+                                  fontSize: displayWidth(context) * 0.05,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              customVoucherModelList[index]
+                                          .subTitle!
+                                          .trim()
+                                          .toString() !=
+                                      'null'
+                                  ? customVoucherModelList[index]
+                                      .subTitle
+                                      .toString()
+                                  : '',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: displayWidth(context) * 0.04,
+                                  fontFamily: 'Kipling_Regular'),
+                            )
+                          ],
+                        ),
                       );
                     })
                 : Center(

@@ -119,6 +119,14 @@ class CustomVoucherModel {
   String? title;
   String? subTitle;
   String? point;
+  String? conditions;
+  String? description;
 
-  CustomVoucherModel({this.image, this.title, this.subTitle, this.point});
+  CustomVoucherModel(
+      {this.image,
+      this.title,
+      this.subTitle,
+      this.point,
+      this.description,
+      this.conditions});
 }

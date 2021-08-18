@@ -16,6 +16,7 @@ import 'package:kipling/module/update_user_details_model.dart';
 import 'package:kipling/ui/badge_screen.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:dio/dio.dart' as d;
+import 'package:kipling/ui/voucher_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PersonalDetails extends StatefulWidget {
@@ -54,6 +55,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   String? currentDate;
   String? dob;
   String? id;
+  String? avatar_url;
 
   PersonalDetailData? ld;
 
@@ -230,48 +232,43 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     return preferences.getString('id');
   }
 
-//   Future<String?> uploadImage(int id) async {
-//     try {
-//       d.Response response;
-//
-//       d.FormData formData = new d.FormData.fromMap({'id': id});
-//       formData.files.add(
-//         MapEntry("avatar_url", await d.MultipartFile.fromFile(imageFile!.path)),
-//       );
-//
-//       response = await dio.post(
-//           'https://cms-mobile-app-staging.loyalty-cloud.com/upload?avatar_url=${imageFile!.path}&id=$id',
-//           options: d.Options(headers: {"content-type": 'application/json'}),
-//           data: formData);
-//       print('response --------> ${response.toString()}');
-//       if (response == null) {
-//         print('response ---null-----> ${response.statusMessage.toString()}');
-//         return null;
-//       } else if (response.statusCode == 200) {
-//         print(
-//             'response.statusMessage --------> ${response.statusMessage.toString()}');
-//         print("Response is---> ${response.data}");
-//         if (response.data['status'] == false) {
-//           print(" In status falseResponse is---> ${response.data}");
-// // return LoginResponse.fromJson(response.data);
-//         } else {
-//           print(
-//               'response. true response data --------> ${response.data.toString()}');
-// // SharedPreferences prefs=await SharedPreferences.getInstance();
-// // prefs.setString('UserId',response.data['data']['user_id'].toString() );
-//           return response.data['data']['user_id'].toString();
-//         }
-//       } else {
-//         print('12345555556 ------>${response.statusMessage.toString()}');
-//         print('22222222 ------>${response.statusCode.toString()}');
-//         throw new Exception(response.data);
-//       }
-//     } on d.DioError catch (e) {
-//       print('12345555556');
-//       print(e);
-// // throw handleError(e);
-//     }
-//   }
+  Future<String?> uploadImage() async {
+    showLoader();
+    try {
+      d.Response response;
+
+      d.FormData formData = d.FormData();
+      formData!.files.add(
+        MapEntry("files", await d.MultipartFile.fromFile(imageFile!.path)),
+      );
+
+      response = await dio.post(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/upload',
+          options: d.Options(headers: {
+            "content-type": 'application/json',
+            'token': '92902de1-9b9a-4dd3-817a-21100b21648f'
+          }),
+          data: formData);
+      hideLoader();
+      print('response --------> ${response.toString()}');
+      if (response == null) {
+        print('response ---null-----> ${response.statusMessage.toString()}');
+        return null;
+      } else if (response.statusCode == 200) {
+        print(
+            'response.statusMessage --------> ${response.statusMessage.toString()}');
+      } else {
+        print('12345555556 ------>${response.statusMessage.toString()}');
+        print('22222222 ------>${response.statusCode.toString()}');
+        throw new Exception(response.data);
+      }
+    } on d.DioError catch (e) {
+      hideLoader();
+      print('12345555556');
+      print(e);
+// throw handleError(e);
+    }
+  }
 
   @override
   void initState() {
@@ -289,6 +286,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   ? value.birthDate.toString().substring(0, 11)
                   : '';
           emailController.text = value.emails!.first.emailAddress.toString();
+          avatar_url = value.avatarUrl.toString();
 
           // DateTime dateOfBirth = DateTime.parse(birthDayController.text);
           //
@@ -448,6 +446,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             color: Color(0xff84847e),
           ),
         ),
+        actions: [
+          GestureDetector(
+            onTap: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Voucher())),
+          )
+        ],
         backgroundColor: Color(0xfffbfbfa),
         centerTitle: true,
         elevation: 0,
@@ -492,19 +496,24 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                   width: displayWidth(context) * 0.25,
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      image: imageFile!.path != ''
+                                      image: avatar_url != "" ||
+                                              avatar_url.toString() != 'null'
                                           ? DecorationImage(
-                                              image: FileImage(imageFile!))
-                                          : DecorationImage(
                                               image: NetworkImage(
-                                              index == 0
-                                                  ? ld!.value!
-                                                      .profilePicturePlaceholderUrlEn
-                                                      .toString()
-                                                  : ld!.value!
-                                                      .profilePicturePlaceholderUrlNl
-                                                      .toString(),
-                                            ))),
+                                                  avatar_url.toString()))
+                                          : imageFile!.path != ''
+                                              ? DecorationImage(
+                                                  image: FileImage(imageFile!))
+                                              : DecorationImage(
+                                                  image: NetworkImage(
+                                                  index == 0
+                                                      ? ld!.value!
+                                                          .profilePicturePlaceholderUrlEn
+                                                          .toString()
+                                                      : ld!.value!
+                                                          .profilePicturePlaceholderUrlNl
+                                                          .toString(),
+                                                ))),
                                   child: GestureDetector(onTap: () {
                                     showCupertinoModalPopup<void>(
                                       context: context,
@@ -1813,24 +1822,26 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     onPressed: () {
                       print('sdvgds');
                       getData().then((value) {
-                        updateUserDataAPI(
-                                email: emailController.text,
-                                name: firstNameController.text,
-                                birthdate: birthdate,
-                                countryCode: 'in',
-                                currentDate: currentDate,
-                                gender: genderController.text,
-                                generalPermission: true,
-                                id: value,
-                                languageCode: 'en',
-                                lastName: lastNameController.text,
-                                middleName: middleNameController.text,
-                                option: true)
-                            .then((value) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BadgeScreen()));
+                        uploadImage().then((value1) {
+                          updateUserDataAPI(
+                                  email: emailController.text,
+                                  name: firstNameController.text,
+                                  birthdate: birthdate,
+                                  countryCode: 'in',
+                                  currentDate: currentDate,
+                                  gender: genderController.text,
+                                  generalPermission: true,
+                                  id: value,
+                                  languageCode: 'en',
+                                  lastName: lastNameController.text,
+                                  middleName: middleNameController.text,
+                                  option: true)
+                              .then((value) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BadgeScreen()));
+                          });
                         });
                       });
                     },
