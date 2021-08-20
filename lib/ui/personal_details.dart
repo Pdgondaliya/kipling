@@ -516,12 +516,15 @@ class _PersonalDetailsState extends State<PersonalDetails> {
           ),
         ),
         actions: [
-          GestureDetector(
-            onTap: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Voucher())),
-            child: Icon(
-              Icons.add,
-              color: Colors.black,
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Voucher())),
+              child: Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
             ),
           )
         ],
