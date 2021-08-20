@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/welcome_model.dart';
 import 'package:kipling/ui/login_screen.dart';
@@ -24,6 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
       key: _scaffoldKey,
       body: ListView(

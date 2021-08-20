@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/text_field.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/forgot_password_model.dart';
@@ -62,6 +63,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

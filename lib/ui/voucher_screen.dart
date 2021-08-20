@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/module/voucher_reward_model.dart';
@@ -50,6 +51,7 @@ class _VoucherState extends State<Voucher> {
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return DefaultTabController(
         length: 2,
         child: Scaffold(

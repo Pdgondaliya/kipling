@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/create_account_model.dart';
@@ -220,6 +221,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
       key: _scaffoldKey,
       body: SingleChildScrollView(

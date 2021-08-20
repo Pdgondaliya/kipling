@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 
 class VoucherDetails extends StatefulWidget {
   String? title;
@@ -27,6 +28,7 @@ class VoucherDetails extends StatefulWidget {
 class _VoucherDetailsState extends State<VoucherDetails> {
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -63,7 +65,9 @@ class _VoucherDetailsState extends State<VoucherDetails> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(displayWidth(context) * 0.05),
+                padding: EdgeInsets.symmetric(
+                    vertical: displayWidth(context) * 0.05,
+                    horizontal: displayWidth(context) * 0.15),
                 child: Container(
                     width: displayWidth(context) - displayWidth(context) * 0.1,
                     height: displayWidth(context) * 0.50 -
@@ -75,7 +79,7 @@ class _VoucherDetailsState extends State<VoucherDetails> {
                             fit: BoxFit.cover)),
                     padding: EdgeInsets.only(
                         top: displayWidth(context) * 0.25,
-                        right: displayWidth(context) * 0.025),
+                        right: displayWidth(context) * 0.019),
                     alignment: Alignment.centerRight,
                     child: Container(
                       color: Color(0xff89b14b),
@@ -239,7 +243,8 @@ class _VoucherDetailsState extends State<VoucherDetails> {
             CupertinoDialogAction(
               child: Text(
                 'Activate',
-                style: TextStyle(fontFamily: 'Kipling_Regular', color: Color(0xff89b14b)),
+                style: TextStyle(
+                    fontFamily: 'Kipling_Regular', color: Color(0xff89b14b)),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/module/all_voucher_details_model.dart';
 import 'package:kipling/module/particular_voucher_details.dart';
 import 'package:kipling/module/voucher_model.dart';
@@ -72,7 +73,7 @@ class _OfferJustForYouVoucherScreenState
   @override
   void initState() {
     super.initState();
-    voucherRewardCommonAPI('a4038a6b-bbf0-4c9e-9a97-6d7bc085e1c3')
+    voucherRewardCommonAPI('9d6e27c8-eb6c-4571-9876-6b57c958872e')
         .then((value) {
       for (int i = 0; i < value.items!.length; i++) {
         print('Value: ${value.items![i].id}');
@@ -97,6 +98,7 @@ class _OfferJustForYouVoucherScreenState
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
         body: Padding(
             padding: EdgeInsets.only(

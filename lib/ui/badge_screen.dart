@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/ui/activated_badges.dart';
 import 'package:kipling/ui/all_badges.dart';
@@ -16,6 +17,7 @@ class BadgeScreen extends StatefulWidget {
 class _BadgeScreenState extends State<BadgeScreen> {
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/main.dart';
 
 class ActivatedBadges extends StatefulWidget {
@@ -21,6 +22,7 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
         body: GridView.builder(
             shrinkWrap: true,

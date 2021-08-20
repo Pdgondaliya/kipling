@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/forgot_password_confirmation_model.dart';
 import 'package:kipling/ui/login_screen.dart';
@@ -27,6 +28,7 @@ class _ForgotPasswordConfirmationState
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -130,7 +132,10 @@ class _ForgotPasswordConfirmationState
                   height: displayHeight(context) * 0.07,
                   margin: EdgeInsets.only(top: displayHeight(context) * 0.01),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => login_screen())),
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF2d2c2e),
                       shape: RoundedRectangleBorder(

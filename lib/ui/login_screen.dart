@@ -9,6 +9,7 @@ import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/custom_widget/text_field.dart';
 import 'package:kipling/main.dart';
@@ -119,6 +120,7 @@ class _login_screenState extends State<login_screen> {
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
         backgroundColor: bgColor,
         body: SafeArea(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/module/badge_model.dart' as b;
 import 'package:kipling/module/country_model.dart' as c;
 import 'package:kipling/module/create_account_model.dart' as ca;
@@ -33,11 +34,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return MaterialApp(
       title: 'Kipling',
       builder: BotToastInit(),
       navigatorObservers: [BotToastNavigatorObserver()],
-
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -245,8 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //VoucherData API
-  Future<VoucherModel>
-  fetchVoucherData() async {
+  Future<VoucherModel> fetchVoucherData() async {
     var response = await http.get(
       Uri.parse(
           'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=voucher'),
@@ -258,8 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print(responseJson);
     if (response.statusCode == 200) {
       setState(() {
-        voucherData =
-            VoucherModel.fromJson(responseJson[0]);
+        voucherData = VoucherModel.fromJson(responseJson[0]);
       });
 
       return VoucherModel.fromJson(responseJson[0]);
@@ -407,6 +406,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
         body: Stack(
       children: [

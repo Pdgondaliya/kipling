@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/module/particular_voucher_details.dart';
 import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/module/voucher_reward_model.dart';
@@ -99,6 +100,7 @@ class _ActiveVoucherScreenState extends State<ActiveVoucherScreen> {
 
   @override
   Widget build(BuildContext context) {
+    internetCheck(context);
     return Scaffold(
       body: Padding(
           padding: EdgeInsets.only(

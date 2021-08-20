@@ -63,8 +63,8 @@ class GetUserDataModel {
   bool? generalPermission;
   Balance? balance;
   List<Email>? emails;
-  List<dynamic>? phoneNumbers;
-  List<dynamic>? addresses;
+  List<PhoneNumber>? phoneNumbers;
+  List<Address>? addresses;
   List<dynamic>? subscriptions;
   String? avatarUrl;
   List<dynamic>? externalIdentifiers;
@@ -99,8 +99,8 @@ class GetUserDataModel {
         generalPermission: json["general_permission"],
         balance: Balance.fromJson(json["balance"]),
         emails: List<Email>.from(json["emails"].map((x) => Email.fromJson(x))),
-        phoneNumbers: List<dynamic>.from(json["phone_numbers"].map((x) => x)),
-        addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
+        phoneNumbers: List<PhoneNumber>.from(json["phone_numbers"].map((x) => x)),
+        addresses: List<Address>.from(json["addresses"].map((x) => x)),
         subscriptions: List<dynamic>.from(json["subscriptions"].map((x) => x)),
         avatarUrl: json["avatar_url"],
         externalIdentifiers:
@@ -277,6 +277,110 @@ class Email {
         "created_at": createdAt!.toIso8601String(),
         "updated_at": updatedAt!.toIso8601String(),
       };
+}
+
+class PhoneNumber {
+  PhoneNumber({
+    this.id,
+    this.primary,
+    this.type,
+    this.countryCode,
+    this.number,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  String? id;
+  bool? primary;
+  String? type;
+  String? countryCode;
+  String? number;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  factory PhoneNumber.fromJson(Map<String, dynamic> json) => PhoneNumber(
+    id: json["id"],
+    primary: json["primary"],
+    type: json["type"],
+    countryCode: json["country_code"],
+    number: json["number"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "primary": primary,
+    "type": type,
+    "country_code": countryCode,
+    "number": number,
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
+  };
+}
+
+class Address {
+  Address({
+    this.id,
+    this.primary,
+    this.type,
+    this.addressLine1,
+    this.addressLine2,
+    this.houseNumber,
+    this.houseNumberSuffix,
+    this.postalCode,
+    this.state,
+    this.city,
+    this.country,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  String? id;
+  bool? primary;
+  String? type;
+  String? addressLine1;
+  String? addressLine2;
+  String? houseNumber;
+  String? houseNumberSuffix;
+  String? postalCode;
+  String? state;
+  String? city;
+  String? country;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  factory Address.fromJson(Map<String, dynamic> json) => Address(
+    id: json["id"],
+    primary: json["primary"],
+    type: json["type"],
+    addressLine1: json["address_line_1"],
+    addressLine2: json["address_line_2"],
+    houseNumber: json["house_number"],
+    houseNumberSuffix: json["house_number_suffix"],
+    postalCode: json["postal_code"],
+    state: json["state"],
+    city: json["city"],
+    country: json["country"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "primary": primary,
+    "type": type,
+    "address_line_1": addressLine1,
+    "address_line_2": addressLine2,
+    "house_number": houseNumber,
+    "house_number_suffix": houseNumberSuffix,
+    "postal_code": postalCode,
+    "state": state,
+    "city": city,
+    "country": country,
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
+  };
 }
 
 class ProgramIdentifier {
