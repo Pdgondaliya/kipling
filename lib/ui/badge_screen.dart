@@ -23,7 +23,7 @@ class _BadgeScreenState extends State<BadgeScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => Navigator.push(context,
+            onPressed: () => Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => PersonalDetails())),
             icon: Icon(
               Icons.arrow_back_ios,

@@ -462,7 +462,96 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     }
   }
 
-  _showDialog() async {
+  _imagePickerOptioniOSDialog() {
+    return showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        cancelButton: CupertinoButton(
+          child: Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            child: const Text('Take a photo'),
+            onPressed: () {
+              _getFromCamera();
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: const Text('Upload a photo'),
+            onPressed: () {
+              _getFromGallery();
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  _imagePickerOptionAndroidDialog() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+            child: Container(
+              height: displayWidth(context) * 0.395,
+              padding: EdgeInsets.all(displayWidth(context) * 0.1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      _getFromCamera();
+                    },
+                    child: Column(
+                      children: [
+                        Icon(Icons.camera_alt, color: Colors.black, size: 50),
+                        Text(
+                          'Camera',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Kipling_Regular',
+                              fontSize: displayWidth(context) * 0.05),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                  GestureDetector(
+                    child: Column(
+                      children: [
+                        Icon(Icons.image, color: Colors.black, size: 50),
+                        Text(
+                          'Gallery',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Kipling_Regular',
+                              fontSize: displayWidth(context) * 0.05),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _getFromGallery();
+                    },
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _showiOSDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -501,15 +590,53 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     );
   }
 
+  _showAndroidDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Leave without saving?',
+              style: TextStyle(fontFamily: 'Kipling_Regular')),
+          content: Text(
+            'If you continue, all the changes you made will be lost.',
+            style: TextStyle(fontFamily: 'Kipling_Regular'),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                    color: Colors.black, fontFamily: 'Kipling_Regular'),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Leave',
+                style: TextStyle(fontFamily: 'Kipling_Regular'),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     internetCheck(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
-            _showDialog();
-          },
+          onPressed: () =>
+              Platform.isAndroid ? _showAndroidDialog() : _showiOSDialog(),
           icon: Icon(
             Icons.arrow_back_ios,
             color: Color(0xff84847e),
@@ -541,7 +668,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
       ),
       body: WillPopScope(
         onWillPop: () {
-          return _showDialog();
+          return Platform.isAndroid ? _showAndroidDialog() : _showiOSDialog();
         },
         child: Stack(
           children: [
@@ -613,34 +740,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                               ))*/
                               ),
                           child: Center(
-                            child: GestureDetector(onTap: () {
-                              showCupertinoModalPopup<void>(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    CupertinoActionSheet(
-                                  cancelButton: CupertinoButton(
-                                    child: Text('Cancel'),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                  actions: <CupertinoActionSheetAction>[
-                                    CupertinoActionSheetAction(
-                                      child: const Text('Take a photo'),
-                                      onPressed: () {
-                                        _getFromCamera();
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    CupertinoActionSheetAction(
-                                      child: const Text('Upload a photo'),
-                                      onPressed: () {
-                                        _getFromGallery();
-                                        Navigator.pop(context);
-                                      },
-                                    )
-                                  ],
-                                ),
-                              );
-                            }),
+                            child: GestureDetector(
+                                onTap: () => Platform.isAndroid
+                                    ? _imagePickerOptionAndroidDialog()
+                                    : _imagePickerOptioniOSDialog()),
                           ),
                         ),
                       ),

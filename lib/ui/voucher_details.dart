@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -42,6 +44,9 @@ class _VoucherDetailsState extends State<VoucherDetails> {
           widget.title.toString(),
           style: TextStyle(fontFamily: 'Kipling_Bold', color: Colors.black),
         ),
+        actions: [
+          Padding(padding: EdgeInsets.only(right: displayWidth(context) * 0.1))
+        ],
       ),
       body: ListView(
         children: [
@@ -142,7 +147,9 @@ class _VoucherDetailsState extends State<VoucherDetails> {
               height: displayHeight(context) * 0.07,
               margin: EdgeInsets.only(top: displayHeight(context) * 0.03),
               child: ElevatedButton(
-                onPressed: () => _showDialog(),
+                onPressed: () => Platform.isAndroid
+                    ? _showAndroidDialog()
+                    : _showiOSDialog(),
                 style: ElevatedButton.styleFrom(
                   primary: const Color(0xFF2d2c2e),
                   shape: RoundedRectangleBorder(
@@ -217,7 +224,7 @@ class _VoucherDetailsState extends State<VoucherDetails> {
     );
   }
 
-  _showDialog() async {
+  _showiOSDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -241,6 +248,45 @@ class _VoucherDetailsState extends State<VoucherDetails> {
               },
             ),
             CupertinoDialogAction(
+              child: Text(
+                'Activate',
+                style: TextStyle(
+                    fontFamily: 'Kipling_Regular', color: Color(0xff89b14b)),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _showAndroidDialog() {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Active this voucher',
+              style: TextStyle(fontFamily: 'Kipling_Regular')),
+          content: Text(
+            'Do you want to activate this voucher? \nYour points will be deducted.',
+            style: TextStyle(fontFamily: 'Kipling_Regular'),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                    color: Colors.black, fontFamily: 'Kipling_Regular'),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
               child: Text(
                 'Activate',
                 style: TextStyle(
