@@ -84,12 +84,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     showLoader();
     var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
     var options = BaseOptions(
-        baseUrl:
-            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+        baseUrl: 'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+            // 'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
         headers: headerMap);
     _dio.options = options;
-    try {
-      Response response = await _dio.get("customers/$id");
+    try { //customers/$id
+      Response response = await _dio.get("program-identifiers/$id");
       print('afdsfgdsgdfsgfgfgfg: ${response.data}');
       hideLoader();
       return GetUserDataModel.fromJson(response.data);
@@ -136,10 +136,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
         headers: headerMap);
     _dio.options = options;
+    print('ididiid: $id');
+    print('ididiid: ${getUserDataModel!.balance!.id.toString()}');
+    print('ididiid: ${getUserDataModel!.balance!.customerId.toString()}');
+    print('ididiid: ${getUserDataModel!.emails![0].id.toString()}');
     try {
       Response response = await _dio
-          .put("customers/fc83716b-5768-48f4-b80a-25c64b844014", data: {
-        "id": "fc83716b-5768-48f4-b80a-25c64b844014",
+          .put("customers/$id", data: {
+        "id": id,
         "title": "Mr.",
         "initials": "",
         "name": name,
@@ -154,8 +158,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         "optin": false,
         "general_permission": true,
         "balance": {
-          "id": "f72739ab-d8d0-4474-b972-5a9639f6757e",
-          "customer_id": "fc83716b-5768-48f4-b80a-25c64b844014",
+          "id": getUserDataModel!.balance!.id.toString(),
+          "customer_id": getUserDataModel!.balance!.customerId.toString(),
           "points": 0,
           "previous_points": 0,
           "total_positive_points": 0,
@@ -171,7 +175,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         },
         "emails": [
           {
-            "id": "6493e5d9-de3c-4335-8d87-e975aea055b6",
+            "id": getUserDataModel!.emails![0].id.toString(),
             "type": "",
             "email_address": email,
             "verified": false,
@@ -277,8 +281,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     print('Value List: ${countryList.toString()}');
     ld = personalDetailData;
     getData().then((value1) {
-      getUserDataAPI('fc83716b-5768-48f4-b80a-25c64b844014').then((value) {
+      getUserDataAPI(value1).then((value) {
         if (!mounted) return;
+        getUserDataModel = value;
         setState(() {
           firstNameController.text =
               value.name!.toString().isNotEmpty ? value.name.toString() : '';
@@ -720,12 +725,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                           avatar_url.toString() != 'null'
                                       ? */
                                   DecorationImage(
-                                      image: NetworkImage(avatar_url != "" ||
-                                              avatar_url.toString() != 'null'
-                                          ? avatar_url.toString()
-                                          : ld!.value!
-                                              .profilePicturePlaceholderUrlEn
-                                              .toString()))
+                                      image: NetworkImage(avatar_url == "" ||
+                                              avatar_url.toString() == 'null'
+                                          ? ld!.value!
+                                          .profilePicturePlaceholderUrlEn
+                                          .toString()
+                                          : avatar_url.toString()))
                               /* : DecorationImage(
                                           image: NetworkImage(ld!.value!
                                                   .profilePicturePlaceholderUrlEn
@@ -2135,6 +2140,69 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       if (imageFile!.path.isEmpty) {
                         print('fghjhjghjghjg');
                         updateUserDataAPI(
+                            id: getUserDataModel!.id.toString(),
+                            email: emailController.text.isNotEmpty
+                                ? emailController.text
+                                : '',
+                            name: firstNameController.text.isNotEmpty
+                                ? firstNameController.text
+                                : '',
+                            birthdate: birthdate,
+                            // countryCode: 'in',
+                            currentDate: currentDate,
+                            gender: genderController.text.isNotEmpty
+                                ? genderController.text
+                                : genderController.text,
+                            generalPermission: true,
+
+                            // languageCode: 'en',
+                            lastName: lastNameController.text.isNotEmpty
+                                ? lastNameController.text
+                                : '',
+                            middleName: middleNameController.text.isNotEmpty
+                                ? middleNameController.text
+                                : '',
+                            addition: additionController.text.isNotEmpty
+                                ? additionController.text
+                                : '',
+                            option: true,
+                            city: cityController.text.isNotEmpty
+                                ? cityController.text
+                                : '',
+                            houseNumber:
+                            houseNumberController.text.isNotEmpty
+                                ? houseNumberController.text
+                                : '',
+                            mobileNumber:
+                            phoneNumberController.text.isNotEmpty
+                                ? phoneNumberController.text
+                                : '',
+                            postalCode: postalCodeController.text.isNotEmpty
+                                ? postalCodeController.text
+                                : '',
+                            state: regionController.text.isNotEmpty
+                                ? regionController.text
+                                : '',
+                            streetName: streetNameController.text.isNotEmpty
+                                ? streetNameController.text
+                                : '',
+                            avatarUrl: avatar_url)
+                            .then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BadgeScreen()));
+                        });
+                      } else
+                      {
+                        print('hyghvghvyjff');
+                        uploadImage().then((value1) {
+                          // print('sdhsbhnbnnbdn: ${value1!.url.toString()}');
+                          if (value1 != null) {
+                            print('dsafghfnbhfbrefbrufbrebfrbfhrfrhfhrfrf');
+                            setState(() {});
+                            updateUserDataAPI(
+                                id: getUserDataModel!.id.toString(),
                                 email: emailController.text.isNotEmpty
                                     ? emailController.text
                                     : '',
@@ -2142,18 +2210,19 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     ? firstNameController.text
                                     : '',
                                 birthdate: birthdate,
-                                // countryCode: 'in',
+                                countryCode: 'in',
                                 currentDate: currentDate,
                                 gender: genderController.text.isNotEmpty
                                     ? genderController.text
                                     : genderController.text,
                                 generalPermission: true,
-                                id: 'fc83716b-5768-48f4-b80a-25c64b844014',
-                                // languageCode: 'en',
+
+                                languageCode: 'en',
                                 lastName: lastNameController.text.isNotEmpty
                                     ? lastNameController.text
                                     : '',
-                                middleName: middleNameController.text.isNotEmpty
+                                middleName:
+                                middleNameController.text.isNotEmpty
                                     ? middleNameController.text
                                     : '',
                                 addition: additionController.text.isNotEmpty
@@ -2164,87 +2233,26 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     ? cityController.text
                                     : '',
                                 houseNumber:
-                                    houseNumberController.text.isNotEmpty
-                                        ? houseNumberController.text
-                                        : '',
+                                houseNumberController.text.isNotEmpty
+                                    ? houseNumberController.text
+                                    : '',
                                 mobileNumber:
-                                    phoneNumberController.text.isNotEmpty
-                                        ? phoneNumberController.text
-                                        : '',
-                                postalCode: postalCodeController.text.isNotEmpty
+                                phoneNumberController.text.isNotEmpty
+                                    ? phoneNumberController.text
+                                    : '',
+                                postalCode:
+                                postalCodeController.text.isNotEmpty
                                     ? postalCodeController.text
                                     : '',
                                 state: regionController.text.isNotEmpty
                                     ? regionController.text
                                     : '',
-                                streetName: streetNameController.text.isNotEmpty
+                                streetName:
+                                streetNameController.text.isNotEmpty
                                     ? streetNameController.text
                                     : '',
-                                avatarUrl: avatar_url)
-                            .then((value) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BadgeScreen()));
-                        });
-                      } else {
-                        print('hyghvghvyjff');
-                        uploadImage().then((value1) {
-                          // print('sdhsbhnbnnbdn: ${value1!.url.toString()}');
-                          if (value1 != null) {
-                            print('dsafghfnbhfbrefbrufbrebfrbfhrfrhfhrfrf');
-                            setState(() {});
-                            updateUserDataAPI(
-                                    email: emailController.text.isNotEmpty
-                                        ? emailController.text
-                                        : '',
-                                    name: firstNameController.text.isNotEmpty
-                                        ? firstNameController.text
-                                        : '',
-                                    birthdate: birthdate,
-                                    countryCode: 'in',
-                                    currentDate: currentDate,
-                                    gender: genderController.text.isNotEmpty
-                                        ? genderController.text
-                                        : genderController.text,
-                                    generalPermission: true,
-                                    id: 'fc83716b-5768-48f4-b80a-25c64b844014',
-                                    languageCode: 'en',
-                                    lastName: lastNameController.text.isNotEmpty
-                                        ? lastNameController.text
-                                        : '',
-                                    middleName:
-                                        middleNameController.text.isNotEmpty
-                                            ? middleNameController.text
-                                            : '',
-                                    addition: additionController.text.isNotEmpty
-                                        ? additionController.text
-                                        : '',
-                                    option: true,
-                                    city: cityController.text.isNotEmpty
-                                        ? cityController.text
-                                        : '',
-                                    houseNumber:
-                                        houseNumberController.text.isNotEmpty
-                                            ? houseNumberController.text
-                                            : '',
-                                    mobileNumber:
-                                        phoneNumberController.text.isNotEmpty
-                                            ? phoneNumberController.text
-                                            : '',
-                                    postalCode:
-                                        postalCodeController.text.isNotEmpty
-                                            ? postalCodeController.text
-                                            : '',
-                                    state: regionController.text.isNotEmpty
-                                        ? regionController.text
-                                        : '',
-                                    streetName:
-                                        streetNameController.text.isNotEmpty
-                                            ? streetNameController.text
-                                            : '',
-                                    avatarUrl:
-                                        value1.formats!.medium!.url.toString())
+                                avatarUrl:
+                                value1.formats!.medium!.url.toString())
                                 .then((value) {
                               Navigator.push(
                                   context,
@@ -2255,6 +2263,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                         });
                       }
                       // getData().then((value) {
+                      //   print('valuevalue: $value');
                       //   print('image: $avatar_url');
                       //
                       // });

@@ -163,9 +163,10 @@ class _AllBadgesState extends State<AllBadges> {
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
                   child: Container(
-                    height: displayHeight(context) * 0.85,
+                    // height: displayHeight(context) * 0.85,
                     padding: EdgeInsets.all(displayHeight(context) * 0.02),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Align(
                           alignment: Alignment.topRight,
@@ -233,119 +234,122 @@ class _AllBadgesState extends State<AllBadges> {
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
-              child: Container(
-                height: displayHeight(context) * 0.68,
-                padding: EdgeInsets.all(displayWidth(context) * 0.02),
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.black,
-                          size: 15,
+              child: Flexible(
+                child: Container(
+                  // height: displayHeight(context) * 0.68,
+                  padding: EdgeInsets.all(displayWidth(context) * 0.02),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.black,
+                            size: 15,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                        width: displayWidth(context) * 0.25,
-                        height: displayWidth(context) * 0.25,
-                        child: Image.network(
-                          image,
-                          fit: BoxFit.contain,
-                        )),
-                    Text(
-                      'You have found',
-                      style: TextStyle(
-                          fontSize: displayHeight(context) * 0.02,
-                          fontFamily: 'Kipling_Bold',
-                          color: Color(0xff8ab250)),
-                    ),
-                    SizedBox(height: displayWidth(context) * 0.005),
-                    Text(
-                      badgeName,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Kipling_Bold',
-                          fontSize: displayHeight(context) * 0.04),
-                    ),
-                    // SizedBox(height: 10),
-                    // Flexible(
-                    //     child: Align(
-                    //       alignment: Alignment.center,
-                    //       child: Html(
-                    //         data: """
-                    //       $desc
-                    //       """,
-                    //         style: {
-                    //           "body": Style(
-                    //             fontFamily: 'Kipling_Regular'
-                    //           ),
-                    //         },
-                    //       ),
-                    //     )),
-                    Html(
-                      data: """
+                      SizedBox(
+                          width: displayWidth(context) * 0.25,
+                          height: displayWidth(context) * 0.25,
+                          child: Image.network(
+                            image,
+                            fit: BoxFit.contain,
+                          )),
+                      Text(
+                        'You have found',
+                        style: TextStyle(
+                            fontSize: displayHeight(context) * 0.02,
+                            fontFamily: 'Kipling_Bold',
+                            color: Color(0xff8ab250)),
+                      ),
+                      SizedBox(height: displayWidth(context) * 0.005),
+                      Text(
+                        badgeName,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Kipling_Bold',
+                            fontSize: displayHeight(context) * 0.04),
+                      ),
+                      // SizedBox(height: 10),
+                      // Flexible(
+                      //     child: Align(
+                      //       alignment: Alignment.center,
+                      //       child: Html(
+                      //         data: """
+                      //       $desc
+                      //       """,
+                      //         style: {
+                      //           "body": Style(
+                      //             fontFamily: 'Kipling_Regular'
+                      //           ),
+                      //         },
+                      //       ),
+                      //     )),
+                      Html(
+                        data: """
                               $desc
                               """,
-                      style: {
-                        "body": Style(
-                            fontFamily: 'Kipling_Regular',
-                            textAlign: TextAlign.center),
-                      },
-                    ),
-                    Html(
-                      data: """
+                        style: {
+                          "body": Style(
+                              fontFamily: 'Kipling_Regular',
+                              textAlign: TextAlign.center),
+                        },
+                      ),
+                      Html(
+                        data: """
                               $condition
                               """,
-                      style: {
-                        "body": Style(
-                            fontFamily: 'Kipling_Regular',
-                            textAlign: TextAlign.center),
-                      },
-                    ),
-                    // Flexible(
-                    //     child: Align(
-                    //       alignment: Alignment.center,
-                    //       child: Html(
-                    //         data: """
-                    //       $condition
-                    //       """,
-                    //         style: {
-                    //           "body": Style(
-                    //               fontFamily: 'Kipling_Regular'
-                    //           ),
-                    //         },
-                    //       ),
-                    //     )),
-                    SizedBox(height: displayWidth(context) * 0.005),
-                    Text(
-                      points,
-                      // '000 points',
-                      style: TextStyle(
-                          color: Color(0xff8ab250),
-                          fontFamily: 'Kipling_Bold',
-                          fontSize: displayHeight(context) * 0.04),
-                    ),
-                    SizedBox(height: displayWidth(context) * 0.005),
-                    RaisedButton(
-                      padding: EdgeInsets.symmetric(vertical: displayWidth(context) * 0.03),
-                      color: Color(0xff2c2d2e),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'Done',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Kipling_Regular',
-                          fontSize: displayHeight(context) * 0.03,
-                        ),
+                        style: {
+                          "body": Style(
+                              fontFamily: 'Kipling_Regular',
+                              textAlign: TextAlign.center),
+                        },
                       ),
-                    )
-                  ],
+                      // Flexible(
+                      //     child: Align(
+                      //       alignment: Alignment.center,
+                      //       child: Html(
+                      //         data: """
+                      //       $condition
+                      //       """,
+                      //         style: {
+                      //           "body": Style(
+                      //               fontFamily: 'Kipling_Regular'
+                      //           ),
+                      //         },
+                      //       ),
+                      //     )),
+                      SizedBox(height: displayWidth(context) * 0.005),
+                      Text(
+                        points,
+                        // '000 points',
+                        style: TextStyle(
+                            color: Color(0xff8ab250),
+                            fontFamily: 'Kipling_Bold',
+                            fontSize: displayHeight(context) * 0.04),
+                      ),
+                      SizedBox(height: displayWidth(context) * 0.005),
+                      RaisedButton(
+                        padding: EdgeInsets.symmetric(vertical: displayWidth(context) * 0.03),
+                        color: Color(0xff2c2d2e),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Done',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Kipling_Regular',
+                            fontSize: displayHeight(context) * 0.03,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             )));

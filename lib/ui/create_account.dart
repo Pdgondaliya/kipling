@@ -747,17 +747,17 @@ class _CreateAccountState extends State<CreateAccount> {
                                     ),
                             ),
                             SizedBox(width: 10),
-                            Text(
+                            Flexible(child: Text(
                               index == 0
                                   ? ld!.value.fields.generalPermission
-                                      .titleTextEn
+                                  .titleTextEn
                                   : ld!.value.fields.generalPermission
-                                      .titleTextNl,
+                                  .titleTextNl,
                               style: TextStyle(
                                   color: Color(0xff010001),
                                   fontSize: displayWidth(context) * 0.05,
                                   fontFamily: 'Kipling_Regular'),
-                            ),
+                            ),)
                           ],
                         ),
                       ),

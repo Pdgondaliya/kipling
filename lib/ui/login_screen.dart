@@ -45,8 +45,10 @@ class _login_screenState extends State<login_screen> {
   // final List<Logindata> pl=widget.;
   late Logindata ld;
   Color bgColor = Colors.white;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController =
+      TextEditingController();
+  TextEditingController passwordController =
+      TextEditingController();
 
   String? ipAddress;
   String? applicationId;
@@ -87,8 +89,6 @@ class _login_screenState extends State<login_screen> {
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.black);
       hideLoader();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => PersonalDetails()));
       return LoginModel.fromJson(response.data);
     } on DioError catch (e) {
       hideLoader();
@@ -248,10 +248,19 @@ class _login_screenState extends State<login_screen> {
                           child: ElevatedButton(
                             onPressed: () {
                               loginAPI(
-                                  emailController.text,
-                                  passwordController.text,
-                                  applicationId!,
-                                  ipAddress!);
+                                      emailController.text,
+                                      passwordController.text,
+                                      applicationId!,
+                                      ipAddress!)
+                                  .then((value) async {
+                                    print('dsfhjbsdhjfndskjfnkj: ${value.user!.id.toString()}');
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.setString(
+                                    'id', value.user!.id.toString());
+                                Navigator.push(
+                                    context, MaterialPageRoute(builder: (context) => PersonalDetails()));
+                              });
                             },
                             style: ElevatedButton.styleFrom(
                               primary: const Color(0xFF2d2c2e),

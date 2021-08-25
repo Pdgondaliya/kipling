@@ -82,9 +82,10 @@ class _ActivatedBadgesState extends State<ActivatedBadges> {
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
                   child: Container(
-                    height: displayHeight(context) * 0.68,
+                    // height: displayHeight(context) * 0.68,
                     padding: EdgeInsets.all(displayWidth(context) * 0.02),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Align(
                           alignment: Alignment.topRight,

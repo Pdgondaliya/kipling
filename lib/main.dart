@@ -18,6 +18,7 @@ import 'package:kipling/module/splash_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/module/welcome_model.dart';
+import 'package:kipling/ui/all_badges.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:kipling/ui/voucher_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
