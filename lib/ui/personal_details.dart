@@ -79,16 +79,44 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   Dio _dio = Dio();
 
   GetUserDataModel? getUserDataModel;
+  GetUserDataModel? getUserDataModel1;
 
   Future<GetUserDataModel> getUserDataAPI(String id) async {
     showLoader();
     var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
     var options = BaseOptions(
-        baseUrl: 'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
-            // 'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+        baseUrl:
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
         headers: headerMap);
     _dio.options = options;
-    try { //customers/$id
+    try {
+      Response response = await _dio.get('customers/$id');
+      print('afdsfgdsgdfsgfgfgfg: ${response.data}');
+      hideLoader();
+      return GetUserDataModel.fromJson(response.data);
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
+      } else {
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
+      }
+    }
+  }
+
+  Future<GetUserDataModel> programIdentifierCallAPI(String id) async {
+    showLoader();
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl:
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
       Response response = await _dio.get("program-identifiers/$id");
       print('afdsfgdsgdfsgfgfgfg: ${response.data}');
       hideLoader();
@@ -137,14 +165,17 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         headers: headerMap);
     _dio.options = options;
     print('ididiid: $id');
-    print('ididiid: ${getUserDataModel!.balance!.id.toString()}');
-    print('ididiid: ${getUserDataModel!.balance!.customerId.toString()}');
-    print('ididiid: ${getUserDataModel!.emails![0].id.toString()}');
+    print('ididiid: ${getUserDataModel1!.balance!.id.toString()}');
+    print('ididiid: ${getUserDataModel1!.balance!.customerId.toString()}');
+    print('ididiid: ${getUserDataModel1!.emails![0].id.toString()}');
+    print('ididiid:==============================================');
+    print('ididiid12121: ${getUserDataModel!.balance!.id.toString()}');
+    print('ididiid12121: ${getUserDataModel!.balance!.customerId.toString()}');
+    print('ididiid12121: ${getUserDataModel!.emails![0].id.toString()}');
     try {
-      Response response = await _dio
-          .put("customers/$id", data: {
-        "id": id,
-        "title": "Mr.",
+      Response response = await _dio.put("customers/${getUserDataModel1!.id.toString()}", data: {
+        "id": getUserDataModel1!.id.toString(),
+        "title": "",
         "initials": "",
         "name": name,
         "middle_name": middleName,
@@ -158,8 +189,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         "optin": false,
         "general_permission": true,
         "balance": {
-          "id": getUserDataModel!.balance!.id.toString(),
-          "customer_id": getUserDataModel!.balance!.customerId.toString(),
+          "id": getUserDataModel1!.balance!.id.toString(),
+          "customer_id": getUserDataModel1!.balance!.customerId.toString(),
           "points": 0,
           "previous_points": 0,
           "total_positive_points": 0,
@@ -175,7 +206,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         },
         "emails": [
           {
-            "id": getUserDataModel!.emails![0].id.toString(),
+            "id": getUserDataModel1!.emails![0].id.toString(),
             "type": "",
             "email_address": email,
             "verified": false,
@@ -187,8 +218,20 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         "phone_numbers": [],
         "addresses": [],
         "subscriptions": [],
-        "avatar_url": avatarUrl,
+        "avatar_url": "",
         "external_identifiers": [],
+        "program_identifiers": [
+          {
+            "id": getUserDataModel1!.programIdentifiers![0].id.toString(),
+            "type": "Auth",
+            "identifier": getUserDataModel1!.programIdentifiers![0].identifier.toString(),
+            "status": "Active",
+            "created_at": currentDate,
+            "updated_at": currentDate,
+            "is_deleted": false,
+            "deleted_at": null
+          }
+        ],
         "tags": [],
         "integer_custom_fields": [],
         "string_custom_fields": [],
@@ -280,82 +323,86 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   void initState() {
     print('Value List: ${countryList.toString()}');
     ld = personalDetailData;
-    getData().then((value1) {
-      getUserDataAPI(value1).then((value) {
-        if (!mounted) return;
-        getUserDataModel = value;
-        setState(() {
-          firstNameController.text =
-              value.name!.toString().isNotEmpty ? value.name.toString() : '';
-          middleNameController.text = value.middleName!.toString().isNotEmpty
-              ? value.middleName.toString()
-              : '';
-          lastNameController.text = value.lastName!.toString().isNotEmpty
-              ? value.lastName.toString()
-              : '';
-          birthDayController.text = value.birthDate
-                      .toString()
-                      .substring(0, 11)
-                      .trim()
-                      .toString()
-                      .isNotEmpty ||
-                  value.birthDate
-                          .toString()
-                          .substring(0, 11)
-                          .trim()
-                          .toString()
-                          .trim() !=
-                      'null'
-              /*||
+    getData().then((id) {
+      print('ValueValue: $id');
+      programIdentifierCallAPI(id).then((programIdentifier) {
+        getUserDataModel = programIdentifier;
+        print('Value1Value1: ${programIdentifier.id.toString()}');
+        getUserDataAPI(programIdentifier.id.toString()).then((getData) {
+          getUserDataModel1 = getData;
+          if (!mounted) return;
+          setState(() {
+            firstNameController.text =
+            getData.name!.toString().isNotEmpty ? getData.name.toString() : '';
+            middleNameController.text = getData.middleName!.toString().isNotEmpty
+                ? getData.middleName.toString()
+                : '';
+            lastNameController.text = getData.lastName!.toString().isNotEmpty
+                ? getData.lastName.toString()
+                : '';
+            birthDayController.text = getData.birthDate
+                        .toString()
+                        .substring(0, 11)
+                        .trim()
+                        .toString()
+                        .isNotEmpty ||
+                getData.birthDate
+                            .toString()
+                            .substring(0, 11)
+                            .trim()
+                            .toString()
+                            .trim() !=
+                        'null'
+                /*||
                   value.birthDate != null*/
-              ? value.birthDate.toString().substring(0, 11)
-              : '';
-          emailController.text =
-              value.emails!.first.emailAddress.toString().isNotEmpty
-                  ? value.emails!.first.emailAddress.toString()
-                  : '';
-          avatar_url = value.avatarUrl.toString().isNotEmpty
-              ? value.avatarUrl.toString()
-              : '';
-          print('Image Avata123: ${value.avatarUrl.toString()}');
-          print('Image Avatar234: ${imageFile!.path}');
-          print(
-              'Image Avatar123: ${ld!.value!.profilePicturePlaceholderUrlEn.toString()}');
-          // phoneNumberController.text = value.phoneNumbers.toString() !=
-          //         '[]' /* || value.phoneNumbers![0].number.toString().isNotEmpty*/
-          //
-          //     ? value.phoneNumbers![0].number!.toString()
-          //     : '';
-          // streetNameController.text =
-          //     /*value.addresses![0].addressLine1.toString().isNotEmpty ||*/
-          //     value.addresses.toString() != '[]'
-          //         ? value.addresses![0].addressLine1.toString()
-          //         : '';
-          // additionController.text =
-          //     /* value.addresses![0].addressLine2.toString().isNotEmpty ||*/
-          //     value.addresses.toString() != '[]'
-          //         ? value.addresses![0].addressLine2.toString()
-          //         : '';
-          // houseNumberController.text =
-          //     /*value.addresses![0].houseNumber.toString().isNotEmpty ||*/
-          //     value.addresses.toString() != '[]'
-          //         ? value.addresses![0].houseNumber.toString()
-          //         : '';
-          // postalCodeController.text =
-          //     /*value.addresses![0].postalCode.toString().isNotEmpty ||*/
-          //     value.addresses.toString() != '[]'
-          //         ? value.addresses![0].postalCode.toString()
-          //         : '';
-          // regionController.text =
-          //     /*value.addresses![0].state.toString().isNotEmpty ||*/
-          //     value.addresses.toString() != '[]'
-          //         ? value.addresses![0].state.toString()
-          //         : '';
-          // cityController.text =
-          //     /*value.addresses![0].city.toString().isNotEmpty ||*/
-          //     value.addresses.toString() != '[]'
-          //         ? value.addresses![0].city.toString()
-          //         : '';
+                ? getData.birthDate.toString().substring(0, 11)
+                : '';
+            emailController.text =
+            getData.emails!.first.emailAddress.toString().isNotEmpty
+                    ? getData.emails!.first.emailAddress.toString()
+                    : '';
+            avatar_url = getData.avatarUrl.toString().isNotEmpty
+                ? getData.avatarUrl.toString()
+                : '';
+            print('Image Avata123: ${getData.avatarUrl.toString()}');
+            print('Image Avatar234: ${imageFile!.path}');
+            print(
+                'Image Avatar123: ${ld!.value!.profilePicturePlaceholderUrlEn.toString()}');
+            // phoneNumberController.text = value.phoneNumbers.toString() !=
+            //         '[]' /* || value.phoneNumbers![0].number.toString().isNotEmpty*/
+            //
+            //     ? value.phoneNumbers![0].number!.toString()
+            //     : '';
+            // streetNameController.text =
+            //     /*value.addresses![0].addressLine1.toString().isNotEmpty ||*/
+            //     value.addresses.toString() != '[]'
+            //         ? value.addresses![0].addressLine1.toString()
+            //         : '';
+            // additionController.text =
+            //     /* value.addresses![0].addressLine2.toString().isNotEmpty ||*/
+            //     value.addresses.toString() != '[]'
+            //         ? value.addresses![0].addressLine2.toString()
+            //         : '';
+            // houseNumberController.text =
+            //     /*value.addresses![0].houseNumber.toString().isNotEmpty ||*/
+            //     value.addresses.toString() != '[]'
+            //         ? value.addresses![0].houseNumber.toString()
+            //         : '';
+            // postalCodeController.text =
+            //     /*value.addresses![0].postalCode.toString().isNotEmpty ||*/
+            //     value.addresses.toString() != '[]'
+            //         ? value.addresses![0].postalCode.toString()
+            //         : '';
+            // regionController.text =
+            //     /*value.addresses![0].state.toString().isNotEmpty ||*/
+            //     value.addresses.toString() != '[]'
+            //         ? value.addresses![0].state.toString()
+            //         : '';
+            // cityController.text =
+            //     /*value.addresses![0].city.toString().isNotEmpty ||*/
+            //     value.addresses.toString() != '[]'
+            //         ? value.addresses![0].city.toString()
+            //         : '';
 // print('BirthDate Controller Text = ${birthDayController.text}');
 //           DateTime dateOfBirth = DateTime.parse(birthDayController.text);
 //
@@ -363,8 +410,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
 //           birthdate = dobFormat.format(dateOfBirth) + 'T00:00:00Z';
 //           print('bibibibibibib: ${birthdate}');
 //           birthdate = value.birthDate.toString();
-          birthdate = '${birthDayController.text.toString().trim()}T00:00:00Z';
-          print('bbbbbbbb: $birthdate');
+            birthdate =
+                '${birthDayController.text.toString().trim()}T00:00:00Z';
+            print('bbbbbbbb: $birthdate');
+          });
         });
       });
     });
@@ -728,8 +777,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       image: NetworkImage(avatar_url == "" ||
                                               avatar_url.toString() == 'null'
                                           ? ld!.value!
-                                          .profilePicturePlaceholderUrlEn
-                                          .toString()
+                                              .profilePicturePlaceholderUrlEn
+                                              .toString()
                                           : avatar_url.toString()))
                               /* : DecorationImage(
                                           image: NetworkImage(ld!.value!
@@ -2140,69 +2189,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       if (imageFile!.path.isEmpty) {
                         print('fghjhjghjghjg');
                         updateUserDataAPI(
-                            id: getUserDataModel!.id.toString(),
-                            email: emailController.text.isNotEmpty
-                                ? emailController.text
-                                : '',
-                            name: firstNameController.text.isNotEmpty
-                                ? firstNameController.text
-                                : '',
-                            birthdate: birthdate,
-                            // countryCode: 'in',
-                            currentDate: currentDate,
-                            gender: genderController.text.isNotEmpty
-                                ? genderController.text
-                                : genderController.text,
-                            generalPermission: true,
-
-                            // languageCode: 'en',
-                            lastName: lastNameController.text.isNotEmpty
-                                ? lastNameController.text
-                                : '',
-                            middleName: middleNameController.text.isNotEmpty
-                                ? middleNameController.text
-                                : '',
-                            addition: additionController.text.isNotEmpty
-                                ? additionController.text
-                                : '',
-                            option: true,
-                            city: cityController.text.isNotEmpty
-                                ? cityController.text
-                                : '',
-                            houseNumber:
-                            houseNumberController.text.isNotEmpty
-                                ? houseNumberController.text
-                                : '',
-                            mobileNumber:
-                            phoneNumberController.text.isNotEmpty
-                                ? phoneNumberController.text
-                                : '',
-                            postalCode: postalCodeController.text.isNotEmpty
-                                ? postalCodeController.text
-                                : '',
-                            state: regionController.text.isNotEmpty
-                                ? regionController.text
-                                : '',
-                            streetName: streetNameController.text.isNotEmpty
-                                ? streetNameController.text
-                                : '',
-                            avatarUrl: avatar_url)
-                            .then((value) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BadgeScreen()));
-                        });
-                      } else
-                      {
-                        print('hyghvghvyjff');
-                        uploadImage().then((value1) {
-                          // print('sdhsbhnbnnbdn: ${value1!.url.toString()}');
-                          if (value1 != null) {
-                            print('dsafghfnbhfbrefbrufbrebfrbfhrfrhfhrfrf');
-                            setState(() {});
-                            updateUserDataAPI(
-                                id: getUserDataModel!.id.toString(),
+                                id: getUserDataModel1!.id.toString(),
                                 email: emailController.text.isNotEmpty
                                     ? emailController.text
                                     : '',
@@ -2210,19 +2197,18 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     ? firstNameController.text
                                     : '',
                                 birthdate: birthdate,
-                                countryCode: 'in',
+                                // countryCode: 'in',
                                 currentDate: currentDate,
                                 gender: genderController.text.isNotEmpty
                                     ? genderController.text
                                     : genderController.text,
                                 generalPermission: true,
 
-                                languageCode: 'en',
+                                // languageCode: 'en',
                                 lastName: lastNameController.text.isNotEmpty
                                     ? lastNameController.text
                                     : '',
-                                middleName:
-                                middleNameController.text.isNotEmpty
+                                middleName: middleNameController.text.isNotEmpty
                                     ? middleNameController.text
                                     : '',
                                 addition: additionController.text.isNotEmpty
@@ -2233,26 +2219,87 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     ? cityController.text
                                     : '',
                                 houseNumber:
-                                houseNumberController.text.isNotEmpty
-                                    ? houseNumberController.text
-                                    : '',
+                                    houseNumberController.text.isNotEmpty
+                                        ? houseNumberController.text
+                                        : '',
                                 mobileNumber:
-                                phoneNumberController.text.isNotEmpty
-                                    ? phoneNumberController.text
-                                    : '',
-                                postalCode:
-                                postalCodeController.text.isNotEmpty
+                                    phoneNumberController.text.isNotEmpty
+                                        ? phoneNumberController.text
+                                        : '',
+                                postalCode: postalCodeController.text.isNotEmpty
                                     ? postalCodeController.text
                                     : '',
                                 state: regionController.text.isNotEmpty
                                     ? regionController.text
                                     : '',
-                                streetName:
-                                streetNameController.text.isNotEmpty
+                                streetName: streetNameController.text.isNotEmpty
                                     ? streetNameController.text
                                     : '',
-                                avatarUrl:
-                                value1.formats!.medium!.url.toString())
+                                avatarUrl: avatar_url)
+                            .then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BadgeScreen()));
+                        });
+                      } else {
+                        print('hyghvghvyjff');
+                        uploadImage().then((value1) {
+                          // print('sdhsbhnbnnbdn: ${value1!.url.toString()}');
+                          if (value1 != null) {
+                            print('dsafghfnbhfbrefbrufbrebfrbfhrfrhfhrfrf');
+                            setState(() {});
+                            updateUserDataAPI(
+                                    id: getUserDataModel!.id.toString(),
+                                    email: emailController.text.isNotEmpty
+                                        ? emailController.text
+                                        : '',
+                                    name: firstNameController.text.isNotEmpty
+                                        ? firstNameController.text
+                                        : '',
+                                    birthdate: birthdate,
+                                    countryCode: 'in',
+                                    currentDate: currentDate,
+                                    gender: genderController.text.isNotEmpty
+                                        ? genderController.text
+                                        : genderController.text,
+                                    generalPermission: true,
+                                    languageCode: 'en',
+                                    lastName: lastNameController.text.isNotEmpty
+                                        ? lastNameController.text
+                                        : '',
+                                    middleName:
+                                        middleNameController.text.isNotEmpty
+                                            ? middleNameController.text
+                                            : '',
+                                    addition: additionController.text.isNotEmpty
+                                        ? additionController.text
+                                        : '',
+                                    option: true,
+                                    city: cityController.text.isNotEmpty
+                                        ? cityController.text
+                                        : '',
+                                    houseNumber:
+                                        houseNumberController.text.isNotEmpty
+                                            ? houseNumberController.text
+                                            : '',
+                                    mobileNumber:
+                                        phoneNumberController.text.isNotEmpty
+                                            ? phoneNumberController.text
+                                            : '',
+                                    postalCode:
+                                        postalCodeController.text.isNotEmpty
+                                            ? postalCodeController.text
+                                            : '',
+                                    state: regionController.text.isNotEmpty
+                                        ? regionController.text
+                                        : '',
+                                    streetName:
+                                        streetNameController.text.isNotEmpty
+                                            ? streetNameController.text
+                                            : '',
+                                    avatarUrl:
+                                        value1.formats!.medium!.url.toString())
                                 .then((value) {
                               Navigator.push(
                                   context,

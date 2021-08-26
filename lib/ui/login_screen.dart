@@ -256,6 +256,7 @@ class _login_screenState extends State<login_screen> {
                                     print('dsfhjbsdhjfndskjfnkj: ${value.user!.id.toString()}');
                                 SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
+                                prefs.clear();
                                 prefs.setString(
                                     'id', value.user!.id.toString());
                                 Navigator.push(
