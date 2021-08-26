@@ -166,25 +166,25 @@ class _VoucherDetailsState extends State<VoucherDetails> {
               ),
             ),
           ),
-          widget.validity.toString() != ''
-              ? Padding(
-                  padding: EdgeInsets.only(
-                      left: displayWidth(context) * 0.08,
-                      right: displayWidth(context) * 0.08,
-                      bottom: displayWidth(context) * 0.03),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Offer until ' + widget.validity.toString(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: displayWidth(context) * 0.04,
-                          fontFamily: 'Kipling_Regular',
-                          color: Colors.grey.withOpacity(0.5)),
-                    ),
-                  ),
-                )
-              : Container(),
+          Padding(
+            padding: EdgeInsets.only(
+                left: displayWidth(context) * 0.08,
+                right: displayWidth(context) * 0.08,
+                bottom: displayWidth(context) * 0.03),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                widget.validity.toString() != ''
+                    ? 'Offer until ' + widget.validity.toString()
+                    : 'Offer until 31 December 2021',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: displayWidth(context) * 0.04,
+                    fontFamily: 'Kipling_Regular',
+                    color: Colors.grey.withOpacity(0.5)),
+              ),
+            ),
+          ),
           Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: displayWidth(context) * 0.08),

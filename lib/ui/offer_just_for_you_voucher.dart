@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/module/all_voucher_details_model.dart';
@@ -174,7 +175,7 @@ class _OfferJustForYouVoucherScreenState
                                   ? customVoucherModelList[index]
                                       .subTitle
                                       .toString()
-                                  : '',
+                                  : 'Offer until 7 Aug 2021',
                               style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: displayWidth(context) * 0.04,
@@ -185,7 +186,10 @@ class _OfferJustForYouVoucherScreenState
                       );
                     })
                 : Center(
-                    child: CircularProgressIndicator(),
+                    child: ColorLoader3(
+                      radius: 40,
+                      dotRadius: 12,
+                    ),
                   )));
   }
 }

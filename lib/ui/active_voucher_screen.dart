@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/module/particular_voucher_details.dart';
@@ -153,7 +154,7 @@ class _ActiveVoucherScreenState extends State<ActiveVoucherScreen> {
                               color: Colors.black),
                         ),
                         Text(customVoucherModelList[index].subTitle!.trim().toString() != 'null'
-                            ?customVoucherModelList[index].subTitle.toString() : '',
+                            ?customVoucherModelList[index].subTitle.toString() : 'Valid until 14 June 2021 ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: displayWidth(context) * 0.04,
@@ -163,7 +164,10 @@ class _ActiveVoucherScreenState extends State<ActiveVoucherScreen> {
                     );
                   })
               : Center(
-                  child: CircularProgressIndicator(),
+                  child: ColorLoader3(
+                    radius: 40,
+                    dotRadius: 12,
+                  ),
                 )),
     );
   }
