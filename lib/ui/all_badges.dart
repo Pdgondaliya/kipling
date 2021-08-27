@@ -75,9 +75,9 @@ class _AllBadgesState extends State<AllBadges> {
               itemCount: finalBadgeModel!.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: displayWidth(context) * 0.00295,
-                  crossAxisSpacing: displayWidth(context) * 0.009,
-                  mainAxisSpacing: displayWidth(context) * 0.00099),
+                  childAspectRatio: displayWidth(context) * 0.0025,
+                  crossAxisSpacing: displayWidth(context) * 0.005,
+                  mainAxisSpacing: displayWidth(context) * 0.0008),
               itemBuilder: (BuildContext context, int k) {
                 return GestureDetector(
                   onTap: () => dialog1(
@@ -121,9 +121,9 @@ class _AllBadgesState extends State<AllBadges> {
               itemCount: allBadgesModelList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: displayHeight(context) * 0.00099,
-                  crossAxisSpacing: displayWidth(context) * 0.009,
-                  mainAxisSpacing: displayWidth(context) * 0.0007),
+                  childAspectRatio: displayHeight(context) * 0.00095,
+                  crossAxisSpacing: displayWidth(context) * 0.0085,
+                  mainAxisSpacing: displayWidth(context) * 0.00065),
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () => dialog(),
@@ -234,122 +234,120 @@ class _AllBadgesState extends State<AllBadges> {
         context: context,
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) => Dialog(
-              child: Flexible(
-                child: Container(
-                  // height: displayHeight(context) * 0.68,
-                  padding: EdgeInsets.all(displayWidth(context) * 0.02),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: Icon(
-                            Icons.close,
-                            color: Colors.black,
-                            size: 15,
-                          ),
+              child: Container(
+                // height: displayHeight(context) * 0.68,
+                padding: EdgeInsets.all(displayWidth(context) * 0.02),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.black,
+                          size: 15,
                         ),
                       ),
-                      SizedBox(
-                          width: displayWidth(context) * 0.25,
-                          height: displayWidth(context) * 0.25,
-                          child: Image.network(
-                            image,
-                            fit: BoxFit.contain,
-                          )),
-                      Text(
-                        'You have found',
-                        style: TextStyle(
-                            fontSize: displayHeight(context) * 0.02,
-                            fontFamily: 'Kipling_Bold',
-                            color: Color(0xff8ab250)),
-                      ),
-                      SizedBox(height: displayWidth(context) * 0.005),
-                      Text(
-                        badgeName,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Kipling_Bold',
-                            fontSize: displayHeight(context) * 0.04),
-                      ),
-                      // SizedBox(height: 10),
-                      // Flexible(
-                      //     child: Align(
-                      //       alignment: Alignment.center,
-                      //       child: Html(
-                      //         data: """
-                      //       $desc
-                      //       """,
-                      //         style: {
-                      //           "body": Style(
-                      //             fontFamily: 'Kipling_Regular'
-                      //           ),
-                      //         },
-                      //       ),
-                      //     )),
-                      Html(
-                        data: """
+                    ),
+                    SizedBox(
+                        width: displayWidth(context) * 0.25,
+                        height: displayWidth(context) * 0.25,
+                        child: Image.network(
+                          image,
+                          fit: BoxFit.contain,
+                        )),
+                    Text(
+                      'You have found',
+                      style: TextStyle(
+                          fontSize: displayHeight(context) * 0.02,
+                          fontFamily: 'Kipling_Bold',
+                          color: Color(0xff8ab250)),
+                    ),
+                    SizedBox(height: displayWidth(context) * 0.005),
+                    Text(
+                      badgeName,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Kipling_Bold',
+                          fontSize: displayHeight(context) * 0.04),
+                    ),
+                    // SizedBox(height: 10),
+                    // Flexible(
+                    //     child: Align(
+                    //       alignment: Alignment.center,
+                    //       child: Html(
+                    //         data: """
+                    //       $desc
+                    //       """,
+                    //         style: {
+                    //           "body": Style(
+                    //             fontFamily: 'Kipling_Regular'
+                    //           ),
+                    //         },
+                    //       ),
+                    //     )),
+                    Html(
+                      data: """
                               $desc
                               """,
-                        style: {
-                          "body": Style(
-                              fontFamily: 'Kipling_Regular',
-                              textAlign: TextAlign.center),
-                        },
-                      ),
-                      Html(
-                        data: """
+                      style: {
+                        "body": Style(
+                            fontFamily: 'Kipling_Regular',
+                            textAlign: TextAlign.center),
+                      },
+                    ),
+                    Html(
+                      data: """
                               $condition
                               """,
-                        style: {
-                          "body": Style(
-                              fontFamily: 'Kipling_Regular',
-                              textAlign: TextAlign.center),
-                        },
-                      ),
-                      // Flexible(
-                      //     child: Align(
-                      //       alignment: Alignment.center,
-                      //       child: Html(
-                      //         data: """
-                      //       $condition
-                      //       """,
-                      //         style: {
-                      //           "body": Style(
-                      //               fontFamily: 'Kipling_Regular'
-                      //           ),
-                      //         },
-                      //       ),
-                      //     )),
-                      SizedBox(height: displayWidth(context) * 0.005),
-                      Text(
-                        points,
-                        // '000 points',
-                        style: TextStyle(
-                            color: Color(0xff8ab250),
-                            fontFamily: 'Kipling_Bold',
-                            fontSize: displayHeight(context) * 0.04),
-                      ),
-                      SizedBox(height: displayWidth(context) * 0.005),
-                      RaisedButton(
-                        padding: EdgeInsets.symmetric(vertical: displayWidth(context) * 0.03),
-                        color: Color(0xff2c2d2e),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'Done',
-                          style: TextStyle(
-                            color: Colors.white,
+                      style: {
+                        "body": Style(
                             fontFamily: 'Kipling_Regular',
-                            fontSize: displayHeight(context) * 0.03,
-                          ),
+                            textAlign: TextAlign.center),
+                      },
+                    ),
+                    // Flexible(
+                    //     child: Align(
+                    //       alignment: Alignment.center,
+                    //       child: Html(
+                    //         data: """
+                    //       $condition
+                    //       """,
+                    //         style: {
+                    //           "body": Style(
+                    //               fontFamily: 'Kipling_Regular'
+                    //           ),
+                    //         },
+                    //       ),
+                    //     )),
+                    SizedBox(height: displayWidth(context) * 0.005),
+                    Text(
+                      points,
+                      // '000 points',
+                      style: TextStyle(
+                          color: Color(0xff8ab250),
+                          fontFamily: 'Kipling_Bold',
+                          fontSize: displayHeight(context) * 0.04),
+                    ),
+                    SizedBox(height: displayWidth(context) * 0.005),
+                    RaisedButton(
+                      padding: EdgeInsets.symmetric(vertical: displayWidth(context) * 0.03),
+                      color: Color(0xff2c2d2e),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Done',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Kipling_Regular',
+                          fontSize: displayHeight(context) * 0.03,
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             )));
