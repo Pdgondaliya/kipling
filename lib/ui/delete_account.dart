@@ -1,0 +1,439 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/loader.dart';
+import 'package:kipling/custom_widget/text_field.dart';
+import 'package:kipling/helper/shared_prefs.dart';
+import 'package:kipling/main.dart';
+import 'package:kipling/module/delete_account_fusion_auth_model.dart';
+import 'package:kipling/module/delete_data_page_model.dart';
+import 'package:kipling/module/get_user_data.dart';
+import 'package:kipling/ui/login_screen.dart';
+
+class DeleteAccount extends StatefulWidget {
+  @override
+  _DeleteAccountState createState() => _DeleteAccountState();
+}
+
+class _DeleteAccountState extends State<DeleteAccount> {
+  DeleteDataPageResponse? ld;
+  String passwordError = '';
+  bool privacyPolicy = true;
+
+  Dio _dio = Dio();
+
+  TextEditingController passwordController = TextEditingController();
+
+  Future<DeleteFusionAuthAccountModel> deleteFusionAuthAccountAPI(
+      String fusionAuthId) async {
+    showLoader();
+    var headerMap = {
+      "Authorization":
+          'YmA9D5ju96N_rrBJsGDfKSS3nPuqYxXZp_2qUeYwWinD1eDC4TtriBTS'
+    };
+    var options = BaseOptions(
+        baseUrl: 'https://auth-mobile-app-staging.loyalty-cloud.com/api/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.get("user/$fusionAuthId");
+      // Fluttertoast.showToast(
+      //     msg: 'Account Created Successfully',
+      //     gravity: ToastGravity.BOTTOM,
+      //     backgroundColor: Colors.black);
+      // Navigator.pop(context);
+      hideLoader();
+      return DeleteFusionAuthAccountModel.fromJson(response.data);
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
+      } else {
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
+      }
+    }
+  }
+
+  Future<DeleteFusionAuthAccountModel> deleteAccountAPI(
+      String customerId) async {
+    showLoader();
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl:
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.get("customers/$customerId");
+      hideLoader();
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: 'Account deleted Successfully',
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.black);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => login_screen()));
+      }
+      return DeleteFusionAuthAccountModel.fromJson(response.data);
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
+      } else {
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
+      }
+    }
+  }
+
+  Future<GetUserDataModel> programIdentifierCallAPI(String id) async {
+    // showLoader();
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl:
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.get("program-identifiers/$id");
+      print('afdsfgdsgdfsgfgfgfg: ${response.data}');
+      hideLoader();
+      return GetUserDataModel.fromJson(response.data);
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
+      } else {
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
+      }
+    }
+  }
+
+  getIds() {
+    Shared_Preferences.prefGetString(Shared_Preferences.keyId, '')
+        .then((fusionId) {
+      programIdentifierCallAPI(fusionId!).then((programIdentifier) {
+        deleteFusionAuthAccountAPI(fusionId!).then((deleted) {
+          deleteAccountAPI(programIdentifier.balance!.customerId.toString());
+        });
+      });
+    });
+  }
+
+  iOSConfirmationDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Delete your account?',
+                style: TextStyle(fontFamily: 'Kipling_Regular')),
+            content: Text(
+                'Do you want to delete your account? All of the data will be permanently deleted.',
+                style: TextStyle(fontFamily: 'Kipling_Regular')),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                      color: Colors.black, fontFamily: 'Kipling_Regular'),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text(
+                  'Delete',
+                  style: TextStyle(
+                      fontFamily: 'Kipling_Regular', color: Colors.blue),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  getIds();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  androidConfirmationDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete your account?',
+                style: TextStyle(fontFamily: 'Kipling_Regular')),
+            content: Text(
+                'Do you want to delete your account? All of the data will be permanently deleted.',
+                style: TextStyle(fontFamily: 'Kipling_Regular')),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                        color: Colors.black, fontFamily: 'Kipling_Regular'),
+                  )),
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    getIds();
+                  },
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(
+                        color: Colors.blue, fontFamily: 'Kipling_Regular'),
+                  ))
+            ],
+          );
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    ld = deleteAccountData;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Icon(Icons.arrow_back_ios, color: Colors.black),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: displayWidth(context) * 0.03),
+            child: Center(
+              child: Container(
+                alignment: Alignment.topRight,
+                child: DropdownButton(
+                  value: index == 1 ? 'NL' : dropdownvalue,
+                  underline: Container(),
+                  icon: Icon(
+                    Icons.arrow_drop_down_rounded,
+                    size: 20,
+                  ),
+                  items: <String>['EN', 'NL']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                        if (dropdownvalue == 'EN') {
+                          index = 0;
+                          print('Index0: $index');
+                          dropdownvalue = newValue!;
+                        } else if (dropdownvalue == 'NL') {
+                          index = 1;
+                          print('Index1: $index');
+                        }
+                      });
+                    });
+                  },
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.08),
+        children: [
+          Text(
+            index == 0
+                ? ld!.value!.titleTextEn.toString()
+                : ld!.value!.titleTextNl.toString(),
+            style: TextStyle(
+                fontSize: displayWidth(context) * 0.06,
+                fontFamily: 'Kipling_Bold',
+                color: Colors.black),
+          ),
+          Html(
+            data: index == 0
+                ? ld!.value!.descriptionTextEn.toString()
+                : ld!.value!.descriptionTextNl.toString(),
+            style: {
+              "body": Style(
+                  fontFamily: 'Kipling_Regular',
+                  textAlign: TextAlign.start,
+                  fontSize: FontSize.larger),
+            },
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: displayWidth(context) * 0.02,
+              // horizontal: displayWidth(context) * 0.04,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  index == 0
+                      ? ld!.value!.fields!.password!.titleTextEn.toString()
+                      : ld!.value!.fields!.password!.titleTextEn.toString(),
+                  style: TextStyle(
+                      color: Color(0xff010001),
+                      fontSize: displayWidth(context) * 0.04,
+                      fontFamily: 'Kipling_Regular'),
+                ),
+                SizedBox(height: 5),
+                buildtextfields(
+                    context: context,
+                    isPassword: true,
+                    controller: passwordController,
+                    hint: index == 0
+                        ? ld!.value!.fields!.password!.placeholderTextEn
+                            .toString()
+                        : ld!.value!.fields!.password!.placeholderTextNl
+                            .toString(),
+                    onChanged: (value) {
+                      if (value != '') {
+                        setState(() {
+                          passwordError = '';
+                        });
+                      }
+                    },
+                    keyboard: TextInputType.text),
+                passwordError == ''
+                    ? Container()
+                    : Container(
+                        child: Text(passwordError,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontFamily: 'Kipling_Regular')),
+                      )
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                // horizontal: displayWidth(context) * 0.04,
+                top: displayWidth(context) * 0.04,
+                bottom: displayWidth(context) * 0.02),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        privacyPolicy = !privacyPolicy;
+                      });
+                    },
+                    child: privacyPolicy == false
+                        ? Icon(
+                            Icons.check_box_outlined,
+                            color: Colors.black,
+                          )
+                        : Icon(
+                            Icons.check_box,
+                            color: Color(0xff89b14b),
+                          ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Flexible(
+                  child: Text(
+                    index == 0
+                        ? ld!.value!.fields!.generalPermission!.titleTextEn
+                            .toString()
+                        : ld!.value!.fields!.generalPermission!.titleTextNl
+                            .toString(),
+                    style: TextStyle(
+                        color: Color(0xff010001),
+                        fontSize: displayWidth(context) * 0.04,
+                        fontFamily: 'Kipling_Regular'),
+                  ),
+                )
+              ],
+            ),
+          ),
+          privacyPolicy == false
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.check_box_outlined,
+                      color: Colors.transparent,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Please select our Privacy Policy',
+                      style: TextStyle(
+                          color: Colors.red, fontFamily: 'Kipling_Regular'),
+                    ),
+                  ],
+                )
+              : Container(),
+          Container(
+            width: double.infinity,
+            height: displayHeight(context) * 0.07,
+            margin: EdgeInsets.only(top: displayHeight(context) * 0.03),
+            child: ElevatedButton(
+              onPressed: () async {
+                if (passwordController.text == '') {
+                  setState(() {
+                    passwordError = 'Please enter password';
+                  });
+                } else {
+                  Platform.isAndroid
+                      ? androidConfirmationDialog()
+                      : iOSConfirmationDialog();
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                primary: const Color(0xFF2d2c2e),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0)),
+              ),
+              child: Text(
+                index == 0
+                    ? ld!.value!.ctaButtonTextEn.toString()
+                    : ld!.value!.ctaButtonTextNl.toString(),
+                style: TextStyle(
+                    fontSize: displayWidth(context) * 0.05,
+                    color: Color(0xfffcfdfd),
+                    fontFamily: 'Kipling_Regular'),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/loader.dart';
+import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/custom_widget/text_field.dart';
@@ -747,17 +748,19 @@ class _CreateAccountState extends State<CreateAccount> {
                                     ),
                             ),
                             SizedBox(width: 10),
-                            Flexible(child: Text(
-                              index == 0
-                                  ? ld!.value.fields.generalPermission
-                                  .titleTextEn
-                                  : ld!.value.fields.generalPermission
-                                  .titleTextNl,
-                              style: TextStyle(
-                                  color: Color(0xff010001),
-                                  fontSize: displayWidth(context) * 0.05,
-                                  fontFamily: 'Kipling_Regular'),
-                            ),)
+                            Flexible(
+                              child: Text(
+                                index == 0
+                                    ? ld!.value.fields.generalPermission
+                                        .titleTextEn
+                                    : ld!.value.fields.generalPermission
+                                        .titleTextNl,
+                                style: TextStyle(
+                                    color: Color(0xff010001),
+                                    fontSize: displayWidth(context) * 0.05,
+                                    fontFamily: 'Kipling_Regular'),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -889,10 +892,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                         name: fNameController.text,
                                         identifier: value.user!.id.toString())
                                     .then((value) async {
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.setString('id', value!.id.toString());
-                                  print('id:::: ${prefs.getString('id')}');
+                                  Shared_Preferences.prefGetString(
+                                          Shared_Preferences.keyId, '')
+                                      .then((value) {
+                                    print('id:::: $value');
+                                  });
                                 });
                               });
                               // createAccountAPI(

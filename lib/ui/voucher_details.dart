@@ -1,11 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
+import 'package:kipling/custom_widget/loader.dart';
+import 'package:kipling/helper/shared_prefs.dart';
+import 'package:kipling/module/activated_button_model.dart';
 
 class VoucherDetails extends StatefulWidget {
   String? title;
@@ -14,6 +19,8 @@ class VoucherDetails extends StatefulWidget {
   String? point;
   String? conditions;
   String? validity;
+  String? customerId;
+  String? templateId;
 
   VoucherDetails(
       {this.title,
@@ -21,13 +28,95 @@ class VoucherDetails extends StatefulWidget {
       this.point,
       this.conditions,
       this.description,
-      this.validity});
+      this.validity,
+      this.customerId,
+      this.templateId});
 
   @override
   _VoucherDetailsState createState() => _VoucherDetailsState();
 }
 
 class _VoucherDetailsState extends State<VoucherDetails> {
+  String pointRequired = '';
+
+  ActivatedOfferButtonErrorResponse activatedOfferButtonErrorResponse =
+      ActivatedOfferButtonErrorResponse();
+
+  ActivatedOfferButtonResponse activatedOfferButtonResponse =
+      ActivatedOfferButtonResponse();
+
+  Dio _dio = Dio();
+
+  getCustomerId() {
+    Shared_Preferences.prefGetString(Shared_Preferences.keyId, '').then((id) {
+      print('ValueValue: $id');
+    });
+  }
+
+  Future activateVoucherButtonAPI(
+      {String? customerId, String? rewardTemplateId}) async {
+    showLoader();
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl: 'https://api-mobile-app-staging.loyalty-cloud.com/v1/',
+        headers: headerMap);
+    _dio.options = options;
+
+    try {
+      Response response = await _dio.post("rewards-service/rewards", data: {
+        "customer_id": customerId,
+        "reward_template_id": rewardTemplateId,
+        "source": "mobile_app"
+      });
+      print('Status Code: ${response.statusCode}');
+      if (response.statusCode == 400) {
+        setState(() {
+          activatedOfferButtonErrorResponse = response.data;
+          print('error msg: $pointRequired');
+          pointRequired = activatedOfferButtonErrorResponse.message.toString();
+        });
+        return ActivatedOfferButtonErrorResponse.fromJson(response.data);
+      } else if (response.statusCode == 200) {
+        setState(() {
+          activatedOfferButtonResponse = response.data;
+        });
+        return ActivatedOfferButtonResponse.fromJson(response.data);
+      }
+      hideLoader();
+      print('hkjsdfkjhfkjdshfkjhfkd: ${response.data}');
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        print('catch Error: ${jsonDecode(e.response.toString())}');
+        if (e.response != null) {
+          // print('catch Error: ${jsonDecode(e.response['message'].toString())}');
+          activatedOfferButtonErrorResponse =
+              ActivatedOfferButtonErrorResponse.fromJson(errorData);
+          print(
+              'catch Error: ${activatedOfferButtonErrorResponse.message.toString()}');
+        }
+        pointRequired = activatedOfferButtonErrorResponse.message.toString();
+        setState(() {});
+        /*  setState(() {
+          activatedOfferButtonErrorResponse = errorData;
+          print('kjfbkjdnfkjdsnfdfkjdsf: $activatedOfferButtonErrorResponse');
+
+          pointRequired = activatedOfferButtonErrorResponse.message.toString();
+          print('error msg: $pointRequired');
+        });*/
+
+        return activatedOfferButtonErrorResponse.message.toString();
+      } else {
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        print('else error : ${errorData.toString()}');
+        throw SocketException(errorData);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     internetCheck(context);
@@ -137,35 +226,49 @@ class _VoucherDetailsState extends State<VoucherDetails> {
               },
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                right: displayWidth(context) * 0.2,
-                left: displayWidth(context) * 0.2,
-                bottom: displayWidth(context) * 0.03),
-            child: Container(
-              width: double.infinity,
-              height: displayHeight(context) * 0.07,
-              margin: EdgeInsets.only(top: displayHeight(context) * 0.03),
-              child: ElevatedButton(
-                onPressed: () => Platform.isAndroid
-                    ? _showAndroidDialog()
-                    : _showiOSDialog(),
-                style: ElevatedButton.styleFrom(
-                  primary: const Color(0xFF2d2c2e),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0)),
-                ),
-                child: Text(
-                  'Activate with ' + widget.point.toString() + ' points',
-                  style: TextStyle(
-                    fontSize: displayWidth(context) * 0.04,
-                    fontFamily: 'Kipling_Regular',
-                    color: Color(0xfffcfdfd),
+          pointRequired != ''
+              ? Padding(
+                  padding: EdgeInsets.only(
+                      right: displayWidth(context) * 0.08,
+                      left: displayWidth(context) * 0.08,
+                      bottom: displayWidth(context) * 0.03),
+                  child: Text(
+                    pointRequired,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: displayWidth(context) * 0.04,
+                        fontFamily: 'Kipling_Regular',
+                        color: Color(0xff89b14b)),
+                  ))
+              : Padding(
+                  padding: EdgeInsets.only(
+                      right: displayWidth(context) * 0.2,
+                      left: displayWidth(context) * 0.2,
+                      bottom: displayWidth(context) * 0.03),
+                  child: Container(
+                    width: double.infinity,
+                    height: displayHeight(context) * 0.07,
+                    margin: EdgeInsets.only(top: displayHeight(context) * 0.03),
+                    child: ElevatedButton(
+                      onPressed: () => Platform.isAndroid
+                          ? _showAndroidDialog()
+                          : _showiOSDialog(),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xFF2d2c2e),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0)),
+                      ),
+                      child: Text(
+                        'Activate with ' + widget.point.toString() + ' points',
+                        style: TextStyle(
+                          fontSize: displayWidth(context) * 0.04,
+                          fontFamily: 'Kipling_Regular',
+                          color: Color(0xfffcfdfd),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
           Padding(
             padding: EdgeInsets.only(
                 left: displayWidth(context) * 0.08,
@@ -293,6 +396,9 @@ class _VoucherDetailsState extends State<VoucherDetails> {
                     fontFamily: 'Kipling_Regular', color: Color(0xff89b14b)),
               ),
               onPressed: () {
+                activateVoucherButtonAPI(
+                    customerId: widget.customerId,
+                    rewardTemplateId: widget.templateId);
                 Navigator.of(context).pop();
               },
             ),

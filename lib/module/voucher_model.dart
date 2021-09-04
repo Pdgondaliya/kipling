@@ -121,6 +121,8 @@ class CustomVoucherModel {
   String? point;
   String? conditions;
   String? description;
+  String? customerId;
+  String? rewardTemplateId;
 
   CustomVoucherModel(
       {this.image,
@@ -128,5 +130,7 @@ class CustomVoucherModel {
       this.subTitle,
       this.point,
       this.description,
-      this.conditions});
+      this.conditions,
+      this.customerId,
+      this.rewardTemplateId});
 }

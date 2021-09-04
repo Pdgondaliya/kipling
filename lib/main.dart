@@ -7,9 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
+import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/module/badge_model.dart' as b;
 import 'package:kipling/module/country_model.dart' as c;
 import 'package:kipling/module/create_account_model.dart' as ca;
+import 'package:kipling/module/delete_data_page_model.dart';
 import 'package:kipling/module/forgot_password_confirmation_model.dart';
 import 'package:kipling/module/forgot_password_model.dart';
 import 'package:kipling/module/login_data.dart';
@@ -19,7 +21,9 @@ import 'package:http/http.dart' as http;
 import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/module/welcome_model.dart';
 import 'package:kipling/ui/all_badges.dart';
+import 'package:kipling/ui/delete_account.dart';
 import 'package:kipling/ui/login_screen.dart';
+import 'package:kipling/ui/personal_details.dart';
 import 'package:kipling/ui/voucher_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Database/db_data.dart';
@@ -58,8 +62,11 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+String id = '';
+
 Future<b.BadgeData>? badgeData;
 Future<c.CountryPickerModel>? futureCountryPickerDataAlbum;
+Future<DeleteDataPageResponse>? futuredeleteDataAlbum;
 late Future<PersonalDetailData> futurePersonDataAlbum;
 late Future<VoucherModel> futureVoucherDataAlbum;
 Future<WelComeScreenModel>? futureWelComeScreenAlbum;
@@ -69,6 +76,7 @@ late Future<Splashdata> futureAlbum;
 late Future<ca.CreateAccountModel> futureCretaeAccountAlbum;
 
 List<b.BadgeData>? badgeDetailsData;
+List<DeleteDataPageResponse>? deleteData;
 List<c.Value>? countryList;
 List<WelComeScreenModel>? welComeScreenList;
 List<ForgotPasswordModel>? forgotPasswordList;
@@ -76,6 +84,7 @@ List<ForgotPasswordConfirmationModel>? forgotPasswordConfirmationList;
 List<VoucherModel>? voucherModellist;
 
 PersonalDetailData? personalDetailData;
+DeleteDataPageResponse? deleteDetailData;
 WelComeScreenModel? welcomeData;
 ForgotPasswordModel? forgotPasswordData;
 ForgotPasswordConfirmationModel? forgotPasswordConfirmationData;
@@ -83,6 +92,7 @@ VoucherModel? voucherData;
 
 List<b.Content>? contents;
 List<Todo> personalDataList = [];
+List<DeleteDataPageResponse> deleteDataList = [];
 List<VoucherModel> voucherDataList = [];
 List<PersonalDetailData> personalList = [];
 List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
@@ -93,6 +103,7 @@ List<ForgotPasswordConfirmationModel> forgotPasswordConfirmationModel = [];
 Logindata? logindata;
 c.CountryPickerModel? countryPickerData;
 ca.CreateAccountModel? createAccountData;
+DeleteDataPageResponse? deleteAccountData;
 List<Todo> taskList = [];
 List<Logindata> profileList = [];
 List<ca.CreateAccountModel> createAccountList = [];
@@ -110,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
     futureCretaeAccountAlbum = fetchCreateAccountData();
     futureCountryPickerDataAlbum = fetchCountryListData();
     futureForgotPasswordAlbum = fetchForgotPasswordData();
+    futuredeleteDataAlbum = fetchDeleteAccountData();
     futureVoucherDataAlbum = fetchVoucherData();
     futureForgotPassworConfirmationAlbum =
         fetchForgotPasswordConfirmationData();
@@ -153,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print("Splash:responseJson");
     print(responseJson);
     if (response.statusCode == 200) {
-      _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
         print("Login Data --->" + logindata.toString());
         print("Personal Data --->" + personalDetailData.toString());
         if (logindata != null &&
@@ -161,14 +173,27 @@ class _MyHomePageState extends State<MyHomePage> {
                     null /*&&
             createAccountData != null*/
             ) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => login_screen(
-                      // ld: logindata,
-                      // personalDetailData: personalDetailData,
-                      // createAccountModel: createAccountData,
-                      )));
+          Shared_Preferences.prefGetString(Shared_Preferences.keyId, '')
+              .then((value) {
+            print('valuevaluevalue: $value');
+            id = value!;
+            print('Id: $id');
+            setState(() {});
+            if (id != "") {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => PersonalDetails()));
+            } else {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => login_screen(
+                          // ld: logindata,
+                          // personalDetailData: personalDetailData,
+                          // createAccountModel: createAccountData,
+                          )));
+            }
+          });
+
           _timer.cancel();
         }
       });
@@ -195,6 +220,28 @@ class _MyHomePageState extends State<MyHomePage> {
       });
 
       return ca.CreateAccountModel.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  //deleteAccount API
+  Future<DeleteDataPageResponse> fetchDeleteAccountData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=delete_my_account'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("createAccount:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {
+        deleteAccountData = DeleteDataPageResponse.fromJson(responseJson[0]);
+      });
+
+      return DeleteDataPageResponse.fromJson(responseJson[0]);
     } else {
       throw Exception('Failed to load album');
     }
@@ -487,11 +534,13 @@ class _MyHomePageState extends State<MyHomePage> {
             if (responseJson[i]['name'] == 'login') {
               print("${responseJson[i]['value']}");
               logindata = Logindata.fromJson(responseJson[i]);
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.setString('fusionAuthId',
-                  logindata!.value![0].fusionauthApplicationId.toString());
-              print(
-                  'Login Fusion Auth Id: ${logindata!.value![0].fusionauthApplicationId}');
+              Shared_Preferences.prefSetString(Shared_Preferences.fusionAuthId,
+                      logindata!.value![0].fusionauthApplicationId.toString())
+                  .then((value) {
+                print(
+                    'Login Fusion Auth Id: ${logindata!.value![0].fusionauthApplicationId}');
+              });
+
               print("Login:${logindata!.name}");
             }
           }

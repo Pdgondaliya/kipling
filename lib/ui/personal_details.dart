@@ -5,18 +5,21 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/custom_widget/text_field.dart';
+import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/get_user_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/update_user_details_model.dart';
 import 'package:kipling/module/upload_image_model.dart';
 import 'package:kipling/ui/badge_screen.dart';
+import 'package:kipling/ui/delete_account.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:dio/dio.dart' as d;
 import 'package:kipling/ui/voucher_screen.dart';
@@ -60,6 +63,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   String? dob;
   String? id;
   String? avatar_url;
+  int? statusCode;
 
   PersonalDetailData? ld;
 
@@ -185,7 +189,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         "name": name,
         "middle_name": middleName,
         "last_name": lastName,
-        "gender": "",
+        "gender": gender,
         "birth_date": birthdate,
         "birth_place": "",
         "country_code": countryCode,
@@ -267,7 +271,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     }
   }
 
-  Future getData() async {
+  /*Future getData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     print('id: ${preferences.getString('id')}');
 
@@ -284,7 +288,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     currentDate = '${date}T${timeFormat}Z';
     // id = preferences.getString('id');
     return preferences.getString('id');
-  }
+  }*/
 
   Future<UploadImageModel?> uploadImage() async {
     showLoader();
@@ -325,14 +329,49 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     }
   }
 
+  Future<int> logoutAPI({String? email}) async {
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl: 'https://auth-mobile-app-staging.loyalty-cloud.com/api/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.post(
+        "logout",
+      );
+      setState(() {
+        statusCode = response.statusCode;
+      });
+      print('Logout Status Code: $statusCode');
+      if (statusCode == 200) {
+        Shared_Preferences.clearAllPref();
+        Fluttertoast.showToast(
+            msg: 'Logout Successfully',
+            textColor: Colors.white,
+            backgroundColor: Colors.black);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => login_screen()));
+      }
+      return response.statusCode!;
+    } on DioError catch (e) {
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        var errorMessage = errorData["message"];
+        throw Exception(errorMessage);
+      } else {
+        throw SocketException("");
+      }
+    }
+  }
+
   @override
   void initState() {
     print('index: $index');
     print('Value List: ${countryList.toString()}');
     ld = personalDetailData;
-    getData().then((id) {
+    Shared_Preferences.prefGetString(Shared_Preferences.keyId, '').then((id) {
       print('ValueValue: $id');
-      programIdentifierCallAPI(id).then((programIdentifier) {
+      programIdentifierCallAPI(id!).then((programIdentifier) {
         getUserDataModel = programIdentifier;
         print('Value1Value1: ${programIdentifier.id.toString()}');
         getUserDataAPI(programIdentifier.id.toString()).then((getData) {
@@ -344,7 +383,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             languageController.text = 'nl';
           }
 
-          setState(()  {
+          setState(() {
             firstNameController.text = getData.name!.toString().isNotEmpty
                 ? getData.name.toString()
                 : '';
@@ -389,10 +428,15 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             genderController.text = getData.gender.toString().isNotEmpty
                 ? getData.gender.toString()
                 : '';
+            genderValue = getData.gender.toString().isNotEmpty
+                ? getData.gender.toString()
+                : 'Male';
             countryCode = getData.countryCode.toString().isNotEmpty
                 ? getData.countryCode.toString()
                 : '';
-
+            print(
+                'gender Value init--->: $genderValue    ${genderController.text}');
+            genderController.text = genderValue;
 
             if (countryCode.isNotEmpty && countryCode != '') {
               print('Country List Length: ${countryList!.length}');
@@ -401,7 +445,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 if (countryList![i].code == countryCode) {
                   print('Country List Length: ${countryList![i].name}');
                   setState(() {
-
                     countryController.text = countryList![i].name;
                     countryValue = countryList![i].name;
                     print('Country Name = ${countryController.text}');
@@ -711,12 +754,33 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 20),
+            padding: EdgeInsets.only(right: 10),
+            child: GestureDetector(
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DeleteAccount())),
+              child: Icon(
+                Icons.delete,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
             child: GestureDetector(
               onTap: () => Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Voucher())),
               child: Icon(
                 Icons.add,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: GestureDetector(
+              onTap: () => logoutAPI(),
+              child: Icon(
+                Icons.logout,
                 color: Colors.black,
               ),
             ),
@@ -936,6 +1000,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                         onChanged: (String? value) {
                                           setState(() {
                                             genderValue = value!;
+
+                                            genderController.text = value;
                                           });
                                         },
                                         hint: Container(
@@ -1199,16 +1265,20 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                           setState(() {
                                             countryValue = value!;
 
-                                            print('Country List Length: ${countryList!.length}');
+                                            print(
+                                                'Country List Length: ${countryList!.length}');
                                             countryController.text = value;
 
-                                            if(countryList != null) {
+                                            if (countryList != null) {
                                               for (int i = 0;
-                                              i < countryList!.length;
-                                              i++) {
-                                                if (countryList![i].name == value) {
-                                                  countryCode = countryList![i].code;
-                                                  print('Country Code: $countryCode');
+                                                  i < countryList!.length;
+                                                  i++) {
+                                                if (countryList![i].name ==
+                                                    value) {
+                                                  countryCode =
+                                                      countryList![i].code;
+                                                  print(
+                                                      'Country Code: $countryCode');
                                                 }
                                               }
                                             }
@@ -1272,7 +1342,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                                                 .code
                                                                 .toString();
 
-                                                        print('Country Code: ${countryCode}');
+                                                        print(
+                                                            'Country Code: ${countryCode}');
                                                       });
                                                     },
                                                   ),
@@ -2266,7 +2337,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       if (imageFile!.path.isEmpty) {
                         print('fghjhjghjghjg');
 
-                        print('lkjsdfuinfkjsdnfvikjdsbhvhjds: ${countryCode.isNotEmpty ? countryCode : ''}');
+                        print(
+                            'lkjsdfuinfkjsdnfvikjdsbhvhjds: ${countryCode.isNotEmpty ? countryCode : ''}');
+                        print(
+                            'gender Value: $genderValue    ${genderController.text}');
                         updateUserDataAPI(
                                 id: getUserDataModel1!.id.toString(),
                                 email: emailController.text.isNotEmpty
@@ -2280,7 +2354,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 currentDate: currentDate,
                                 gender: genderController.text.isNotEmpty
                                     ? genderController.text
-                                    : genderController.text,
+                                    : '',
                                 generalPermission: true,
                                 countryCode:
                                     countryCode.isNotEmpty ? countryCode : '',
@@ -2346,7 +2420,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                     currentDate: currentDate,
                                     gender: genderController.text.isNotEmpty
                                         ? genderController.text
-                                        : genderController.text,
+                                        : '',
                                     generalPermission: true,
                                     languageCode:
                                         languageController.text.isNotEmpty

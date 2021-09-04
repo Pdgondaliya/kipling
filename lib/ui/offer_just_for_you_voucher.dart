@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
+import 'package:kipling/custom_widget/loader.dart';
+import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/module/all_voucher_details_model.dart';
+import 'package:kipling/module/get_user_data.dart';
 import 'package:kipling/module/particular_voucher_details.dart';
 import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/ui/voucher_details.dart';
@@ -22,7 +25,72 @@ class _OfferJustForYouVoucherScreenState
     extends State<OfferJustForYouVoucherScreen> {
   Dio _dio = Dio();
 
+  String? customerId;
+  String? selectedTemplateId;
+
   List<CustomVoucherModel> customVoucherModelList = [];
+
+  Future<GetUserDataModel> programIdentifierCallAPI(String id) async {
+    // showLoader();
+    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
+    var options = BaseOptions(
+        baseUrl:
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.get("program-identifiers/$id");
+      print('afdsfgdsgdfsgfgfgfg: ${response.data}');
+      hideLoader();
+      return GetUserDataModel.fromJson(response.data);
+    } on DioError catch (e) {
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+        throw Exception(errorData);
+      } else {
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
+      }
+    }
+  }
+
+  getCustomerId() {
+    Shared_Preferences.prefGetString(Shared_Preferences.keyId, '').then((id) {
+      print('ValueValue: $id');
+      programIdentifierCallAPI(id!).then((ProgramIdentifier) {
+        setState(() {
+          customerId = ProgramIdentifier.balance!.customerId.toString();
+          print('CustomerId: $customerId');
+        });
+        voucherRewardCommonAPI(ProgramIdentifier.balance!.customerId.toString())
+            .then((voucherAPI) {
+          for (int i = 0; i < voucherAPI.items!.length; i++) {
+            print('Value: ${voucherAPI.items![i].id}');
+            particularVoucherDetailsAPI(voucherAPI.items![i]!.id.toString())
+                .then((pvDetails) {
+              print('jajjajajajajajaja');
+              setState(() {
+                customVoucherModelList.add(CustomVoucherModel(
+                    customerId: customerId,
+                    rewardTemplateId: voucherAPI.items![i].id.toString(),
+                    image: pvDetails.images![0].formats!.small!.url.toString(),
+                    title: voucherAPI.items![i].name.toString(),
+                    subTitle: voucherAPI.items![i].validityEndDate.toString(),
+                    point: voucherAPI.items![i].pointsNeeded.toString(),
+                    conditions: pvDetails.conditions.toString(),
+                    description: pvDetails.description.toString()));
+                print('customList: ${customVoucherModelList!.length}');
+                print('sdgsdf ${customVoucherModelList![0].image}');
+              });
+            });
+          }
+        });
+      });
+    });
+  }
 
   Future<AllVoucherDetailsModel> voucherRewardCommonAPI(String id) async {
     var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
@@ -74,7 +142,8 @@ class _OfferJustForYouVoucherScreenState
   @override
   void initState() {
     super.initState();
-    voucherRewardCommonAPI('9d6e27c8-eb6c-4571-9876-6b57c958872e')
+    getCustomerId();
+    /*  voucherRewardCommonAPI('9d6e27c8-eb6c-4571-9876-6b57c958872e')
         .then((value) {
       for (int i = 0; i < value.items!.length; i++) {
         print('Value: ${value.items![i].id}');
@@ -94,7 +163,7 @@ class _OfferJustForYouVoucherScreenState
           });
         });
       }
-    });
+    });*/
   }
 
   @override
@@ -115,6 +184,7 @@ class _OfferJustForYouVoucherScreenState
                             context,
                             MaterialPageRoute(
                                 builder: (context) => VoucherDetails(
+
                                       title: customVoucherModelList[index]
                                           .title
                                           .toString(),

@@ -12,6 +12,7 @@ import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/custom_widget/text_field.dart';
+import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/module/login_check_model.dart';
@@ -45,10 +46,8 @@ class _login_screenState extends State<login_screen> {
   // final List<Logindata> pl=widget.;
   late Logindata ld;
   Color bgColor = Colors.white;
-  TextEditingController emailController =
-      TextEditingController();
-  TextEditingController passwordController =
-      TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   String? ipAddress;
   String? applicationId;
@@ -57,9 +56,11 @@ class _login_screenState extends State<login_screen> {
     ipAddress = await Ipify.ipv4();
     print('IPAddress: $ipAddress');
 
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    applicationId = pref.getString('fusionAuthId');
-    print('Application Id: $applicationId');
+    Shared_Preferences.prefGetString(Shared_Preferences.fusionAuthId, "")
+        .then((value) {
+      applicationId = value;
+      print('Application Id: $applicationId');
+    });
   }
 
   // String dropdownvalue = 'EN';
@@ -88,6 +89,7 @@ class _login_screenState extends State<login_screen> {
           msg: 'Login SuccessFully',
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.black);
+
       hideLoader();
       return LoginModel.fromJson(response.data);
     } on DioError catch (e) {
@@ -253,14 +255,17 @@ class _login_screenState extends State<login_screen> {
                                       applicationId!,
                                       ipAddress!)
                                   .then((value) async {
-                                    print('dsfhjbsdhjfndskjfnkj: ${value.user!.id.toString()}');
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                prefs.clear();
-                                prefs.setString(
-                                    'id', value.user!.id.toString());
+                                print(
+                                    'dsfhjbsdhjfndskjfnkj: ${value.user!.id.toString()}');
+
+                                Shared_Preferences.prefSetString(
+                                    Shared_Preferences.keyId,
+                                    value.user!.id.toString());
                                 Navigator.push(
-                                    context, MaterialPageRoute(builder: (context) => PersonalDetails()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PersonalDetails()));
                               });
                             },
                             style: ElevatedButton.styleFrom(
