@@ -345,6 +345,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
       print('Logout Status Code: $statusCode');
       if (statusCode == 200) {
         Shared_Preferences.clearAllPref();
+        Shared_Preferences.clearPref(Shared_Preferences.keyId);
         Fluttertoast.showToast(
             msg: 'Logout Successfully',
             textColor: Colors.white,

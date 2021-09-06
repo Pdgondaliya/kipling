@@ -28,10 +28,10 @@ class _DeleteAccountState extends State<DeleteAccount> {
 
   Dio _dio = Dio();
 
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordController =
+      TextEditingController(text: '12345678');
 
-  Future<DeleteFusionAuthAccountModel> deleteFusionAuthAccountAPI(
-      String fusionAuthId) async {
+  Future<int> deleteFusionAuthAccountAPI(String programIdentifierId) async {
     showLoader();
     var headerMap = {
       "Authorization":
@@ -42,14 +42,17 @@ class _DeleteAccountState extends State<DeleteAccount> {
         headers: headerMap);
     _dio.options = options;
     try {
-      Response response = await _dio.get("user/$fusionAuthId");
+      Response response = await _dio.delete("user/$programIdentifierId");
+
+      print('fusionUth Response delete: ${response.data}');
       // Fluttertoast.showToast(
       //     msg: 'Account Created Successfully',
       //     gravity: ToastGravity.BOTTOM,
       //     backgroundColor: Colors.black);
       // Navigator.pop(context);
       hideLoader();
-      return DeleteFusionAuthAccountModel.fromJson(response.data);
+      // return DeleteFusionAuthAccountModel.fromJson(response.data);
+      return response.statusCode!;
     } on DioError catch (e) {
       hideLoader();
       if (e.response != null) {
@@ -74,8 +77,10 @@ class _DeleteAccountState extends State<DeleteAccount> {
         headers: headerMap);
     _dio.options = options;
     try {
-      Response response = await _dio.get("customers/$customerId");
+      Response response = await _dio.delete("customers/$customerId");
       hideLoader();
+
+      print('Response delete: ${response.data}');
       if (response.statusCode == 200) {
         Fluttertoast.showToast(
             msg: 'Account deleted Successfully',
@@ -128,10 +133,16 @@ class _DeleteAccountState extends State<DeleteAccount> {
 
   getIds() {
     Shared_Preferences.prefGetString(Shared_Preferences.keyId, '')
-        .then((fusionId) {
-      programIdentifierCallAPI(fusionId!).then((programIdentifier) {
-        deleteFusionAuthAccountAPI(fusionId!).then((deleted) {
-          deleteAccountAPI(programIdentifier.balance!.customerId.toString());
+        .then((programIdentifierId) {
+      print('ProgramIdentifier Id: ${programIdentifierId.toString()}');
+      programIdentifierCallAPI(programIdentifierId!).then((customerId) {
+        print(
+            'customerId: ${customerId.programIdentifiers![0].identifier.toString()}');
+        print('customerId1: ${customerId.id.toString()}');
+        deleteFusionAuthAccountAPI(
+                customerId.programIdentifiers![0].identifier.toString())
+            .then((deleted) {
+          deleteAccountAPI(customerId.id.toString());
         });
       });
     });
@@ -165,8 +176,9 @@ class _DeleteAccountState extends State<DeleteAccount> {
                       fontFamily: 'Kipling_Regular', color: Colors.blue),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop();
                   getIds();
+                  Navigator.of(context).pop();
+
                 },
               ),
             ],
@@ -270,6 +282,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.08),
         children: [
+          SizedBox(height: displayWidth(context) * 0.05,),
           Text(
             index == 0
                 ? ld!.value!.titleTextEn.toString()

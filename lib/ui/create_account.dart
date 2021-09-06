@@ -31,13 +31,13 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   // String dropdownvalue = 'EN';
 
-  TextEditingController fNameController = TextEditingController();
-  TextEditingController lNameController = TextEditingController();
-  TextEditingController mNameController = TextEditingController();
+  TextEditingController fNameController = TextEditingController(text: 'fdf');
+  TextEditingController lNameController = TextEditingController(text: 'dsfsf');
+  TextEditingController mNameController = TextEditingController(text: 'asfdsa');
   TextEditingController dateController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController cnfPasswordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: 'user1010@gmail.com');
+  TextEditingController passwordController = TextEditingController(text: '12345678');
+  TextEditingController cnfPasswordController = TextEditingController(text: '12345678');
 
   String firstNameError = '';
   String lastNameError = '';
@@ -203,9 +203,17 @@ class _CreateAccountState extends State<CreateAccount> {
                           setState(() {
                             currentDate = val;
 
-                            final DateFormat formatter =
-                                DateFormat('dd-MM-yyyy');
+                            final DateFormat formatter = DateFormat('dd-MM-yyyy');
                             dateController.text = formatter.format(currentDate);
+
+                            final DateFormat df = DateFormat('yyyy-MM-dd');
+                            String d = df.format(currentDate);
+
+                            DateFormat tf = new DateFormat("HH:mm:ss");
+                            String s = tf.format(currentDate);
+
+                            print('dateResult: ${d + 'T' + s + 'Z'}');
+                            finalDate = d + 'T' + s + 'Z';
                           });
                         }),
                   ),

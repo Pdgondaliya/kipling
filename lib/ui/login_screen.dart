@@ -46,8 +46,8 @@ class _login_screenState extends State<login_screen> {
   // final List<Logindata> pl=widget.;
   late Logindata ld;
   Color bgColor = Colors.white;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: 'user1010@gmail.com');
+  TextEditingController passwordController = TextEditingController(text: '12345678');
 
   String? ipAddress;
   String? applicationId;
@@ -85,20 +85,36 @@ class _login_screenState extends State<login_screen> {
         "applicationId": applicationId,
         "ipAddress": ipAddress
       });
-      Fluttertoast.showToast(
-          msg: 'Login SuccessFully',
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.black);
 
+      print('status Code login: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: 'Login SuccessFully',
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.black);
+      } else if (response.statusCode == 423) {
+        Fluttertoast.showToast(
+            msg: 'Your account is Locked',
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.black);
+      }
       hideLoader();
       return LoginModel.fromJson(response.data);
     } on DioError catch (e) {
+      print('Login Catch error');
+      Fluttertoast.showToast(
+          msg: 'Your account is Locked',
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.black);
       hideLoader();
       if (e.response != null) {
         var errorData = jsonDecode(e.response.toString());
         // var errorMessage = errorData["message"];
+
         throw Exception(errorData);
+
       } else {
+        print('Login else error');
         hideLoader();
         var errorData = jsonDecode(e.response.toString());
         throw SocketException(errorData);
