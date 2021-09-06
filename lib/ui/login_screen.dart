@@ -46,8 +46,8 @@ class _login_screenState extends State<login_screen> {
   // final List<Logindata> pl=widget.;
   late Logindata ld;
   Color bgColor = Colors.white;
-  TextEditingController emailController = TextEditingController(text: 'user1010@gmail.com');
-  TextEditingController passwordController = TextEditingController(text: '12345678');
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   String? ipAddress;
   String? applicationId;

@@ -31,13 +31,13 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   // String dropdownvalue = 'EN';
 
-  TextEditingController fNameController = TextEditingController(text: 'fdf');
-  TextEditingController lNameController = TextEditingController(text: 'dsfsf');
-  TextEditingController mNameController = TextEditingController(text: 'asfdsa');
+  TextEditingController fNameController = TextEditingController();
+  TextEditingController lNameController = TextEditingController();
+  TextEditingController mNameController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  TextEditingController emailController = TextEditingController(text: 'user1010@gmail.com');
-  TextEditingController passwordController = TextEditingController(text: '12345678');
-  TextEditingController cnfPasswordController = TextEditingController(text: '12345678');
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController cnfPasswordController = TextEditingController();
 
   String firstNameError = '';
   String lastNameError = '';

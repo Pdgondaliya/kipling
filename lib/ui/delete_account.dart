@@ -29,7 +29,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
   Dio _dio = Dio();
 
   TextEditingController passwordController =
-      TextEditingController(text: '12345678');
+      TextEditingController();
 
   Future<int> deleteFusionAuthAccountAPI(String programIdentifierId) async {
     showLoader();
