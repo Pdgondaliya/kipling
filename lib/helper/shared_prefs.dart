@@ -6,6 +6,7 @@ class Shared_Preferences {
 
   //loginButton
   static const String keyId = 'id';
+  static const String email = 'email';
   static const String fusionAuthId = 'fusionAuthId';
 
   //int

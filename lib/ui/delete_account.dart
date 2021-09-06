@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:kipling/main.dart';
 import 'package:kipling/module/delete_account_fusion_auth_model.dart';
 import 'package:kipling/module/delete_data_page_model.dart';
 import 'package:kipling/module/get_user_data.dart';
+import 'package:kipling/module/login_check_model.dart';
 import 'package:kipling/ui/login_screen.dart';
 
 class DeleteAccount extends StatefulWidget {
@@ -28,8 +30,92 @@ class _DeleteAccountState extends State<DeleteAccount> {
 
   Dio _dio = Dio();
 
-  TextEditingController passwordController =
-      TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  String? ipAddress;
+  String? applicationId;
+
+  getIP() async {
+    ipAddress = await Ipify.ipv4();
+    setState(() {});
+    print('IPAddress: $ipAddress');
+
+    Shared_Preferences.prefGetString(Shared_Preferences.fusionAuthId, "")
+        .then((value) {
+     setState(() {
+       applicationId = value;
+     });
+      print('Application Id: $applicationId');
+    });
+  }
+
+  Future<LoginModel> loginAPI(String loginId, String password,
+      String applicationId, String ipAddress) async {
+    showLoader();
+    var headerMap = {
+      "Authorization":
+          'YmA9D5ju96N_rrBJsGDfKSS3nPuqYxXZp_2qUeYwWinD1eDC4TtriBTS'
+    };
+    var options = BaseOptions(
+        baseUrl: 'https://auth-mobile-app-staging.loyalty-cloud.com/',
+        headers: headerMap);
+    _dio.options = options;
+    try {
+      Response response = await _dio.post("api/login", data: {
+        "loginId": loginId,
+        "password": password,
+        "applicationId": applicationId,
+        "ipAddress": ipAddress
+      });
+
+      print('status Code login: ${response.statusCode}');
+      if (response.statusCode == 200 || response.statusCode == 202) {
+        Shared_Preferences.prefGetString(Shared_Preferences.keyId, '')
+            .then((programIdentifierId) {
+          print('ProgramIdentifier Id: ${programIdentifierId.toString()}');
+          programIdentifierCallAPI(programIdentifierId!).then((customerId) {
+            print(
+                'customerId: ${customerId.programIdentifiers![0].identifier.toString()}');
+            print('customerId1: ${customerId.id.toString()}');
+            deleteFusionAuthAccountAPI(
+                    customerId.programIdentifiers![0].identifier.toString())
+                .then((deleted) {
+              deleteAccountAPI(customerId.id.toString());
+            });
+          });
+        });
+        // Fluttertoast.showToast(
+        //     msg: 'Login SuccessFully',
+        //     gravity: ToastGravity.BOTTOM,
+        //     backgroundColor: Colors.black);
+      } else if (response.statusCode == 423) {
+        Fluttertoast.showToast(
+            msg: 'Your account is Locked',
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.black);
+      }
+      hideLoader();
+      return LoginModel.fromJson(response.data);
+    } on DioError catch (e) {
+      print('Login Catch error');
+      Fluttertoast.showToast(
+          msg: 'You entered wrong password',
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.black);
+      hideLoader();
+      if (e.response != null) {
+        var errorData = jsonDecode(e.response.toString());
+        // var errorMessage = errorData["message"];
+
+        throw Exception(errorData);
+      } else {
+        print('Login else error');
+        hideLoader();
+        var errorData = jsonDecode(e.response.toString());
+        throw SocketException(errorData);
+      }
+    }
+  }
 
   Future<int> deleteFusionAuthAccountAPI(String programIdentifierId) async {
     showLoader();
@@ -132,19 +218,10 @@ class _DeleteAccountState extends State<DeleteAccount> {
   }
 
   getIds() {
-    Shared_Preferences.prefGetString(Shared_Preferences.keyId, '')
-        .then((programIdentifierId) {
-      print('ProgramIdentifier Id: ${programIdentifierId.toString()}');
-      programIdentifierCallAPI(programIdentifierId!).then((customerId) {
-        print(
-            'customerId: ${customerId.programIdentifiers![0].identifier.toString()}');
-        print('customerId1: ${customerId.id.toString()}');
-        deleteFusionAuthAccountAPI(
-                customerId.programIdentifiers![0].identifier.toString())
-            .then((deleted) {
-          deleteAccountAPI(customerId.id.toString());
-        });
-      });
+    Shared_Preferences.prefGetString(Shared_Preferences.email, '')
+        .then((email) {
+      print('delete MVC Email: $email');
+      loginAPI(email!, passwordController.text, applicationId!, ipAddress!);
     });
   }
 
@@ -178,7 +255,6 @@ class _DeleteAccountState extends State<DeleteAccount> {
                 onPressed: () {
                   getIds();
                   Navigator.of(context).pop();
-
                 },
               ),
             ],
@@ -225,6 +301,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
   void initState() {
     super.initState();
     ld = deleteAccountData;
+    getIP();
   }
 
   @override
@@ -282,7 +359,9 @@ class _DeleteAccountState extends State<DeleteAccount> {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.08),
         children: [
-          SizedBox(height: displayWidth(context) * 0.05,),
+          SizedBox(
+            height: displayWidth(context) * 0.05,
+          ),
           Text(
             index == 0
                 ? ld!.value!.titleTextEn.toString()

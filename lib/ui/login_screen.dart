@@ -112,7 +112,6 @@ class _login_screenState extends State<login_screen> {
         // var errorMessage = errorData["message"];
 
         throw Exception(errorData);
-
       } else {
         print('Login else error');
         hideLoader();
@@ -277,6 +276,9 @@ class _login_screenState extends State<login_screen> {
                                 Shared_Preferences.prefSetString(
                                     Shared_Preferences.keyId,
                                     value.user!.id.toString());
+                                Shared_Preferences.prefSetString(
+                                    Shared_Preferences.email,
+                                    value.user!.email.toString());
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

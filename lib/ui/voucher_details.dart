@@ -357,6 +357,9 @@ class _VoucherDetailsState extends State<VoucherDetails> {
                     fontFamily: 'Kipling_Regular', color: Color(0xff89b14b)),
               ),
               onPressed: () {
+                activateVoucherButtonAPI(
+                    customerId: widget.customerId,
+                    rewardTemplateId: widget.templateId);
                 Navigator.of(context).pop();
               },
             ),
