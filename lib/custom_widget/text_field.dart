@@ -13,6 +13,7 @@ Widget buildtextfields(
     Function()? onTap,
     ValueChanged<String>? onChanged,
     bool? isPassword,
+    Color? borderColor,
     TextInputType? keyboard}) {
   return GestureDetector(
       onTap: onTap,
@@ -44,7 +45,10 @@ Widget buildtextfields(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
                   borderSide: BorderSide(
-                      color: Colors.grey.withOpacity(0.5), width: 1.0),
+                      color: borderColor != null
+                          ? borderColor
+                          : Colors.grey.withOpacity(0.5),
+                      width: 1.0),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
@@ -53,7 +57,10 @@ Widget buildtextfields(
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
                   borderSide: BorderSide(
-                      color: Colors.grey.withOpacity(0.5), width: 1.0),
+                      color: borderColor != null
+                          ? borderColor
+                          : Colors.grey.withOpacity(0.5),
+                      width: 1.0),
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),

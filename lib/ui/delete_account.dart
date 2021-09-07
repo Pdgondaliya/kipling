@@ -42,9 +42,9 @@ class _DeleteAccountState extends State<DeleteAccount> {
 
     Shared_Preferences.prefGetString(Shared_Preferences.fusionAuthId, "")
         .then((value) {
-     setState(() {
-       applicationId = value;
-     });
+      setState(() {
+        applicationId = value;
+      });
       print('Application Id: $applicationId');
     });
   }
@@ -168,6 +168,10 @@ class _DeleteAccountState extends State<DeleteAccount> {
 
       print('Response delete: ${response.data}');
       if (response.statusCode == 200) {
+        Shared_Preferences.clearAllPref();
+        Shared_Preferences.clearPref(Shared_Preferences.keyId);
+        Shared_Preferences.clearPref(Shared_Preferences.email);
+        Shared_Preferences.clearPref(Shared_Preferences.fusionAuthId);
         Fluttertoast.showToast(
             msg: 'Account deleted Successfully',
             gravity: ToastGravity.BOTTOM,
@@ -405,6 +409,9 @@ class _DeleteAccountState extends State<DeleteAccount> {
                     context: context,
                     isPassword: true,
                     controller: passwordController,
+                    borderColor: passwordError != ''
+                        ? Colors.red
+                        : Colors.grey.withOpacity(0.5),
                     hint: index == 0
                         ? ld!.value!.fields!.password!.placeholderTextEn
                             .toString()
