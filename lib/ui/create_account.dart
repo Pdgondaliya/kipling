@@ -166,7 +166,7 @@ class _CreateAccountState extends State<CreateAccount> {
         context: context,
         initialDate: currentDate,
         firstDate: DateTime(2015),
-        lastDate: DateTime(2050));
+        lastDate: DateTime.now());
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
         currentDate = pickedDate;
@@ -199,11 +199,13 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: CupertinoDatePicker(
                         initialDateTime: DateTime.now(),
                         mode: CupertinoDatePickerMode.date,
+                        maximumDate: DateTime.now(),
                         onDateTimeChanged: (val) {
                           setState(() {
                             currentDate = val;
 
-                            final DateFormat formatter = DateFormat('dd-MM-yyyy');
+                            final DateFormat formatter =
+                                DateFormat('dd-MM-yyyy');
                             dateController.text = formatter.format(currentDate);
 
                             final DateFormat df = DateFormat('yyyy-MM-dd');

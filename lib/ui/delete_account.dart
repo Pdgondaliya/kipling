@@ -88,20 +88,18 @@ class _DeleteAccountState extends State<DeleteAccount> {
         //     msg: 'Login SuccessFully',
         //     gravity: ToastGravity.BOTTOM,
         //     backgroundColor: Colors.black);
-      } else if (response.statusCode == 423) {
-        Fluttertoast.showToast(
-            msg: 'Your account is Locked',
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.black);
       }
       hideLoader();
       return LoginModel.fromJson(response.data);
     } on DioError catch (e) {
       print('Login Catch error');
-      Fluttertoast.showToast(
-          msg: 'You entered wrong password',
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.black);
+      // Fluttertoast.showToast(
+      //     msg: 'You entered wrong password',
+      //     gravity: ToastGravity.BOTTOM,
+      //     backgroundColor: Colors.black);
+
+      passwordError = 'Incorrect password';
+      setState(() {});
       hideLoader();
       if (e.response != null) {
         var errorData = jsonDecode(e.response.toString());

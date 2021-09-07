@@ -483,7 +483,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         context: context,
         initialDate: _chosenDateTime,
         firstDate: DateTime(1950),
-        lastDate: DateTime(2050));
+        lastDate: DateTime.now());
     if (pickedDate != null && pickedDate != _chosenDateTime)
       setState(() {
         _chosenDateTime = pickedDate;
@@ -516,6 +516,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     child: CupertinoDatePicker(
                         initialDateTime: DateTime.now(),
                         mode: CupertinoDatePickerMode.date,
+                        maximumDate: DateTime.now(),
                         onDateTimeChanged: (val) {
                           setState(() {
                             _chosenDateTime = val;
