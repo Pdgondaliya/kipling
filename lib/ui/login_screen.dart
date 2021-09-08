@@ -20,6 +20,7 @@ import 'package:kipling/module/login_data.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/ui/create_account.dart';
 import 'package:kipling/ui/forgot_password.dart';
+import 'package:kipling/ui/home_page.dart';
 import 'package:kipling/ui/personal_details.dart';
 import 'package:kipling/ui/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -283,7 +284,7 @@ class _login_screenState extends State<login_screen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            PersonalDetails()));
+                                            HomePage() /*PersonalDetails()*/));
                               });
                             },
                             style: ElevatedButton.styleFrom(

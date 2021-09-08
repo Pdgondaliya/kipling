@@ -1785,6 +1785,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                 ),
                               ),
                               buildtextfields(
+                                  enable: false,
                                   hint: index == 0
                                       ? ld!.value!.emailAddressTextEn.toString()
                                       : ld!.value!.emailAddressTextNl

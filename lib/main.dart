@@ -22,6 +22,7 @@ import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/module/welcome_model.dart';
 import 'package:kipling/ui/all_badges.dart';
 import 'package:kipling/ui/delete_account.dart';
+import 'package:kipling/ui/home_page.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:kipling/ui/personal_details.dart';
 import 'package:kipling/ui/voucher_screen.dart';
@@ -138,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final responseJsonAll = jsonDecode(allScreenData.body);
     int check = await DatabaseHelper.instance.tableIsEmpty() as int;
     bool checktable =
-        await DatabaseHelper.instance.databaseExists("kipling.db");
+    await DatabaseHelper.instance.databaseExists("kipling.db");
     if (check <= 0) {
       var insert = await DatabaseHelper.instance
           .insert(Todo(jsonString: allScreenData.body, id: 1));
@@ -169,10 +170,10 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Login Data --->" + logindata.toString());
         print("Personal Data --->" + personalDetailData.toString());
         if (logindata != null &&
-                personalDetailData !=
-                    null /*&&
+            personalDetailData !=
+                null /*&&
             createAccountData != null*/
-            ) {
+        ) {
           Shared_Preferences.prefGetString(Shared_Preferences.keyId, '')
               .then((value) {
             print('valuevaluevalue: $value');
@@ -181,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
             setState(() {});
             if (id != "") {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => PersonalDetails()));
+                  MaterialPageRoute(builder: (context) => HomePage()/*PersonalDetails()*/));
             } else {
               Navigator.pushReplacement(
                   context,
@@ -271,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //ForgotPasswordConfirmation API
   Future<ForgotPasswordConfirmationModel>
-      fetchForgotPasswordConfirmationData() async {
+  fetchForgotPasswordConfirmationData() async {
     var response = await http.get(
       Uri.parse(
           'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=forgot_password_confirmation'),
@@ -395,7 +396,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final responseJson =
-        json.decode(response.body) /*jsonDecode(response.body)*/;
+    json.decode(response.body) /*jsonDecode(response.body)*/;
     print("badgeData:responseJson");
     print(responseJson);
     print('Status Code: ${response.statusCode}');
@@ -417,9 +418,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       .toString(),
                   title: badgeDetailsData![i].contents![j].title.toString(),
                   description:
-                      badgeDetailsData![i].contents![j].description.toString(),
+                  badgeDetailsData![i].contents![j].description.toString(),
                   condition:
-                      badgeDetailsData![i].contents![j].conditions.toString(),
+                  badgeDetailsData![i].contents![j].conditions.toString(),
                   url: badgeDetailsData![i]
                       .contents![j]
                       .images![0]
@@ -433,9 +434,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     .toString(),
                 title: badgeDetailsData![i].contents![j].title.toString(),
                 description:
-                    badgeDetailsData![i].contents![j].description.toString(),
+                badgeDetailsData![i].contents![j].description.toString(),
                 condition:
-                    badgeDetailsData![i].contents![j].conditions.toString(),
+                badgeDetailsData![i].contents![j].conditions.toString(),
                 url: badgeDetailsData![i]
                     .contents![j]
                     .images![0]
@@ -457,56 +458,56 @@ class _MyHomePageState extends State<MyHomePage> {
     internetCheck(context);
     return Scaffold(
         body: Stack(
-      children: [
-        Image.asset(
-          'assets/images/splash_background.jpg',
-          fit: BoxFit.cover,
-          width: displayWidth(context),
-          height: displayHeight(context),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: displayHeight(context) * 0.05,
-          ),
-          child: Center(
-            child: Image.asset(
-              'assets/images/logo_white.png',
+          children: [
+            Image.asset(
+              'assets/images/splash_background.jpg',
               fit: BoxFit.cover,
+              width: displayWidth(context),
+              height: displayHeight(context),
             ),
-          ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: displayHeight(context) * 0.05,
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/logo_white.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            )
+          ],
         )
-      ],
-    )
-        //
-        //     FutureBuilder<Splashdata>(
-        //   future: futureAlbum,
-        //   builder: (context, snapshot) {
-        //     if (snapshot.hasData) {
-        //       return _buildPosts(snapshot.data!.value.bgImageUrl,
-        //           snapshot.data!.value.logoImageUrl);
-        //     } else if (snapshot.hasError) {
-        //       return SnackBar(
-        //         margin: EdgeInsets.only(bottom: displayHeight(context) * 0.02),
-        //         duration: Duration(seconds: 2),
-        //         content: const Text('Something went wrong'),
-        //       );
-        //     }
-        //     // By default, show a loading spinner.
-        //     // return centerProgressBar(radius: 40, dotRadius: 12);
-        //     return Center(
-        //       child: Container(
-        //         margin: EdgeInsets.symmetric(
-        //           horizontal: displayHeight(context) * 0.05,
-        //         ),
-        //         child: Image.asset(
-        //           'assets/images/splash_logo.png',
-        //           color: Colors.black,
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // ),
-        );
+      //
+      //     FutureBuilder<Splashdata>(
+      //   future: futureAlbum,
+      //   builder: (context, snapshot) {
+      //     if (snapshot.hasData) {
+      //       return _buildPosts(snapshot.data!.value.bgImageUrl,
+      //           snapshot.data!.value.logoImageUrl);
+      //     } else if (snapshot.hasError) {
+      //       return SnackBar(
+      //         margin: EdgeInsets.only(bottom: displayHeight(context) * 0.02),
+      //         duration: Duration(seconds: 2),
+      //         content: const Text('Something went wrong'),
+      //       );
+      //     }
+      //     // By default, show a loading spinner.
+      //     // return centerProgressBar(radius: 40, dotRadius: 12);
+      //     return Center(
+      //       child: Container(
+      //         margin: EdgeInsets.symmetric(
+      //           horizontal: displayHeight(context) * 0.05,
+      //         ),
+      //         child: Image.asset(
+      //           'assets/images/splash_logo.png',
+      //           color: Colors.black,
+      //         ),
+      //       ),
+      //     );
+      //   },
+      // ),
+    );
   }
 
   void updatedata() {
@@ -535,10 +536,11 @@ class _MyHomePageState extends State<MyHomePage> {
               print("${responseJson[i]['value']}");
               logindata = Logindata.fromJson(responseJson[i]);
               Shared_Preferences.prefSetString(Shared_Preferences.fusionAuthId,
-                      logindata!.value![0].fusionauthApplicationId.toString())
+                  logindata!.value![0].fusionauthApplicationId.toString())
                   .then((value) {
                 print(
-                    'Login Fusion Auth Id: ${logindata!.value![0].fusionauthApplicationId}');
+                    'Login Fusion Auth Id: ${logindata!.value![0]
+                        .fusionauthApplicationId}');
               });
 
               print("Login:${logindata!.name}");
@@ -568,42 +570,42 @@ class _MyHomePageState extends State<MyHomePage> {
 Widget _buildPosts(String bg_url, String center_url) {
   return Container(
       child: Stack(
-    children: <Widget>[
-      Positioned.fill(
-          child: CachedNetworkImage(
-        imageUrl: bg_url,
-        fit: BoxFit.fill,
-        progressIndicatorBuilder: (context, url, progress) {
-          return Center(
-            child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: displayHeight(context) * 0.05),
-                child: Image.asset('assets/images/splash_logo.png',
-                    color: Colors.black)),
-          );
-        },
-        // placeholder: (context, url) =>
-        //     centerProgressBar(radius: 40, dotRadius: 12),
-      )),
-      Center(
-        child: Padding(
-            padding: const EdgeInsets.all(60),
-            child: Image.network(center_url)),
-      )
-    ],
-  ));
+        children: <Widget>[
+          Positioned.fill(
+              child: CachedNetworkImage(
+                imageUrl: bg_url,
+                fit: BoxFit.fill,
+                progressIndicatorBuilder: (context, url, progress) {
+                  return Center(
+                    child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: displayHeight(context) * 0.05),
+                        child: Image.asset('assets/images/splash_logo.png',
+                            color: Colors.black)),
+                  );
+                },
+                // placeholder: (context, url) =>
+                //     centerProgressBar(radius: 40, dotRadius: 12),
+              )),
+          Center(
+            child: Padding(
+                padding: const EdgeInsets.all(60),
+                child: Image.network(center_url)),
+          )
+        ],
+      ));
 }
 
 // Calling loader
 Widget centerProgressBar({required double radius, required double dotRadius}) {
   return Center(
       child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      ColorLoader3(
-        dotRadius: dotRadius,
-        radius: radius,
-      )
-    ],
-  ));
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ColorLoader3(
+            dotRadius: dotRadius,
+            radius: radius,
+          )
+        ],
+      ));
 }

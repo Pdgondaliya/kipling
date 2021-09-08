@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
+import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/welcome_model.dart';
+import 'package:kipling/ui/home_page.dart';
 import 'package:kipling/ui/login_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -16,11 +18,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   // String dropdownvalue = 'EN';
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  String? firstName;
+  String? lastName;
+
   @override
   void initState() {
     super.initState();
     print('welcomeData: $welcomeData');
     ld = welcomeData;
+    getUserName();
+  }
+
+  getUserName() {
+    Shared_Preferences.prefGetString(Shared_Preferences.firstName, '')
+        .then((firstname) {
+      setState(() {
+        firstName = firstname;
+      });
+      print('Firstname: $firstName');
+    });
+    Shared_Preferences.prefGetString(Shared_Preferences.lastName, '')
+        .then((lastname) {
+      setState(() {
+        lastName = lastname;
+      });
+      print('Lastname: $lastName');
+    });
   }
 
   @override
@@ -122,7 +145,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 SizedBox(height: displayHeight(context) * 0.02),
                 Text(
-                  'jurgen Derycke',
+                  '$firstName $lastName',
                   style: TextStyle(
                       fontFamily: 'Kipling_Bold',
                       color: Colors.black,
@@ -168,7 +191,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => login_screen()));
+                                  builder: (context) =>
+                                      HomePage() /*login_screen()*/));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,

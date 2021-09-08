@@ -8,6 +8,8 @@ class Shared_Preferences {
   static const String keyId = 'id';
   static const String email = 'email';
   static const String fusionAuthId = 'fusionAuthId';
+  static const String firstName = 'firstName';
+  static const String lastName = 'lastName';
 
   //int
   static Future prefSetInt(String key, int value) async {

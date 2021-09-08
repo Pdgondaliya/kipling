@@ -902,10 +902,35 @@ class _CreateAccountState extends State<CreateAccount> {
                                         name: fNameController.text,
                                         identifier: value.user!.id.toString())
                                     .then((value) async {
-                                  Shared_Preferences.prefGetString(
-                                          Shared_Preferences.keyId, '')
+                                  Shared_Preferences.prefSetString(
+                                          Shared_Preferences.keyId,
+                                          value
+                                              .programIdentifiers![0].identifier
+                                              .toString())
                                       .then((value) {
-                                    print('id:::: $value');
+                                    print(
+                                        'id:::: ${value.programIdentifiers![0].identifier.toString()}');
+                                  });
+                                  Shared_Preferences.prefSetString(
+                                          Shared_Preferences.lastName,
+                                          value.lastName.toString())
+                                      .then((value) {
+                                    print(
+                                        'LastName:::: ${value.lastName.toString()}');
+                                  });
+                                  Shared_Preferences.prefSetString(
+                                      Shared_Preferences.firstName,
+                                      value.name.toString())
+                                      .then((value) {
+                                    print(
+                                        'FirstName:::: ${value.name.toString()}');
+                                  });
+                                  Shared_Preferences.prefSetString(
+                                      Shared_Preferences.email,
+                                      value.emails![0].emailAddress.toString())
+                                      .then((value) {
+                                    print(
+                                        'FirstName:::: ${value.name.toString()}');
                                   });
                                 });
                               });
