@@ -4,6 +4,7 @@ import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/ui/activated_badges.dart';
 import 'package:kipling/ui/all_badges.dart';
+import 'package:kipling/ui/my_account_details.dart';
 import 'package:kipling/ui/personal_details.dart';
 import 'package:kipling/ui/voucher_screen.dart';
 
@@ -24,21 +25,21 @@ class _BadgeScreenState extends State<BadgeScreen> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => PersonalDetails())),
+                MaterialPageRoute(builder: (context) => MyAccountDetails())),
             icon: Icon(
               Icons.arrow_back_ios,
               color: Color(0xff84847e),
             ),
           ),
-          actions: [
-            Center(
-              child: IconButton(
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Voucher())),
-                icon: Icon(Icons.ac_unit, color: Colors.black),
-              ),
-            )
-          ],
+          // actions: [
+          //   Center(
+          //     child: IconButton(
+          //       onPressed: () => Navigator.push(context,
+          //           MaterialPageRoute(builder: (context) => Voucher())),
+          //       icon: Icon(Icons.ac_unit, color: Colors.black),
+          //     ),
+          //   )
+          // ],
           backgroundColor: Color(0xfffbfbfa),
           centerTitle: true,
           elevation: 0,

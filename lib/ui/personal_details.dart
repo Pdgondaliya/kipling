@@ -22,6 +22,7 @@ import 'package:kipling/ui/badge_screen.dart';
 import 'package:kipling/ui/delete_account.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:dio/dio.dart' as d;
+import 'package:kipling/ui/my_account_details.dart';
 import 'package:kipling/ui/voucher_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -329,43 +330,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     }
   }
 
-  Future<int> logoutAPI({String? email}) async {
-    var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
-    var options = BaseOptions(
-        baseUrl: 'https://auth-mobile-app-staging.loyalty-cloud.com/api/',
-        headers: headerMap);
-    _dio.options = options;
-    try {
-      Response response = await _dio.post(
-        "logout",
-      );
-      setState(() {
-        statusCode = response.statusCode;
-      });
-      print('Logout Status Code: $statusCode');
-      if (statusCode == 200) {
-        Shared_Preferences.clearAllPref();
-        Shared_Preferences.clearPref(Shared_Preferences.keyId);
-        Shared_Preferences.clearPref(Shared_Preferences.email);
-        Shared_Preferences.clearPref(Shared_Preferences.fusionAuthId);
-        Fluttertoast.showToast(
-            msg: 'Logout Successfully',
-            textColor: Colors.white,
-            backgroundColor: Colors.black);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => login_screen()));
-      }
-      return response.statusCode!;
-    } on DioError catch (e) {
-      if (e.response != null) {
-        var errorData = jsonDecode(e.response.toString());
-        var errorMessage = errorData["message"];
-        throw Exception(errorMessage);
-      } else {
-        throw SocketException("");
-      }
-    }
-  }
+
 
   @override
   void initState() {
@@ -756,40 +721,40 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             color: Color(0xff84847e),
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DeleteAccount())),
-              child: Icon(
-                Icons.delete,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Voucher())),
-              child: Icon(
-                Icons.add,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () => logoutAPI(),
-              child: Icon(
-                Icons.logout,
-                color: Colors.black,
-              ),
-            ),
-          )
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 10),
+        //     child: GestureDetector(
+        //       onTap: () => Navigator.push(context,
+        //           MaterialPageRoute(builder: (context) => DeleteAccount())),
+        //       child: Icon(
+        //         Icons.delete,
+        //         color: Colors.black,
+        //       ),
+        //     ),
+        //   ),
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 10),
+        //     child: GestureDetector(
+        //       onTap: () => Navigator.push(
+        //           context, MaterialPageRoute(builder: (context) => Voucher())),
+        //       child: Icon(
+        //         Icons.add,
+        //         color: Colors.black,
+        //       ),
+        //     ),
+        //   ),
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 10),
+        //     child: GestureDetector(
+        //       onTap: () => logoutAPI(),
+        //       child: Icon(
+        //         Icons.logout,
+        //         color: Colors.black,
+        //       ),
+        //     ),
+        //   )
+        // ],
         backgroundColor: Color(0xfffbfbfa),
         centerTitle: true,
         elevation: 0,
@@ -2470,7 +2435,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => BadgeScreen()));
+                                      builder: (context) => MyAccountDetails()));
                             });
                           }
                         });

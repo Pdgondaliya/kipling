@@ -66,6 +66,7 @@ dev_dependencies:
   retrofit_generator: ^2.0.0+3
   json_serializable: ^4.1.4
   built_value_generator: ^8.1.1
+  percent_indicator: ^3.0.1
 #  flutter_native_splash: ^1.2.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

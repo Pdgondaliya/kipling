@@ -15,6 +15,7 @@ import 'package:kipling/module/delete_data_page_model.dart';
 import 'package:kipling/module/forgot_password_confirmation_model.dart';
 import 'package:kipling/module/forgot_password_model.dart';
 import 'package:kipling/module/login_data.dart';
+import 'package:kipling/module/my_account_details_model.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/splash_data.dart';
 import 'package:http/http.dart' as http;
@@ -25,6 +26,7 @@ import 'package:kipling/ui/delete_account.dart';
 import 'package:kipling/ui/home_page.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:kipling/ui/personal_details.dart';
+import 'package:kipling/ui/my_account_details.dart';
 import 'package:kipling/ui/voucher_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Database/db_data.dart';
@@ -68,46 +70,38 @@ String id = '';
 Future<b.BadgeData>? badgeData;
 Future<c.CountryPickerModel>? futureCountryPickerDataAlbum;
 Future<DeleteDataPageResponse>? futuredeleteDataAlbum;
-late Future<PersonalDetailData> futurePersonDataAlbum;
-late Future<VoucherModel> futureVoucherDataAlbum;
+Future<PersonalDetailData>? futurePersonDataAlbum;
+Future<VoucherModel>? futureVoucherDataAlbum;
 Future<WelComeScreenModel>? futureWelComeScreenAlbum;
 Future<ForgotPasswordModel>? futureForgotPasswordAlbum;
 Future<ForgotPasswordConfirmationModel>? futureForgotPassworConfirmationAlbum;
-late Future<Splashdata> futureAlbum;
-late Future<ca.CreateAccountModel> futureCretaeAccountAlbum;
+Future<Splashdata>? futureAlbum;
+Future<ca.CreateAccountModel>? futureCretaeAccountAlbum;
+Future<MyAccountDetailsModel>? futureMyAccountDetailsAlbum;
 
 List<b.BadgeData>? badgeDetailsData;
 List<DeleteDataPageResponse>? deleteData;
 List<c.Value>? countryList;
-List<WelComeScreenModel>? welComeScreenList;
-List<ForgotPasswordModel>? forgotPasswordList;
-List<ForgotPasswordConfirmationModel>? forgotPasswordConfirmationList;
-List<VoucherModel>? voucherModellist;
+List<MyAccountValue>? myAccountDetailsList;
 
 PersonalDetailData? personalDetailData;
-DeleteDataPageResponse? deleteDetailData;
 WelComeScreenModel? welcomeData;
 ForgotPasswordModel? forgotPasswordData;
 ForgotPasswordConfirmationModel? forgotPasswordConfirmationData;
 VoucherModel? voucherData;
-
-List<b.Content>? contents;
-List<Todo> personalDataList = [];
-List<DeleteDataPageResponse> deleteDataList = [];
-List<VoucherModel> voucherDataList = [];
-List<PersonalDetailData> personalList = [];
-List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
-List<b.FinalBadgeModel> finalBadgeModel = [];
-List<WelComeScreenModel> welcomeModel = [];
-List<ForgotPasswordModel> forgotPasswordModel = [];
-List<ForgotPasswordConfirmationModel> forgotPasswordConfirmationModel = [];
 Logindata? logindata;
 c.CountryPickerModel? countryPickerData;
 ca.CreateAccountModel? createAccountData;
 DeleteDataPageResponse? deleteAccountData;
+MyAccountDetailsModel? myAccountDetailsData;
+
+List<b.Content>? contents;
+List<Todo> personalDataList = [];
+List<PersonalDetailData> personalList = [];
+List<b.FinalBadgeModel> finalActivatedBadgeModel = [];
+List<b.FinalBadgeModel> finalBadgeModel = [];
+List<MyAccountDetailsModel> finalMyAccountModel = [];
 List<Todo> taskList = [];
-List<Logindata> profileList = [];
-List<ca.CreateAccountModel> createAccountList = [];
 
 class _MyHomePageState extends State<MyHomePage> {
   late Timer _timer;
@@ -118,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     fetchapi();
     futureAlbum = fetchAlbum();
+    futureMyAccountDetailsAlbum = fetchMyAccountDetailsData();
     futurePersonDataAlbum = fetchPersonData();
     futureCretaeAccountAlbum = fetchCreateAccountData();
     futureCountryPickerDataAlbum = fetchCountryListData();
@@ -139,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final responseJsonAll = jsonDecode(allScreenData.body);
     int check = await DatabaseHelper.instance.tableIsEmpty() as int;
     bool checktable =
-    await DatabaseHelper.instance.databaseExists("kipling.db");
+        await DatabaseHelper.instance.databaseExists("kipling.db");
     if (check <= 0) {
       var insert = await DatabaseHelper.instance
           .insert(Todo(jsonString: allScreenData.body, id: 1));
@@ -170,10 +165,10 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Login Data --->" + logindata.toString());
         print("Personal Data --->" + personalDetailData.toString());
         if (logindata != null &&
-            personalDetailData !=
-                null /*&&
+                personalDetailData !=
+                    null /*&&
             createAccountData != null*/
-        ) {
+            ) {
           Shared_Preferences.prefGetString(Shared_Preferences.keyId, '')
               .then((value) {
             print('valuevaluevalue: $value');
@@ -181,8 +176,11 @@ class _MyHomePageState extends State<MyHomePage> {
             print('Id: $id');
             setState(() {});
             if (id != "") {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomePage()/*PersonalDetails()*/));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MyAccountDetails() /*PersonalDetails()*/));
             } else {
               Navigator.pushReplacement(
                   context,
@@ -221,6 +219,28 @@ class _MyHomePageState extends State<MyHomePage> {
       });
 
       return ca.CreateAccountModel.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  //MyAccountDetails API
+  Future<MyAccountDetailsModel> fetchMyAccountDetailsData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=my_account'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("my account details:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {
+        myAccountDetailsData = MyAccountDetailsModel.fromJson(responseJson[0]);
+      });
+
+      return MyAccountDetailsModel.fromJson(responseJson[0]);
     } else {
       throw Exception('Failed to load album');
     }
@@ -272,7 +292,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //ForgotPasswordConfirmation API
   Future<ForgotPasswordConfirmationModel>
-  fetchForgotPasswordConfirmationData() async {
+      fetchForgotPasswordConfirmationData() async {
     var response = await http.get(
       Uri.parse(
           'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=forgot_password_confirmation'),
@@ -396,7 +416,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final responseJson =
-    json.decode(response.body) /*jsonDecode(response.body)*/;
+        json.decode(response.body) /*jsonDecode(response.body)*/;
     print("badgeData:responseJson");
     print(responseJson);
     print('Status Code: ${response.statusCode}');
@@ -418,9 +438,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       .toString(),
                   title: badgeDetailsData![i].contents![j].title.toString(),
                   description:
-                  badgeDetailsData![i].contents![j].description.toString(),
+                      badgeDetailsData![i].contents![j].description.toString(),
                   condition:
-                  badgeDetailsData![i].contents![j].conditions.toString(),
+                      badgeDetailsData![i].contents![j].conditions.toString(),
                   url: badgeDetailsData![i]
                       .contents![j]
                       .images![0]
@@ -434,9 +454,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     .toString(),
                 title: badgeDetailsData![i].contents![j].title.toString(),
                 description:
-                badgeDetailsData![i].contents![j].description.toString(),
+                    badgeDetailsData![i].contents![j].description.toString(),
                 condition:
-                badgeDetailsData![i].contents![j].conditions.toString(),
+                    badgeDetailsData![i].contents![j].conditions.toString(),
                 url: badgeDetailsData![i]
                     .contents![j]
                     .images![0]
@@ -458,56 +478,56 @@ class _MyHomePageState extends State<MyHomePage> {
     internetCheck(context);
     return Scaffold(
         body: Stack(
-          children: [
-            Image.asset(
-              'assets/images/splash_background.jpg',
+      children: [
+        Image.asset(
+          'assets/images/splash_background.jpg',
+          fit: BoxFit.cover,
+          width: displayWidth(context),
+          height: displayHeight(context),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: displayHeight(context) * 0.05,
+          ),
+          child: Center(
+            child: Image.asset(
+              'assets/images/logo_white.png',
               fit: BoxFit.cover,
-              width: displayWidth(context),
-              height: displayHeight(context),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: displayHeight(context) * 0.05,
-              ),
-              child: Center(
-                child: Image.asset(
-                  'assets/images/logo_white.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            )
-          ],
+          ),
         )
-      //
-      //     FutureBuilder<Splashdata>(
-      //   future: futureAlbum,
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasData) {
-      //       return _buildPosts(snapshot.data!.value.bgImageUrl,
-      //           snapshot.data!.value.logoImageUrl);
-      //     } else if (snapshot.hasError) {
-      //       return SnackBar(
-      //         margin: EdgeInsets.only(bottom: displayHeight(context) * 0.02),
-      //         duration: Duration(seconds: 2),
-      //         content: const Text('Something went wrong'),
-      //       );
-      //     }
-      //     // By default, show a loading spinner.
-      //     // return centerProgressBar(radius: 40, dotRadius: 12);
-      //     return Center(
-      //       child: Container(
-      //         margin: EdgeInsets.symmetric(
-      //           horizontal: displayHeight(context) * 0.05,
-      //         ),
-      //         child: Image.asset(
-      //           'assets/images/splash_logo.png',
-      //           color: Colors.black,
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // ),
-    );
+      ],
+    )
+        //
+        //     FutureBuilder<Splashdata>(
+        //   future: futureAlbum,
+        //   builder: (context, snapshot) {
+        //     if (snapshot.hasData) {
+        //       return _buildPosts(snapshot.data!.value.bgImageUrl,
+        //           snapshot.data!.value.logoImageUrl);
+        //     } else if (snapshot.hasError) {
+        //       return SnackBar(
+        //         margin: EdgeInsets.only(bottom: displayHeight(context) * 0.02),
+        //         duration: Duration(seconds: 2),
+        //         content: const Text('Something went wrong'),
+        //       );
+        //     }
+        //     // By default, show a loading spinner.
+        //     // return centerProgressBar(radius: 40, dotRadius: 12);
+        //     return Center(
+        //       child: Container(
+        //         margin: EdgeInsets.symmetric(
+        //           horizontal: displayHeight(context) * 0.05,
+        //         ),
+        //         child: Image.asset(
+        //           'assets/images/splash_logo.png',
+        //           color: Colors.black,
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // ),
+        );
   }
 
   void updatedata() {
@@ -536,11 +556,10 @@ class _MyHomePageState extends State<MyHomePage> {
               print("${responseJson[i]['value']}");
               logindata = Logindata.fromJson(responseJson[i]);
               Shared_Preferences.prefSetString(Shared_Preferences.fusionAuthId,
-                  logindata!.value![0].fusionauthApplicationId.toString())
+                      logindata!.value![0].fusionauthApplicationId.toString())
                   .then((value) {
                 print(
-                    'Login Fusion Auth Id: ${logindata!.value![0]
-                        .fusionauthApplicationId}');
+                    'Login Fusion Auth Id: ${logindata!.value![0].fusionauthApplicationId}');
               });
 
               print("Login:${logindata!.name}");
@@ -570,42 +589,42 @@ class _MyHomePageState extends State<MyHomePage> {
 Widget _buildPosts(String bg_url, String center_url) {
   return Container(
       child: Stack(
-        children: <Widget>[
-          Positioned.fill(
-              child: CachedNetworkImage(
-                imageUrl: bg_url,
-                fit: BoxFit.fill,
-                progressIndicatorBuilder: (context, url, progress) {
-                  return Center(
-                    child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: displayHeight(context) * 0.05),
-                        child: Image.asset('assets/images/splash_logo.png',
-                            color: Colors.black)),
-                  );
-                },
-                // placeholder: (context, url) =>
-                //     centerProgressBar(radius: 40, dotRadius: 12),
-              )),
-          Center(
-            child: Padding(
-                padding: const EdgeInsets.all(60),
-                child: Image.network(center_url)),
-          )
-        ],
-      ));
+    children: <Widget>[
+      Positioned.fill(
+          child: CachedNetworkImage(
+        imageUrl: bg_url,
+        fit: BoxFit.fill,
+        progressIndicatorBuilder: (context, url, progress) {
+          return Center(
+            child: Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: displayHeight(context) * 0.05),
+                child: Image.asset('assets/images/splash_logo.png',
+                    color: Colors.black)),
+          );
+        },
+        // placeholder: (context, url) =>
+        //     centerProgressBar(radius: 40, dotRadius: 12),
+      )),
+      Center(
+        child: Padding(
+            padding: const EdgeInsets.all(60),
+            child: Image.network(center_url)),
+      )
+    ],
+  ));
 }
 
 // Calling loader
 Widget centerProgressBar({required double radius, required double dotRadius}) {
   return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ColorLoader3(
-            dotRadius: dotRadius,
-            radius: radius,
-          )
-        ],
-      ));
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      ColorLoader3(
+        dotRadius: dotRadius,
+        radius: radius,
+      )
+    ],
+  ));
 }
