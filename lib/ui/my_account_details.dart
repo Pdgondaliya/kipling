@@ -794,8 +794,8 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                                             .toString(),
                                     style: TextStyle(
                                         fontSize: displayWidth(context) * 0.04,
-                                        fontFamily: 'Kipling_Regular',
-                                        color: Color(0xFF88b14a)),
+                                        fontFamily: 'Kipling_Bold',
+                                        color: Colors.black),
                                   )
                                 ],
                               )),
