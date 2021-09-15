@@ -266,7 +266,8 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
 
   // List<PageName> pageNameList = [];
 
-  String avatar_url = 'assets/images/user.png';
+  String avatar_url = '';
+  String avatar_url1 = 'assets/images/user.png';
   bool selected = false;
   int? statusCode;
   String? userName;
@@ -322,7 +323,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
     var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
     var options = BaseOptions(
         baseUrl:
-        'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
         headers: headerMap);
     _dio.options = options;
     try {
@@ -349,7 +350,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
     var headerMap = {"token": '92902de1-9b9a-4dd3-817a-21100b21648f'};
     var options = BaseOptions(
         baseUrl:
-        'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
+            'https://api-mobile-app-staging.loyalty-cloud.com/v1/customers-service/',
         headers: headerMap);
     _dio.options = options;
     try {
@@ -381,16 +382,16 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
           .then((lastName) {
         Shared_Preferences.prefGetString(Shared_Preferences.phoneNumber, '');
         setState(() {
-          userName = firstName.toString() + lastName.toString();
+          userName = "${firstName.toString()} ${lastName.toString()}";
         });
       });
-    //   programIdentifierCallAPI(id!).then((programIdentifier) {
-    //     getUserDataAPI(programIdentifier.id.toString()).then((getData) {
-    //       // Shared_Preferences.prefGetString(
-    //       //     Shared_Preferences.phoneNumber,
-    //       //     getData.phoneNumbers[0]!.id.toString());
-    //     });
-    //   });
+      //   programIdentifierCallAPI(id!).then((programIdentifier) {
+      //     getUserDataAPI(programIdentifier.id.toString()).then((getData) {
+      //       // Shared_Preferences.prefGetString(
+      //       //     Shared_Preferences.phoneNumber,
+      //       //     getData.phoneNumbers[0]!.id.toString());
+      //     });
+      //   });
     });
     // pageNameList.add(PageName(
     //     icon: Icon(Icons.ac_unit, size: 20, color: Color(0xFF88b14a)),
@@ -491,23 +492,21 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                           Center(
                             child: Padding(
                               padding:
-                              EdgeInsets.all(displayWidth(context) * 0.05),
+                                  EdgeInsets.all(displayWidth(context) * 0.05),
                               child: Container(
                                 height: displayWidth(context) * 0.25,
                                 width: displayWidth(context) * 0.25,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    image: avatar_url == ""
+                                    image: avatar_url != ""
                                         ? DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(ld!
-                                            .value!.loyaltyCardBgImageUrl
-                                            .toString()))
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(avatar_url))
                                         : DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage(
-                                            avatar_url.toString()))),
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                avatar_url1.toString()))),
                               ),
                             ),
                           ),
@@ -546,14 +545,16 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Kipling_Regular',
-                                          fontSize: displayWidth(context) * 0.07),
+                                          fontSize:
+                                              displayWidth(context) * 0.07),
                                     ),
                                     Text(
                                       "Smile point",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Kipling_Regular',
-                                          fontSize: displayWidth(context) * 0.03),
+                                          fontSize:
+                                              displayWidth(context) * 0.03),
                                     )
                                   ],
                                 ),
@@ -567,8 +568,10 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                                 horizontal: displayWidth(context) * 0.08),
                             child: Text(
                               index == 0
-                                  ? ld!.value!.savingDescriptionTextEn.toString()
-                                  : ld!.value!.savingDescriptionTextNl.toString(),
+                                  ? ld!.value!.savingDescriptionTextEn
+                                      .toString()
+                                  : ld!.value!.savingDescriptionTextNl
+                                      .toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: displayWidth(context) * 0.03,
@@ -714,6 +717,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
               ),
             ),
           ),
+          SizedBox(height: 10),
           ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -765,8 +769,47 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                               child: Row(
                                 children: [
                                   SizedBox(
-                                    child: Icon(Icons.ac_unit,
-                                        size: 20, color: Color(0xFF88b14a)),
+                                    child: Icon(
+                                        ld!.value!.tabs![index].redirectUrl
+                                                    .toString() ==
+                                                'my_profile'
+                                            ? Icons.person_outline
+                                            : ld!.value!.tabs![index]
+                                                        .redirectUrl
+                                                        .toString() ==
+                                                    'my_history'
+                                                ? Icons.history_edu_outlined
+                                                : ld!.value!.tabs![index]
+                                                            .redirectUrl
+                                                            .toString() ==
+                                                        'account_setting'
+                                                    ? Icons.settings
+                                                    : ld!.value!.tabs![index]
+                                                                .redirectUrl
+                                                                .toString() ==
+                                                            'voucher'
+                                                        ? Icons
+                                                            .wallet_giftcard_outlined
+                                                        : ld!
+                                                                    .value!
+                                                                    .tabs![
+                                                                        index]
+                                                                    .redirectUrl
+                                                                    .toString() ==
+                                                                'badge'
+                                                            ? Icons
+                                                                .badge_outlined
+                                                            : ld!
+                                                                        .value!
+                                                                        .tabs![
+                                                                            index]
+                                                                        .redirectUrl
+                                                                        .toString() ==
+                                                                    'logout'
+                                                                ? Icons.logout
+                                                                : null,
+                                        size: 20,
+                                        color: Color(0xFF88b14a)),
                                   ),
                                   SizedBox(width: displayWidth(context) * 0.02),
                                   Text(
