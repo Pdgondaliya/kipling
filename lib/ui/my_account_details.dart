@@ -800,7 +800,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
                                 ],
                               )),
                         ),
-                        Divider(color: Colors.grey)
+                        Divider(color: Colors.grey.withOpacity(0.5))
                       ],
                     ));
               })
