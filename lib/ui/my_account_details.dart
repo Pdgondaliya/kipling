@@ -270,7 +270,7 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
   String avatar_url1 = 'assets/images/user.png';
   bool selected = false;
   int? statusCode;
-  String? userName;
+  String userName = '';
   String? phoneNumber;
 
   // listOfPage() {
@@ -376,44 +376,33 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
   void initState() {
     super.initState();
     ld = myAccountDetailsData;
-    Shared_Preferences.prefGetString(Shared_Preferences.firstName, '')
-        .then((firstName) {
-      Shared_Preferences.prefGetString(Shared_Preferences.lastName, '')
-          .then((lastName) {
-        Shared_Preferences.prefGetString(Shared_Preferences.phoneNumber, '');
-        setState(() {
-          userName = "${firstName.toString()} ${lastName.toString()}";
+    Shared_Preferences.prefGetString(Shared_Preferences.keyId, '').then((id) {
+      programIdentifierCallAPI(id.toString()).then((programIdentifier) {
+        getUserDataAPI(programIdentifier.id.toString()).then((value) {
+          Shared_Preferences.prefSetString(Shared_Preferences.firstName,
+                  programIdentifier.name.toString());
+          Shared_Preferences.prefSetString(Shared_Preferences.lastName,
+              programIdentifier.lastName.toString());
+
+          Shared_Preferences.prefGetString(Shared_Preferences.firstName, '')
+              .then((firstName) {
+            print('FirstName: $firstName');
+            Shared_Preferences.prefGetString(Shared_Preferences.lastName, '')
+                .then((lastName) {
+              print('lastName: $lastName');
+              Shared_Preferences.prefGetString(Shared_Preferences.phoneNumber, '');
+              setState(() {
+                userName = "${firstName.toString()} ${lastName.toString()}";
+              });
+            });
+
+            ld!.value!.tabs!.sort((a, b) => a.sortid!.compareTo(b.sortid!));
+          });
         });
       });
-      //   programIdentifierCallAPI(id!).then((programIdentifier) {
-      //     getUserDataAPI(programIdentifier.id.toString()).then((getData) {
-      //       // Shared_Preferences.prefGetString(
-      //       //     Shared_Preferences.phoneNumber,
-      //       //     getData.phoneNumbers[0]!.id.toString());
-      //     });
-      //   });
     });
-    // pageNameList.add(PageName(
-    //     icon: Icon(Icons.ac_unit, size: 20, color: Color(0xFF88b14a)),
-    //     pageName: 'PERSONAL DETAILS'));
-    // pageNameList.add(PageName(
-    //     icon: Icon(Icons.ac_unit, size: 20, color: Color(0xFF88b14a)),
-    //     pageName: 'TRANSACTION & ACTIVITIES'));
-    // pageNameList.add(PageName(
-    //     icon: Icon(Icons.ac_unit, size: 20, color: Color(0xFF88b14a)),
-    //     pageName: 'MY VOUCHERS'));
-    // pageNameList.add(PageName(
-    //     icon: Icon(Icons.ac_unit, size: 20, color: Color(0xFF88b14a)),
-    //     pageName: 'MY COLLECTABLES'));
-    // pageNameList.add(PageName(
-    //     icon: Icon(Icons.ac_unit, size: 20, color: Color(0xFF88b14a)),
-    //     pageName: 'INBOX'));
-    // pageNameList.add(PageName(
-    //     icon: Icon(Icons.ac_unit, size: 20, color: Color(0xFF88b14a)),
-    //     pageName: 'MY JOURNEY'));
-    // pageNameList.add(PageName(
-    //     icon: Icon(Icons.ac_unit, size: 20, color: Color(0xFF88b14a)),
-    //     pageName: 'SIGN OUT'));
+
+
   }
 
   double percentageCount() {
