@@ -6,6 +6,7 @@ import 'package:kipling/main.dart';
 import 'package:kipling/module/welcome_model.dart';
 import 'package:kipling/ui/home_page.dart';
 import 'package:kipling/ui/login_screen.dart';
+import 'package:kipling/ui/my_account_details.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -192,7 +193,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      HomePage() /*login_screen()*/));
+                                      MyAccountDetails() /*login_screen()*/));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,

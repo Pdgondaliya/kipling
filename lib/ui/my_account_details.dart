@@ -429,21 +429,6 @@ class _MyAccountDetailsState extends State<MyAccountDetails> {
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         children: [
-          // Container(
-          //     color: selected ? Colors.black38 : Colors.transparent,
-          //     padding: EdgeInsets.only(
-          //         top: displayWidth(context) * 0.08,
-          //         right: displayWidth(context) * 0.08,
-          //         left: displayWidth(context) * 0.08),
-          //     child: Center(
-          //       child: Text(
-          //         ld!.value!.titleTextEn.toString(),
-          //         style: TextStyle(
-          //             color: Colors.black,
-          //             fontSize: displayWidth(context) * 0.045,
-          //             fontFamily: 'Kipling_Bold'),
-          //       ),
-          //     )),
           Stack(
             children: [
               Center(
