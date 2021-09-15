@@ -477,7 +477,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     internetCheck(context);
     return Scaffold(
-        body: Stack(
+      body:
+          /* Stack(
       children: [
         Image.asset(
           'assets/images/splash_background.jpg',
@@ -497,37 +498,37 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         )
       ],
-    )
-        //
-        //     FutureBuilder<Splashdata>(
-        //   future: futureAlbum,
-        //   builder: (context, snapshot) {
-        //     if (snapshot.hasData) {
-        //       return _buildPosts(snapshot.data!.value.bgImageUrl,
-        //           snapshot.data!.value.logoImageUrl);
-        //     } else if (snapshot.hasError) {
-        //       return SnackBar(
-        //         margin: EdgeInsets.only(bottom: displayHeight(context) * 0.02),
-        //         duration: Duration(seconds: 2),
-        //         content: const Text('Something went wrong'),
-        //       );
-        //     }
-        //     // By default, show a loading spinner.
-        //     // return centerProgressBar(radius: 40, dotRadius: 12);
-        //     return Center(
-        //       child: Container(
-        //         margin: EdgeInsets.symmetric(
-        //           horizontal: displayHeight(context) * 0.05,
-        //         ),
-        //         child: Image.asset(
-        //           'assets/images/splash_logo.png',
-        //           color: Colors.black,
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // ),
-        );
+    )*/
+
+          FutureBuilder<Splashdata>(
+        future: futureAlbum,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _buildPosts(snapshot.data!.value.bgImageUrl,
+                snapshot.data!.value.logoImageUrl);
+          } else if (snapshot.hasError) {
+            return SnackBar(
+              margin: EdgeInsets.only(bottom: displayHeight(context) * 0.02),
+              duration: Duration(seconds: 2),
+              content: const Text('Something went wrong'),
+            );
+          }
+          // By default, show a loading spinner.
+          // return centerProgressBar(radius: 40, dotRadius: 12);
+          return Center(
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: displayHeight(context) * 0.05,
+              ),
+              child: Image.asset(
+                'assets/images/splash_logo.png',
+                color: Colors.black,
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   void updatedata() {
