@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/bottom_navigation.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/ui/activated_badges.dart';
 import 'package:kipling/ui/all_badges.dart';
-import 'package:kipling/ui/my_account_details.dart';
-import 'package:kipling/ui/personal_details.dart';
-import 'package:kipling/ui/voucher_screen.dart';
 
 class BadgeScreen extends StatefulWidget {
   const BadgeScreen({Key? key}) : super(key: key);
@@ -25,7 +23,7 @@ class _BadgeScreenState extends State<BadgeScreen> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => MyAccountDetails())),
+                MaterialPageRoute(builder: (context) => BottomNavigation(index: 2, pageIndex: 7))),
             icon: Icon(
               Icons.arrow_back_ios,
               color: Color(0xff84847e),

@@ -1,30 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/bottom_navigation.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/custom_widget/text_field.dart';
 import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/main.dart';
-import 'package:kipling/module/create_account_model.dart';
 import 'package:kipling/module/login_check_model.dart';
 import 'package:kipling/module/login_data.dart';
-import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/ui/create_account.dart';
 import 'package:kipling/ui/forgot_password.dart';
-import 'package:kipling/ui/home_page.dart';
-import 'package:kipling/ui/my_account_details.dart';
-import 'package:kipling/ui/personal_details.dart';
-import 'package:kipling/ui/welcome_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class login_screen extends StatefulWidget {
   // const login_screen(
@@ -44,8 +35,6 @@ var items = [];
 String dropdownvalue = 'EN';
 
 class _login_screenState extends State<login_screen> {
-  // final Color color = HexColor.fromHex('#aabbcc');
-  // final List<Logindata> pl=widget.;
   late Logindata ld;
   Color bgColor = Colors.white;
   TextEditingController emailController = TextEditingController();
@@ -64,8 +53,6 @@ class _login_screenState extends State<login_screen> {
       print('Application Id: $applicationId');
     });
   }
-
-  // String dropdownvalue = 'EN';
 
   Dio _dio = Dio();
 
@@ -111,7 +98,6 @@ class _login_screenState extends State<login_screen> {
       hideLoader();
       if (e.response != null) {
         var errorData = jsonDecode(e.response.toString());
-        // var errorMessage = errorData["message"];
 
         throw Exception(errorData);
       } else {
@@ -126,7 +112,6 @@ class _login_screenState extends State<login_screen> {
   @override
   void initState() {
     print('pppppppppp  --- > ${personalDetailData}');
-    // print(ld?.name);
     getIP();
     ld = logindata!;
     items.clear();
@@ -309,7 +294,7 @@ class _login_screenState extends State<login_screen> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  MyAccountDetails() /*PersonalDetails()*/));
+                                                  BottomNavigation(index: 2, pageIndex: 2) /*PersonalDetails()*/));
                                     });
                                   },
                                   style: ElevatedButton.styleFrom(

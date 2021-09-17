@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/bottom_navigation.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/module/badge_model.dart' as b;
@@ -19,16 +20,10 @@ import 'package:kipling/module/my_account_details_model.dart';
 import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/splash_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:kipling/module/tabbar_model.dart';
 import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/module/welcome_model.dart';
-import 'package:kipling/ui/all_badges.dart';
-import 'package:kipling/ui/delete_account.dart';
-import 'package:kipling/ui/home_page.dart';
 import 'package:kipling/ui/login_screen.dart';
-import 'package:kipling/ui/personal_details.dart';
-import 'package:kipling/ui/my_account_details.dart';
-import 'package:kipling/ui/voucher_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'Database/db_data.dart';
 import 'Database/db_helper.dart';
 
@@ -78,11 +73,13 @@ Future<ForgotPasswordConfirmationModel>? futureForgotPassworConfirmationAlbum;
 Future<Splashdata>? futureAlbum;
 Future<ca.CreateAccountModel>? futureCretaeAccountAlbum;
 Future<MyAccountDetailsModel>? futureMyAccountDetailsAlbum;
+Future<TabBarModel>? futureTabBarDetailsAlbum;
 
 List<b.BadgeData>? badgeDetailsData;
 List<DeleteDataPageResponse>? deleteData;
 List<c.Value>? countryList;
 List<MyAccountValue>? myAccountDetailsList;
+List<TabBarValue>? tabBarDetailsList;
 
 PersonalDetailData? personalDetailData;
 WelComeScreenModel? welcomeData;
@@ -94,6 +91,7 @@ c.CountryPickerModel? countryPickerData;
 ca.CreateAccountModel? createAccountData;
 DeleteDataPageResponse? deleteAccountData;
 MyAccountDetailsModel? myAccountDetailsData;
+TabBarModel? tabBarModelData;
 
 List<b.Content>? contents;
 List<Todo> personalDataList = [];
@@ -112,8 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     fetchapi();
     futureAlbum = fetchAlbum();
+    futureTabBarDetailsAlbum = fetchTabBarData();
     futureMyAccountDetailsAlbum = fetchMyAccountDetailsData();
     futurePersonDataAlbum = fetchPersonData();
+    // futureTabBarDetailsAlbum = fetchTabBarData();
     futureCretaeAccountAlbum = fetchCreateAccountData();
     futureCountryPickerDataAlbum = fetchCountryListData();
     futureForgotPasswordAlbum = fetchForgotPasswordData();
@@ -123,6 +123,13 @@ class _MyHomePageState extends State<MyHomePage> {
         fetchForgotPasswordConfirmationData();
     futureWelComeScreenAlbum = fetchWelComeData();
     badgeData = fetchBadgeData();
+    // fetchTabBarData().then((value) {
+    //   print('Valueeeee; $value');
+    //   tabBarModelData = value;
+    //   setState(() {
+    //
+    //   });
+    // });
     print("initState");
   }
 
@@ -180,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MyAccountDetails() /*PersonalDetails()*/));
+                          BottomNavigation(index: 2, pageIndex: 2,) /*PersonalDetails()*/));
             } else {
               Navigator.pushReplacement(
                   context,
@@ -241,6 +248,28 @@ class _MyHomePageState extends State<MyHomePage> {
       });
 
       return MyAccountDetailsModel.fromJson(responseJson[0]);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  //TabBar API
+  Future<TabBarModel> fetchTabBarData() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://cms-mobile-app-staging.loyalty-cloud.com/pages?name=tab_bar'),
+      headers: {"token": "92902de1-9b9a-4dd3-817a-21100b21648f"},
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print("TabBar:responseJson");
+    print(responseJson);
+    if (response.statusCode == 200) {
+      print('response Json 0 : ${TabBarModel.fromJson(responseJson[0])}');
+      tabBarModelData = TabBarModel.fromJson(responseJson[0]);
+      setState(() {
+      });
+      return TabBarModel.fromJson(responseJson[0]);
     } else {
       throw Exception('Failed to load album');
     }
@@ -431,7 +460,7 @@ class _MyHomePageState extends State<MyHomePage> {
           for (int j = 0; j < badgeDetailsData![i].contents!.length; j++) {
             if (badgeDetailsData![i].contents![j].state == 'Activated') {
               print('shdfbhjbdfjbdsjfjsdbfhjdsbfjbdsfjbdfjbdfj');
-              finalActivatedBadgeModel!.add(b.FinalBadgeModel(
+              finalActivatedBadgeModel.add(b.FinalBadgeModel(
                   point_needed: badgeDetailsData![i]
                       .voucherTemplate!
                       .pointsNeeded

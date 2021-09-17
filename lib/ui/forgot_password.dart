@@ -100,7 +100,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         if (dropdownvalue == 'EN') {
                           index = 0;
                           print('Index0: $index');
-                          dropdownvalue = newValue!;
+                          dropdownvalue = newValue;
                         } else if (dropdownvalue == 'NL') {
                           index = 1;
                           print('Index1: $index');

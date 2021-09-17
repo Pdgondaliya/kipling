@@ -72,7 +72,7 @@ class _AllBadgesState extends State<AllBadges> {
                   left: displayHeight(context) * 0.02,
                   right: displayHeight(context) * 0.02,
                   top: displayHeight(context) * 0.02),
-              itemCount: finalBadgeModel!.length,
+              itemCount: finalBadgeModel.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: displayWidth(context) * 0.0025,
@@ -81,21 +81,21 @@ class _AllBadgesState extends State<AllBadges> {
               itemBuilder: (BuildContext context, int k) {
                 return GestureDetector(
                   onTap: () => dialog1(
-                      finalBadgeModel![k].url.toString(),
-                      finalBadgeModel![k].title.toString(),
-                      finalBadgeModel![k].description.toString(),
-                      finalBadgeModel![k].point_needed.toString(),
-                      finalBadgeModel![k].condition.toString()),
+                      finalBadgeModel[k].url.toString(),
+                      finalBadgeModel[k].title.toString(),
+                      finalBadgeModel[k].description.toString(),
+                      finalBadgeModel[k].point_needed.toString(),
+                      finalBadgeModel[k].condition.toString()),
                   child: Column(
                     children: [
                       SizedBox(
                           width: displayWidth(context) * 0.30,
                           height: displayWidth(context) * 0.30,
                           child: Image.network(
-                              finalBadgeModel![k].url.toString())),
+                              finalBadgeModel[k].url.toString())),
                       SizedBox(height: displayWidth(context) * 0.005),
                       Text(
-                        finalBadgeModel![k].title.toString(),
+                        finalBadgeModel[k].title.toString(),
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: displayHeight(context) * 0.02,
@@ -103,7 +103,7 @@ class _AllBadgesState extends State<AllBadges> {
                       ),
                       SizedBox(height: displayWidth(context) * 0.005),
                       Text(
-                        finalBadgeModel![k].point_needed.toString(),
+                        finalBadgeModel[k].point_needed.toString(),
                         style: TextStyle(
                             color: Color(0xff8ab250),
                             fontSize: displayHeight(context) * 0.015,

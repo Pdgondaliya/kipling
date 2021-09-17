@@ -1,0 +1,61 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter run
+
+## exception
+
+NoSuchMethodError: NoSuchMethodError: The method '[]' was called on null.
+Receiver: null
+Tried calling: []("data")
+
+```
+#0      Object.noSuchMethod (dart:core-patch/object_patch.dart:54:5)
+#1      FlutterVmService.flutterDebugDumpRenderTree (package:flutter_tools/src/vmservice.dart:559:20)
+<asynchronous suspension>
+#2      FlutterDevice.debugDumpRenderTree (package:flutter_tools/src/resident_runner.dart:416:27)
+<asynchronous suspension>
+#3      ResidentRunner.debugDumpRenderTree (package:flutter_tools/src/resident_runner.dart:1009:7)
+<asynchronous suspension>
+#4      TerminalHandler.processTerminalInput (package:flutter_tools/src/resident_runner.dart:1644:7)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel stable, 2.2.3, on Microsoft Windows [Version 10.0.19042.1165], locale en-US)
+    • Flutter version 2.2.3 at C:\flutter
+    • Framework revision f4abaa0735 (3 months ago), 2021-07-01 12:46:11 -0700
+    • Engine revision 241c87ad80
+    • Dart version 2.13.4
+
+[!] Android toolchain - develop for Android devices (Android SDK version 30.0.3)
+    • Android SDK at C:\Users\Jaimin\AppData\Local\Android\sdk
+    • Platform android-30, build-tools 30.0.3
+    • Java binary at: C:\Program Files\Android\Android Studio\jre\bin\java
+    • Java version OpenJDK Runtime Environment (build 11.0.8+10-b944.6842174)
+    ✗ Android license status unknown.
+      Run `flutter doctor --android-licenses` to accept the SDK licenses.
+      See https://flutter.dev/docs/get-started/install/windows#android-setup for more details.
+
+[✓] Chrome - develop for the web
+    • Chrome at C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+
+[✓] Android Studio (version 4.1.0)
+    • Android Studio at C:\Program Files\Android\Android Studio
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 11.0.8+10-b944.6842174)
+
+[✓] Connected device (3 available)
+    • Redmi 5A (mobile) • fb7d4fb7d540 • android-arm64  • Android 8.1.0 (API 27)
+    • Chrome (web)      • chrome       • web-javascript • Google Chrome 93.0.4577.63
+    • Edge (web)        • edge         • web-javascript • Microsoft Edge 93.0.961.47
+
+! Doctor found issues in 1 category.
+```

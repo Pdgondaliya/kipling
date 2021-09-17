@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/bottom_navigation.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/helper/shared_prefs.dart';
 import 'package:kipling/main.dart';
 import 'package:kipling/module/welcome_model.dart';
-import 'package:kipling/ui/home_page.dart';
 import 'package:kipling/ui/login_screen.dart';
-import 'package:kipling/ui/my_account_details.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -16,7 +15,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   WelComeScreenModel? ld;
 
-  // String dropdownvalue = 'EN';
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String? firstName;
@@ -60,11 +58,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Container(
                 height: displayHeight(context) * 0.25,
                 width: displayWidth(context),
-                // decoration: BoxDecoration(
-                //     image: DecorationImage(
-                //         image: AssetImage(
-                //             'assets/images/slider_puffin_before_mobile.jpeg'),
-                //         fit: BoxFit.cover)),
               ),
               Padding(
                 padding: EdgeInsets.only(
@@ -93,25 +86,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           if (dropdownvalue == 'EN') {
                             index = 0;
                             print('Index0: $index');
-                            dropdownvalue = newValue!;
+                            dropdownvalue = newValue;
                           } else if (dropdownvalue == 'NL') {
                             index = 1;
                             print('Index1: $index');
                           }
                         });
                       });
-                      // setState(() {
-                      //   dropdownvalue = newValue.toString();
-                      //   if (newValue.toString().toLowerCase() ==
-                      //       ld.value[0].languageCode) {
-                      //     index = 0;
-                      //   } else if (newValue.toString().toLowerCase() ==
-                      //       ld.value[1].languageCode) {
-                      //     index = 1;
-                      //   } else {
-                      //     index = 0;
-                      //   }
-                      // });
                     },
                   ),
                 ),
@@ -192,8 +173,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      MyAccountDetails() /*login_screen()*/));
+                                  builder: (context) => BottomNavigation(
+                                      index: 2, ) /*login_screen()*/));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,

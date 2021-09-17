@@ -5,10 +5,10 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/bottom_navigation.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/custom_widget/text_field.dart';
@@ -19,17 +19,13 @@ import 'package:kipling/module/personal_details_data.dart';
 import 'package:kipling/module/update_user_details_model.dart';
 import 'package:kipling/module/upload_image_model.dart';
 import 'package:kipling/ui/badge_screen.dart';
-import 'package:kipling/ui/delete_account.dart';
 import 'package:kipling/ui/login_screen.dart';
 import 'package:dio/dio.dart' as d;
-import 'package:kipling/ui/my_account_details.dart';
-import 'package:kipling/ui/voucher_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PersonalDetails extends StatefulWidget {
-  // const PersonalDetails({this.ld});
+  int? index;
 
-  // final PersonalDetailData? ld;
+  PersonalDetails({this.index});
 
   @override
   _PersonalDetailsState createState() => _PersonalDetailsState();
@@ -272,32 +268,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     }
   }
 
-  /*Future getData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    print('id: ${preferences.getString('id')}');
-
-    DateTime today = DateTime.now();
-
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    String date = formatter.format(today);
-
-    DateFormat time = DateFormat('hh:mm:ss');
-    String timeFormat = time.format(today);
-
-    print('Date =============> ${date}T${timeFormat}Z');
-
-    currentDate = '${date}T${timeFormat}Z';
-    // id = preferences.getString('id');
-    return preferences.getString('id');
-  }*/
-
   Future<UploadImageModel?> uploadImage() async {
     showLoader();
     try {
       d.Response response;
 
       d.FormData formData = d.FormData();
-      formData!.files.add(
+      formData.files.add(
         MapEntry("files", await d.MultipartFile.fromFile(imageFile!.path)),
       );
 
@@ -468,7 +445,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   }
 
   void _selectDateiOS(ctx) {
-    // showCupertinoModalPopup is a built-in function of the cupertino library
     showCupertinoModalPopup(
         context: ctx,
         builder: (_) => Container(
@@ -721,40 +697,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             color: Color(0xff84847e),
           ),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: EdgeInsets.only(right: 10),
-        //     child: GestureDetector(
-        //       onTap: () => Navigator.push(context,
-        //           MaterialPageRoute(builder: (context) => DeleteAccount())),
-        //       child: Icon(
-        //         Icons.delete,
-        //         color: Colors.black,
-        //       ),
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: EdgeInsets.only(right: 10),
-        //     child: GestureDetector(
-        //       onTap: () => Navigator.push(
-        //           context, MaterialPageRoute(builder: (context) => Voucher())),
-        //       child: Icon(
-        //         Icons.add,
-        //         color: Colors.black,
-        //       ),
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: EdgeInsets.only(right: 10),
-        //     child: GestureDetector(
-        //       onTap: () => logoutAPI(),
-        //       child: Icon(
-        //         Icons.logout,
-        //         color: Colors.black,
-        //       ),
-        //     ),
-        //   )
-        // ],
         backgroundColor: Color(0xfffbfbfa),
         centerTitle: true,
         elevation: 0,
@@ -2435,7 +2377,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => MyAccountDetails()));
+                                      builder: (context) => BottomNavigation(index: 2, pageIndex: 5,)));
                             });
                           }
                         });

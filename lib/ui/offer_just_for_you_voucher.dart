@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kipling/Loader/color_loader_3.dart';
 import 'package:kipling/MediaQuery/get_mediaquery.dart';
+import 'package:kipling/custom_widget/bottom_navigation.dart';
 import 'package:kipling/custom_widget/internet_dialog.dart';
 import 'package:kipling/custom_widget/loader.dart';
 import 'package:kipling/helper/shared_prefs.dart';
@@ -69,7 +70,7 @@ class _OfferJustForYouVoucherScreenState
             .then((voucherAPI) {
           for (int i = 0; i < voucherAPI.items!.length; i++) {
             print('Value: ${voucherAPI.items![i].id}');
-            particularVoucherDetailsAPI(voucherAPI.items![i]!.id.toString())
+            particularVoucherDetailsAPI(voucherAPI.items![i].id.toString())
                 .then((pvDetails) {
               print('jajjajajajajajaja');
               setState(() {
@@ -82,8 +83,8 @@ class _OfferJustForYouVoucherScreenState
                     point: voucherAPI.items![i].pointsNeeded.toString(),
                     conditions: pvDetails.conditions.toString(),
                     description: pvDetails.description.toString()));
-                print('customList: ${customVoucherModelList!.length}');
-                print('sdgsdf ${customVoucherModelList![0].image}');
+                print('customList: ${customVoucherModelList.length}');
+                print('sdgsdf ${customVoucherModelList[0].image}');
               });
             });
           }
@@ -143,27 +144,6 @@ class _OfferJustForYouVoucherScreenState
   void initState() {
     super.initState();
     getCustomerId();
-    /*  voucherRewardCommonAPI('9d6e27c8-eb6c-4571-9876-6b57c958872e')
-        .then((value) {
-      for (int i = 0; i < value.items!.length; i++) {
-        print('Value: ${value.items![i].id}');
-        particularVoucherDetailsAPI(value.items![i]!.id.toString())
-            .then((value1) {
-          print('jajjajajajajajaja');
-          setState(() {
-            customVoucherModelList.add(CustomVoucherModel(
-                image: value1.images![0].formats!.small!.url.toString(),
-                title: value.items![i].name.toString(),
-                subTitle: value.items![i].validityEndDate.toString(),
-                point: value.items![i].pointsNeeded.toString(),
-                conditions: value1.conditions.toString(),
-                description: value1.description.toString()));
-            print('customList: ${customVoucherModelList!.length}');
-            print('sdgsdf ${customVoucherModelList![0].image}');
-          });
-        });
-      }
-    });*/
   }
 
   @override
@@ -183,7 +163,34 @@ class _OfferJustForYouVoucherScreenState
                         onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => VoucherDetails(
+                                builder: (context) => BottomNavigation(
+                                      pageIndex: 8,
+                                      index: 2,
+                                      title: customVoucherModelList[index]
+                                          .title
+                                          .toString(),
+                                      image: customVoucherModelList[index]
+                                          .image
+                                          .toString(),
+                                      point: customVoucherModelList[index]
+                                          .point
+                                          .toString(),
+                                      conditions: customVoucherModelList[index]
+                                          .conditions
+                                          .toString(),
+                                      description: customVoucherModelList[index]
+                                          .description
+                                          .toString(),
+                                      validity: customVoucherModelList[index]
+                                                  .subTitle!
+                                                  .trim()
+                                                  .toString() !=
+                                              'null'
+                                          ? customVoucherModelList[index]
+                                              .subTitle
+                                              .toString()
+                                          : '',
+                                    ) /*VoucherDetails(
 
                                       title: customVoucherModelList[index]
                                           .title
@@ -209,7 +216,8 @@ class _OfferJustForYouVoucherScreenState
                                               .subTitle
                                               .toString()
                                           : '',
-                                    ))),
+                                    )*/
+                                )),
                         child: Column(
                           children: [
                             Container(
