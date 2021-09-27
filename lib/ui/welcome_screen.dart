@@ -174,7 +174,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BottomNavigation(
-                                      index: 2, ) /*login_screen()*/));
+                                      index: 2,pageIndex: 2) /*login_screen()*/));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,

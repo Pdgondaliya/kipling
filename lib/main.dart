@@ -24,6 +24,7 @@ import 'package:kipling/module/tabbar_model.dart';
 import 'package:kipling/module/voucher_model.dart';
 import 'package:kipling/module/welcome_model.dart';
 import 'package:kipling/ui/login_screen.dart';
+import 'package:kipling/ui/temp_login.dart';
 import 'Database/db_data.dart';
 import 'Database/db_helper.dart';
 
@@ -46,7 +47,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: 'Flutter API'),
+      home: TempLogin(),
+     // home: MyHomePage(title: 'Flutter API'),
     );
   }
 }
